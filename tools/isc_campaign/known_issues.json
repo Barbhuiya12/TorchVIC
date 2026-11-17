@@ -1,0 +1,14 @@
+{
+ "_doc": "Open findings (module/variable/check) that tests/test_isc_sanity.py reports but does not fail on. Remove an entry when its issue is fixed (I1: the river-aquifer exchange on the ISC network).",
+ "known": {
+  "groundwater/baseflow/baseflow_high": "I1 (groundwater)",
+  "groundwater/baseflow/oscillation": "I1 (groundwater)",
+  "groundwater/capillary_rise/oscillation": "I1 (groundwater)",
+  "vic/gwrecharge/baseflow_high": "I1 (groundwater)",
+  "vicwur_routing/discharge/negative": "I1 (groundwater)",
+  "vicwur_routing/discharge/oscillation": "I1 (groundwater)",
+  "vicwur_routing/stream_moist/oscillation": "I1 (groundwater)",
+  "groundwater/head/oscillation": "I1 (groundwater)",
+  "vic/recharge/baseflow_high": "I1 (groundwater)"
+ }
+}

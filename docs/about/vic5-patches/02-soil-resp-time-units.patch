@@ -1,0 +1,36 @@
+From 36789bb7092e82c8eba74ade5b67687f4f785349 Mon Sep 17 00:00:00 2001
+From: Barbhuiya12 <siddikbarbhuiya@gmail.com>
+Date: Tue, 17 Nov 2026 14:23:36 +0530
+Subject: [PATCH] compute_soil_resp: use seconds per day for all three pools
+
+The time step dt is in seconds. The litter pool converts the turnover
+time with SEC_PER_DAY / dt, but the intermediate and slow pools used
+HOURS_PER_DAY / dt, a leftover of VIC 4 where dt was in hours. Both pools
+therefore decayed 3600 times too fast.
+
+Use SEC_PER_DAY for the intermediate and slow pools as well.
+---
+ vic/vic_run/src/compute_soil_resp.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/vic/vic_run/src/compute_soil_resp.c b/vic/vic_run/src/compute_soil_resp.c
+index dbe0a752..b84fe197 100644
+--- a/vic/vic_run/src/compute_soil_resp.c
++++ b/vic/vic_run/src/compute_soil_resp.c
+@@ -165,11 +165,11 @@ compute_soil_resp(int     Nnodes,
+         RhInter[i] = param.SRESP_RFACTOR *
+                      (fTSoil[i] * fMSoil[i] /
+                       (param.SRESP_TAUINTER * CONST_DDAYS_PER_YEAR *
+-                       HOURS_PER_DAY / dt)) * CInterNode[i];
++                       SEC_PER_DAY / dt)) * CInterNode[i];
+         RhSlow[i] = param.SRESP_RFACTOR *
+                     (fTSoil[i] * fMSoil[i] /
+                      (param.SRESP_TAUSLOW * CONST_DDAYS_PER_YEAR *
+-                      HOURS_PER_DAY / dt)) * CSlowNode[i];
++                      SEC_PER_DAY / dt)) * CSlowNode[i];
+         *RhInterTot += RhInter[i];
+         *RhSlowTot += RhSlow[i];
+     }
+-- 
+2.43.0
+

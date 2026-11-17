@@ -1,0 +1,63 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "torchvic"
+dynamic = ["version"]
+description = "The VIC 5 land surface model (5.0.1 and 5.1.0 physics) in PyTorch, run forward on GPU or CPU from native VIC 5 image-driver inputs"
+readme = "README.md"
+requires-python = ">=3.10"
+license = "GPL-3.0-or-later"
+license-files = ["LICENSE", "NOTICE", "THIRD_PARTY_NOTICES.md", "torchvic/crop/NOTICE_PCSE.txt"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Hydrology",
+    "Topic :: Scientific/Engineering :: Atmospheric Science",
+]
+authors = [{name = "Siddik Barbhuiya", email = "siddikbarbhuiya@gmail.com"}]
+keywords = ["hydrology", "VIC", "land surface model", "GPU", "PyTorch"]
+dependencies = [
+    "torch>=2.6,<2.8",  # tested with 2.6.0; fusion degrades to eager on a torch without its inductor hooks
+    "numpy>=1.24",
+    "xarray>=2023.1",
+    "netCDF4>=1.6",
+    "cftime>=1.6",
+    "pandas>=2.0",
+    "pyyaml>=6.0",
+]
+
+[project.optional-dependencies]
+progress = ["tqdm"]
+test = ["pytest", "scipy"]
+flood = ["scipy"]        # DEM conditioning of the flood connector (torchvic.flood.dem)
+zarr = ["zarr>=3", "numcodecs"]
+
+[project.urls]
+Homepage = "https://github.com/Barbhuiya12/TorchVIC"
+Repository = "https://github.com/Barbhuiya12/TorchVIC"
+Documentation = "https://barbhuiya12.github.io/TorchVIC/"
+Issues = "https://github.com/Barbhuiya12/TorchVIC/issues"
+
+[project.scripts]
+torchvic = "torchvic.cli:main"
+
+[tool.setuptools.dynamic]
+version = {attr = "torchvic.__version__"}
+
+[tool.setuptools.packages.find]
+include = ["torchvic*"]
+
+[tool.setuptools.package-data]
+torchvic = ["data/*.json", "crop/NOTICE_PCSE.txt", "crop/cropsyst/sdr_field_ops.txt"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "--import-mode=importlib"
+pythonpath = ["tests"]

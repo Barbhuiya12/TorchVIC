@@ -1,0 +1,86 @@
+site_name: TorchVIC
+site_description: The VIC 5 land surface model in PyTorch, on GPU and CPU
+site_author: Siddik Barbhuiya
+site_url: https://barbhuiya12.github.io/TorchVIC/
+repo_url: https://github.com/Barbhuiya12/TorchVIC
+repo_name: Barbhuiya12/TorchVIC
+edit_uri: edit/main/docs/
+copyright: "Copyright &copy; 2026 Siddik Barbhuiya. TorchVIC is free software under GPL-3.0-or-later."
+theme:
+  name: readthedocs
+  highlightjs: true
+  navigation_depth: 4
+  collapse_navigation: true
+  sticky_navigation: true
+  titles_only: false
+markdown_extensions:
+  - admonition
+  - toc:
+      permalink: true
+  - tables
+  - fenced_code
+  - def_list
+nav:
+  - Home: index.md
+  - About:
+      - Model overview: about/overview.md
+      - Differences from VIC: differences.md
+      - Verification: verification.md
+      - Performance: performance.md
+      - Known limitations: about/limitations.md
+      - Known issues in VIC 5: about/vic5-issues.md
+      - How to cite: about/citing.md
+      - References: about/references.md
+      - FAQ: about/faq.md
+      - Contact: about/contact.md
+  - Documentation:
+      - Install: install.md
+      - Quick start: quickstart.md
+      - User guide:
+          - Overview: guide/index.md
+          - Prepare your inputs: guide/inputs.md
+          - The global parameter file: guide/global-file.md
+          - Running the model: guide/running.md
+          - Outputs and state files: guide/outputs.md
+          - Routing to gauges: guide/routing.md
+          - Study files, observations, ensembles: guide/study.md
+          - Troubleshooting: troubleshooting.md
+      - Tutorials:
+          - Walnut Gulch, end to end: tutorials/walnut-gulch.md
+          - Your own domain, from scratch: tutorials/own-domain.md
+      - Reference:
+          - Options, value by value: OPTIONS.md
+          - Output variables: OUTPUT_VARIABLES.md
+          - Python API: guide/python-api.md
+          - Process-to-C mapping: mapping.md
+      - Coupled system:
+          - Overview: coupled/overview.md
+          - Configuration file: CONFIGURATION.md
+          - Connector API: CONNECTOR_API.md
+          - Coupling graph: COUPLING_GRAPH.md
+          - Water accounting: WATER_ACCOUNTING.md
+          - Connectors:
+              - River routing: connectors/river.md
+              - Reservoirs: connectors/reservoir.md
+              - Groundwater: connectors/groundwater.md
+              - Flood: connectors/flood.md
+              - Irrigation: connectors/irrigation.md
+              - Crops: connectors/crop.md
+              - CropSyst: connectors/cropsyst.md
+              - VIC-WUR: connectors/vicwur.md
+              - Ensembles and DA: connectors/ensemble_da.md
+              - Water quality: connectors/water_quality.md
+  - Development:
+      - Release notes: development/release-notes.md
+      - Contributing: development/contributing.md
+      - Testing: development/testing.md
+      - Architecture: ARCHITECTURE.md
+  - Downloads:
+      - Sample data: downloads/data.md
+      - Code and license: downloads/code.md
+exclude_docs: |
+  _gen/
+  requirements.txt
+validation:
+  links:
+    anchors: warn

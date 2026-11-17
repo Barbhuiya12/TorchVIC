@@ -1,0 +1,31 @@
+From a0f20d0bc7b1c95a1ebb6f3ed619dae8f3090819 Mon Sep 17 00:00:00 2001
+From: Barbhuiya12 <siddikbarbhuiya@gmail.com>
+Date: Tue, 17 Nov 2026 14:24:16 +0530
+Subject: [PATCH] get_volume: return after limiting the volume to the maximum
+
+For a depth above the top node, get_volume() sets status = 1 and
+*volume = lake_con.maxvolume ("lake depth exceeds maximum; setting to
+maximum"), but then falls into the loop over the lake nodes, which adds the
+volume of every layer again. The function therefore returned about twice
+the maximum volume.
+
+Return right after limiting the volume.
+---
+ vic/vic_run/src/lake_utils.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/vic/vic_run/src/lake_utils.c b/vic/vic_run/src/lake_utils.c
+index 77c2f94e..a1a0bf0e 100644
+--- a/vic/vic_run/src/lake_utils.c
++++ b/vic/vic_run/src/lake_utils.c
+@@ -65,6 +65,7 @@ get_volume(lake_con_struct lake_con,
+     if (depth > lake_con.z[0]) {
+         status = 1;
+         *volume = lake_con.maxvolume;
++        return status;
+     }
+ 
+     for (i = lake_con.numnod - 1; i >= 0; i--) {
+-- 
+2.43.0
+

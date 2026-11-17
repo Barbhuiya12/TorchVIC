@@ -1,0 +1,57 @@
+# VIC + groundwater. VIC's baseflow (OUT_BASEFLOW, the water that leaves the
+# bottom soil layer) is the aquifer's recharge; the aquifer returns it as
+# discharge to the rivers. The baseflow is counted once: runoff goes to
+# routing directly, baseflow only through the aquifer. Feeding
+# vic.total_runoff (runoff + baseflow) to routing as well would count the
+# baseflow twice; docs/connectors/groundwater.md.
+#   torchvic validate --config configs/vic_groundwater.yaml
+#   torchvic run --config configs/vic_groundwater.yaml --out results_vic_gw
+# The aquifer parameters below are SYNTHETIC (a uniform 50 m unconfined
+# aquifer); real ones come from GLHYMPS, depth-to-bedrock and CGWB data (see
+# the doc) as {file, var} entries per field.
+version: 1
+run:
+  device: auto
+  dtype: float64
+modules:
+  vic:
+    connector: vic
+    global_param: ${TORCHVIC_SAMPLE_DATA}/image/WalnutGulch/parameters/global_param.WalnutGulch.L2015.txt
+    core: 5.1.0
+    window_days: 1            # daily exchange: daily recharge
+  groundwater:
+    connector: groundwater
+    # the VIC cells are the aquifer cells (read from the same global file)
+    global_param: ${TORCHVIC_SAMPLE_DATA}/image/WalnutGulch/parameters/global_param.WalnutGulch.L2015.txt
+    interval_days: 1
+    aquifer:                   # scalar, per-cell list, or {file, var, scale}
+      k: 5.0                   # hydraulic conductivity, m/d
+      sy: 0.10                 # specific yield
+      ss: 1.0e-5               # specific storage, 1/m
+      thickness: 50.0          # m
+      top: 0.0                 # land surface elevation, m
+      depth_to_water: 5.0      # initial water table depth, m
+    drain:                     # discharge to streams when no river stage
+      depth: 2.0               # drain level below the surface, m
+      cond: 1.0e4              # m2/d per cell
+    pumping: true              # accepts pumping_request, delivers `pumping`
+    afr: 0.1                   # wells reduce below bottom + 10 % of thickness
+    # river:                   # with a routing module: RIV exchange
+    #   cond: 2.0e4            # riverbed conductance, m2/d
+    #   stage: -1.0            # m, replaced by routing's river_stage
+    #   bottom: -2.0
+    # evt: {rate: 2.0e-3, depth: 3.0}   # groundwater ET, m/d, extinction m
+  routing:
+    enabled: false            # planned: runoff + groundwater.discharge
+connections:
+  - {from: vic.baseflow, to: groundwater.recharge}
+  # with routing:
+  #   - {from: vic.runoff,            to: routing.inflow}
+  #   - {from: groundwater.discharge, to: routing.inflow}
+ledger:
+  enabled: true
+  on_violation: reject
+output:
+  dir: results_vic_gw
+  history: true
+  ledger: true

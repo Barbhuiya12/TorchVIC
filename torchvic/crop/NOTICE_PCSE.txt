@@ -1,0 +1,30 @@
+torchvic.crop is a PyTorch port of the WOFOST 7.2 crop model as implemented in
+PCSE (Python Crop Simulation Environment) version 6.0.13.
+
+  PCSE: Copyright (c) 2004-2024 Wageningen Environmental Research,
+  Wageningen-UR. Authors: Allard de Wit and Herman Berghuijs.
+  Licence: European Union Public Licence v1.2 (EUPL-1.2).
+  Source: https://github.com/ajwdewit/pcse
+
+The EUPL-1.2 appendix lists GPL-3.0 as a compatible licence, which allows this
+derivative work to be distributed under GPL-3.0-or-later (the licence of
+TorchVIC) provided the PCSE copyright and this credit are kept. The modules
+ported are pcse/crop/{wofost72,phenology,partitioning,assimilation,
+respiration,evapotranspiration,leaf_dynamics,stem_dynamics,root_dynamics,
+storage_organ_dynamics}.py, pcse/soil/classic_waterbalance.py (validation
+mode only) and astro/AFGEN from pcse/util.py.
+
+Crop parameter sets (data, not code) are read from the WOFOST crop parameter
+repository, https://github.com/ajwdewit/WOFOST_crop_parameters, branch
+wofost72 (EUPL, Wageningen Environmental Research); a copy sits in
+<data root>/static/upstream/wofost_crop_parameters/wofost72.
+
+Please cite:
+  de Wit, A., Boogaard, H., Fumagalli, D., Janssen, S., Knapen, R.,
+  van Kraalingen, D., Supit, I., van der Wijngaart, R., van Diepen, K. (2019)
+  25 years of the WOFOST cropping systems model. Agricultural Systems 168,
+  154-167. doi:10.1016/j.agsy.2018.06.018
+  van Diepen, C.A., Wolf, J., van Keulen, H., Rappoldt, C. (1989) WOFOST: a
+  simulation model of crop production. Soil Use and Management 5, 16-24.
+  Supit, I., Hooijer, A.A., van Diepen, C.A. (1994) System description of the
+  WOFOST 6.0 crop simulation model. CEC, Luxembourg.

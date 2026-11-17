@@ -1,0 +1,54 @@
+From d851ce503e2e7c9fc7ef252b123e161510ce8c68 Mon Sep 17 00:00:00 2001
+From: Barbhuiya12 <siddikbarbhuiya@gmail.com>
+Date: Tue, 17 Nov 2026 14:27:27 +0530
+Subject: [PATCH] update the version strings to 5.1.0
+
+The release commit "bump version to 5.1.0" changed no file, so
+vic_version.h (and the Python driver version in setup.py) still were those
+of VIC 5.0.1. Every VIC 5.1.0 build therefore reports "5.0.1 February 1,
+2017" with -v, in the log, and in the VIC_Model_Version attribute and the
+MODEL_VERSION header line of its output files.
+
+Set VERSION to "5.1.0 December 14, 2021" and SHORT_VERSION to "5.1.0", and
+the Python driver version to 5.1.0, as for the 5.0.1 release.
+---
+ vic/drivers/python/setup.py                  | 4 ++--
+ vic/drivers/shared_all/include/vic_version.h | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/vic/drivers/python/setup.py b/vic/drivers/python/setup.py
+index 19d8ce13..72fc40ee 100644
+--- a/vic/drivers/python/setup.py
++++ b/vic/drivers/python/setup.py
+@@ -24,8 +24,8 @@ from setuptools.extension import Extension
+ log_level = 0
+ 
+ MAJOR = 5
+-MINOR = 0
+-MICRO = 1
++MINOR = 1
++MICRO = 0
+ ISRELEASED = True
+ VERSION = '%d.%d.%d' % (MAJOR, MINOR, MICRO)
+ QUALIFIER = ''
+diff --git a/vic/drivers/shared_all/include/vic_version.h b/vic/drivers/shared_all/include/vic_version.h
+index 4ff988c1..d7f1ffd2 100644
+--- a/vic/drivers/shared_all/include/vic_version.h
++++ b/vic/drivers/shared_all/include/vic_version.h
+@@ -11,11 +11,11 @@
+ #define STR(x) STR_HELPER(x)
+ 
+ #ifndef VERSION
+-#define VERSION "5.0.1 February 1, 2017"
++#define VERSION "5.1.0 December 14, 2021"
+ #endif
+ 
+ #ifndef SHORT_VERSION
+-#define SHORT_VERSION "5.0.1"
++#define SHORT_VERSION "5.1.0"
+ #endif
+ 
+ #ifndef GIT_VERSION
+-- 
+2.43.0
+

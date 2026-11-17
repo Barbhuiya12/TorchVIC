@@ -1,0 +1,13 @@
+id,name,class,reason,validation
+482,Gurdaspur_M_LineUBDC_Rapid_No2,b,"canal gauge (Upper Bari Doab Canal rapid/feeder); polygon 6 km2 < 1 cell; regulated diversion, not natural river flow",excluded
+480,Gurdaspur_Hydel_Channel_Head_R,b,UBDC hydel channel head: canal/regulated channel; grid catchment (Ravi+Ujh) 14 000 km2 vs polygon 6 264; not routable,excluded
+484,Gurdaspur_Main_Line_UBDC_Head,b,UBDC main line head: canal/regulated channel; not routable,excluded
+478,Gurdaspur_GWD_Salampur_Feeder,b,UBDC GWD Salampur feeder: canal/regulated channel; not routable,excluded
+23,Saradaput,d,"Saradaput: GRIT sends a 12 000 km2 river (19.09N 82.22E) into the gauge cell; polygon (5 107 km2 stated) excludes it and Chindnar polygon includes it; needs a >10-cell reroute against GRIT; polygon/GRIT conflict, not fixed",excluded
+30,Chindnar,d,"Chindnar: polygon 17 944 km2 (stated 17 900) but GRIT area at the outlet is 7 400; 12 000 km2 of the polygon drains to Saradaput in GRIT; polygon or stated area likely wrong, not fixed",excluded
+222,CHINARI,d,"Chinari (Jhelum): Jhelum leaves the ISC mask at 34.4N 74.5E (mask hole west of the line of control); gauge at 73.83E is not reachable, grid area 1 200 vs 13 665",excluded
+412,HRUITEZAWL,d,Hruitezawl (Mizoram): 46% of the polygon lies outside the ISC mask (Myanmar/Bangladesh side); grid cannot hold the basin,excluded
+419,Sihthangpui,d,Sihthangpui (Mizoram): 51% of the polygon lies outside the ISC mask; grid cannot hold the basin,excluded
+421,TUIPUI_D,d,Tuipui D (Mizoram): 59% of the polygon lies outside the ISC mask; grid cannot hold the basin,excluded
+533,DIKHOW_MUKH,c,"Dikhow mouth in the Brahmaputra braid plain; 2 300 km2 of the polygon exits at a cell shared with foreign tributaries (900+ km2); no single-cell fix at 1/16 deg; unresolved, excluded",excluded
+105,Didi,c,"Didi: long narrow polygon parallel to the Chambal; its western half drains to the Chambal in GRIT (141 000 km2 river on the polygon edge); no single-cell fix at 1/16 deg; unresolved, excluded",excluded

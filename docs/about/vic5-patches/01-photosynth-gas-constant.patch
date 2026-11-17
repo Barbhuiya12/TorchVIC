@@ -1,0 +1,114 @@
+From a485951460a09b4b3e2cb9dbfb0e984ce37cf474 Mon Sep 17 00:00:00 2001
+From: Barbhuiya12 <siddikbarbhuiya@gmail.com>
+Date: Tue, 17 Nov 2026 14:23:24 +0530
+Subject: [PATCH] photosynth: use the gas constant per mole
+
+The activation energies (PHOTO_EV, PHOTO_EC, PHOTO_EO, PHOTO_ER, PHOTO_EK)
+are in J/mol, and the conversions between stomatal resistance and
+conductance need mol m-3, but photosynth() used CONST_RGAS (J/K/kmole),
+which is 1000 times too large. The Arrhenius temperature factors were
+therefore almost 1 (Vcmax at 5 C was 0.998 instead of 0.183 of its value at
+25 C) and the supply term r0 was 1000 times too large. VIC 4.2 used
+Rgas = 8.3143 J/K/mol here.
+
+Add CONST_RMOL (J/K/mole) and use it in the nine expressions of
+photosynth.c.
+---
+ vic/vic_run/include/vic_physical_constants.h |  1 +
+ vic/vic_run/src/photosynth.c                 | 18 +++++++++---------
+ 2 files changed, 10 insertions(+), 9 deletions(-)
+
+diff --git a/vic/vic_run/include/vic_physical_constants.h b/vic/vic_run/include/vic_physical_constants.h
+index 0bd60415..69d6791d 100644
+--- a/vic/vic_run/include/vic_physical_constants.h
++++ b/vic/vic_run/include/vic_physical_constants.h
+@@ -68,6 +68,7 @@
+ #define CONST_MWC 12.01  /**< molecular weight of carbon ~ kg/kmole */
+ /**< gas constants */
+ #define CONST_RGAS (CONST_AVOGAD * CONST_BOLTZ) /**< Universal gas constant ~ J/K/kmole */
++#define CONST_RMOL (CONST_RGAS / MOLE_PER_KMOLE) /**< Universal gas constant ~ J/K/mole */
+ #define CONST_RDAIR (CONST_RGAS / CONST_MWDAIR)  /**< Dry air gas constant ~ J/K/kg */
+ #define CONST_RWV (CONST_RGAS / CONST_MWWV)  /**< Water vapor gas constant ~ J/K/kg */
+ #define CONST_EPS (CONST_MWWV / CONST_MWAIR)  /**< Ratio of molecular weights */
+diff --git a/vic/vic_run/src/photosynth.c b/vic/vic_run/src/photosynth.c
+index 0ad8bcb3..cbbb23d1 100644
+--- a/vic/vic_run/src/photosynth.c
++++ b/vic/vic_run/src/photosynth.c
+@@ -66,7 +66,7 @@ photosynth(char    Ctype,
+        ! and Jmax at 25 Celsius (Vcmax * nscl),  Knorr (107/108)
+     ********************************************************************************/
+     Vcmax = MaxCarboxRate * NscaleFactor *
+-            exp(param.PHOTO_EV * (T0 / T1) / (CONST_RGAS * T));
++            exp(param.PHOTO_EV * (T0 / T1) / (CONST_RMOL * T));
+ 
+     /********************************************************************************
+        ! Determine temperature-dependent rates, compensation point, and 'dark' respiration
+@@ -89,9 +89,9 @@ photosynth(char    Ctype,
+            !    Knorr (106)
+         ********************************************************************************/
+         KC = param.PHOTO_KC *
+-             exp(param.PHOTO_EC * (T0 / T1) / (CONST_RGAS * T));
++             exp(param.PHOTO_EC * (T0 / T1) / (CONST_RMOL * T));
+         KO = param.PHOTO_KO *
+-             exp(param.PHOTO_EO * (T0 / T1) / (CONST_RGAS * T));
++             exp(param.PHOTO_EO * (T0 / T1) / (CONST_RMOL * T));
+ 
+         /********************************************************************************
+            ! CO2 compensation point without leaf respiration, gamma* is assumed to be linearly
+@@ -132,7 +132,7 @@ photosynth(char    Ctype,
+         *Rdark = param.PHOTO_FRDC3 * MaxCarboxRate * NscaleFactor *
+                  exp(param.PHOTO_ER *
+                      (T0 /
+-                      T1) / (CONST_RGAS * T)) * hiTinhib(Tfoliage) * darkinhib(
++                      T1) / (CONST_RMOL * T)) * hiTinhib(Tfoliage) * darkinhib(
+             PIRRIN);
+     }
+     else if (Ctype == PHOTO_C4) {
+@@ -164,7 +164,7 @@ photosynth(char    Ctype,
+            ! K scales of course with EK
+         ********************************************************************************/
+         K = CO2Specificity * 1.E3 * NscaleFactor * exp(
+-            param.PHOTO_EK * (T0 / T1) / (CONST_RGAS * T));
++            param.PHOTO_EK * (T0 / T1) / (CONST_RMOL * T));
+ 
+         /********************************************************************************
+            !  Compute 'dark' respiration
+@@ -174,7 +174,7 @@ photosynth(char    Ctype,
+         *Rdark = param.PHOTO_FRDC4 * MaxCarboxRate * NscaleFactor *
+                  exp(param.PHOTO_ER *
+                      (T0 /
+-                      T1) / (CONST_RGAS * T)) * hiTinhib(Tfoliage) * darkinhib(
++                      T1) / (CONST_RMOL * T)) * hiTinhib(Tfoliage) * darkinhib(
+             PIRRIN);
+     } // End computation of T-dependent rates and dark respiration
+ 
+@@ -261,7 +261,7 @@ photosynth(char    Ctype,
+                ! and r0 = 1/G0
+                ! So Ci = Catm - 1.6*(Rgas*T/Psurf)*rs * A = Catm - A * r0
+             ********************************************************************************/
+-            r0 = (*rs) * 1.6 * CONST_RGAS * T / Psurf;
++            r0 = (*rs) * 1.6 * CONST_RMOL * T / Psurf;
+ 
+             /********************************************************************************
+                ! A = min{JC, JE} - Rdark
+@@ -320,7 +320,7 @@ photosynth(char    Ctype,
+                ! and r0 = 1/G0
+                ! So Ci = Catm - 1.6*(Rgas*T/Psurf)*rs * A = Catm - A * r0
+             ********************************************************************************/
+-            r0 = (*rs) * 1.6 * CONST_RGAS * T / Psurf;
++            r0 = (*rs) * 1.6 * CONST_RMOL * T / Psurf;
+ 
+             /********************************************************************************
+                !  J0=1/2/Theta *(Vcmax + Ji) = (alphai * aPAR + Vcmax) / 2 / Theta
+@@ -418,7 +418,7 @@ photosynth(char    Ctype,
+         else {
+             *rs = 0.625 *
+                   (Catm -
+-                   (*Ci)) / ((*Agross) - (*Rdark)) * (Psurf / (CONST_RGAS * T));
++                   (*Ci)) / ((*Agross) - (*Rdark)) * (Psurf / (CONST_RMOL * T));
+         }
+         if (*rs > param.HUGE_RESIST) {
+             *rs = param.HUGE_RESIST;
+-- 
+2.43.0
+

@@ -1,0 +1,211 @@
+--- a/vic/plugins/general/src/plugin_dump.c
++++ b/vic/plugins/general/src/plugin_dump.c
+@@ -27,6 +27,8 @@
+ #include <plugin.h>
+ #include <math.h>
+ 
++void crop_dump_step(FILE *);   /* crops/src/crop_dump.c */
++
+ static FILE *vwdump = NULL;
+ static int   vwdump_init = 0;
+ 
+@@ -276,5 +278,8 @@
+         vw_rec(7, n, buf);
+         free(buf);
+     }
++    if (plugin_options.WOFOST) {
++        crop_dump_step(vwdump);
++    }
+     fflush(vwdump);
+ }
+--- /dev/null
++++ b/vic/plugins/crops/src/crop_dump.c
+@@ -0,0 +1,188 @@
++/******************************************************************************
++ * @section DESCRIPTION
++ *
++ * Dump-only instrumentation of the WOFOST-NPK crop state (TorchVIC), in
++ * the VICWUR_DUMP file of plugin_dump.c.  Called
++ * from plugin_dump_step (O phase, after crop_run of P3); it only reads
++ * model state.
++ *
++ * Record tag 8, every step:  NC  nbands  F  then [cell][band][class][F]
++ * (NaN where the cell has no unit of that crop class).  The F fields are
++ * the crop inputs of the step (air_temp[NR], shortwave[NR], CO2 forcing,
++ * the tile's pot_evap and water_stress, Tfactor and AreaFract of the band,
++ * Cv of the tile, Cc of the month), then the FIELDS list of
++ * TorchVIC tests/oracle/ref_vicwur_wofost.c, the leaf-class count, sum of
++ * weights, sum of weight x area, head age, and crop_con tsum1/tsum2.
++ *****************************************************************************/
++
++#include <vic_driver_image.h>
++#include <plugin.h>
++#include <math.h>
++
++#define NUTRIENT_ST(X, P, s) \
++    X(P ## _st_roots, s.roots) X(P ## _st_stems, s.stems) \
++    X(P ## _st_leaves, s.leaves) X(P ## _st_storage, s.storage) \
++    X(P ## _st_Demand, s.Demand) X(P ## _st_Max_lv, s.Max_lv) \
++    X(P ## _st_Max_st, s.Max_st) X(P ## _st_Max_ro, s.Max_ro) \
++    X(P ## _st_Max_so, s.Max_so) X(P ## _st_Optimum_lv, s.Optimum_lv) \
++    X(P ## _st_Optimum_st, s.Optimum_st) X(P ## _st_Indx, s.Indx) \
++    X(P ## _st_Uptake, s.Uptake) X(P ## _st_death_lv, s.death_lv) \
++    X(P ## _st_death_st, s.death_st) X(P ## _st_death_ro, s.death_ro) \
++    X(P ## _st_Avail, s.Avail) X(P ## _st_Avail_lv, s.Avail_lv) \
++    X(P ## _st_Avail_st, s.Avail_st) X(P ## _st_Avail_ro, s.Avail_ro)
++#define NUTRIENT_RT(X, P, r) \
++    X(P ## _rt_roots, r.roots) X(P ## _rt_stems, r.stems) \
++    X(P ## _rt_leaves, r.leaves) X(P ## _rt_storage, r.storage) \
++    X(P ## _rt_Demand, r.Demand) X(P ## _rt_Demand_lv, r.Demand_lv) \
++    X(P ## _rt_Demand_st, r.Demand_st) X(P ## _rt_Demand_ro, r.Demand_ro) \
++    X(P ## _rt_Demand_so, r.Demand_so) X(P ## _rt_Supply, r.Supply) \
++    X(P ## _rt_Transloc, r.Transloc) X(P ## _rt_Transloc_lv, r.Transloc_lv) \
++    X(P ## _rt_Transloc_st, r.Transloc_st) \
++    X(P ## _rt_Transloc_ro, r.Transloc_ro) X(P ## _rt_Uptake, r.Uptake) \
++    X(P ## _rt_Uptake_lv, r.Uptake_lv) X(P ## _rt_Uptake_st, r.Uptake_st) \
++    X(P ## _rt_Uptake_ro, r.Uptake_ro) X(P ## _rt_death_lv, r.death_lv) \
++    X(P ## _rt_death_st, r.death_st) X(P ## _rt_death_ro, r.death_ro)
++
++#define FIELDS(X) \
++    X(Sowing, g->crp->Sowing) X(Emergence, g->crp->Emergence) \
++    X(CultivateDay, g->crp->CultivateDay) X(GrowthDay, g->crp->GrowthDay) \
++    X(cultivating, g->cultivating) X(growing, g->growing) \
++    X(NPK_Indx, g->crp->NPK_Indx) X(NutrientStress, g->crp->NutrientStress) \
++    X(TSumEmergence, g->crp->TSumEmergence) \
++    X(fac_ro, g->crp->fac_ro) X(fac_lv, g->crp->fac_lv) \
++    X(fac_st, g->crp->fac_st) X(fac_so, g->crp->fac_so) \
++    X(prm_TempSum1, g->crp->prm.TempSum1) \
++    X(prm_TempSum2, g->crp->prm.TempSum2) \
++    X(prm_MaxRootingDepth, g->crp->prm.MaxRootingDepth) \
++    X(rt_roots, g->crp->rt.roots) X(rt_stems, g->crp->rt.stems) \
++    X(rt_leaves, g->crp->rt.leaves) X(rt_LAIExp, g->crp->rt.LAIExp) \
++    X(rt_storage, g->crp->rt.storage) \
++    X(rt_Development, g->crp->rt.Development) \
++    X(rt_RootDepth, g->crp->rt.RootDepth) \
++    X(rt_vernalization, g->crp->rt.vernalization) \
++    X(st_roots, g->crp->st.roots) X(st_stems, g->crp->st.stems) \
++    X(st_leaves, g->crp->st.leaves) X(st_LAI, g->crp->st.LAI) \
++    X(st_LAIExp, g->crp->st.LAIExp) X(st_storage, g->crp->st.storage) \
++    X(st_Development, g->crp->st.Development) \
++    X(st_Development_prev, g->crp->st.Development_prev) \
++    X(st_RootDepth, g->crp->st.RootDepth) \
++    X(st_RootDepth_prev, g->crp->st.RootDepth_prev) \
++    X(st_vernalization, g->crp->st.vernalization) \
++    X(drt_roots, g->crp->drt.roots) X(drt_stems, g->crp->drt.stems) \
++    X(drt_leaves, g->crp->drt.leaves) \
++    X(dst_roots, g->crp->dst.roots) X(dst_stems, g->crp->dst.stems) \
++    X(dst_leaves, g->crp->dst.leaves) \
++    NUTRIENT_ST(X, N, g->crp->N_st) NUTRIENT_ST(X, P, g->crp->P_st) \
++    NUTRIENT_ST(X, K, g->crp->K_st) \
++    NUTRIENT_RT(X, N, g->crp->N_rt) NUTRIENT_RT(X, P, g->crp->P_rt) \
++    NUTRIENT_RT(X, K, g->crp->K_rt) \
++    X(ste_st_N_tot, g->ste->st_N_tot) X(ste_st_P_tot, g->ste->st_P_tot) \
++    X(ste_st_K_tot, g->ste->st_K_tot) X(ste_st_N_mins, g->ste->st_N_mins) \
++    X(ste_st_P_mins, g->ste->st_P_mins) X(ste_st_K_mins, g->ste->st_K_mins) \
++    X(ste_rt_N_tot, g->ste->rt_N_tot) X(ste_rt_P_tot, g->ste->rt_P_tot) \
++    X(ste_rt_K_tot, g->ste->rt_K_tot) X(ste_rt_N_mins, g->ste->rt_N_mins) \
++    X(ste_rt_P_mins, g->ste->rt_P_mins) X(ste_rt_K_mins, g->ste->rt_K_mins) \
++    X(mng_N_Mins, g->mng->N_Mins) X(mng_NRecoveryFrac, g->mng->NRecoveryFrac) \
++    X(mng_N_external, g->mng->N_external) \
++    X(mng_P_external, g->mng->P_external) \
++    X(mng_K_external, g->mng->K_external) \
++    X(soil_WaterStress, g->soil->WaterStress) \
++    X(met_Tmin0, g->met->Tmin[0]) X(met_Tmin1, g->met->Tmin[1]) \
++    X(met_Tmin2, g->met->Tmin[2]) X(met_Tmin3, g->met->Tmin[3]) \
++    X(met_Tmin4, g->met->Tmin[4]) X(met_Tmin5, g->met->Tmin[5]) \
++    X(met_Tmin6, g->met->Tmin[6]) X(met_Tmax, g->met->Tmax) \
++    X(met_Temp, g->met->Temp) X(met_DayTemp, g->met->DayTemp) \
++    X(met_Radiation, g->met->Radiation) X(met_CO2, g->met->CO2) \
++    X(met_PotEvaptrans, g->met->PotEvaptrans) \
++    X(met_MeteoDay, g->met->MeteoDay) \
++    X(met_AtmosphTransm, g->met->AtmosphTransm) \
++    X(met_AngotRadiation, g->met->AngotRadiation) \
++    X(met_Daylength, g->met->Daylength) \
++    X(met_PARDaylength, g->met->PARDaylength) \
++    X(met_SinLD, g->met->SinLD) X(met_CosLD, g->met->CosLD) \
++    X(met_DiffRadPP, g->met->DiffRadPP) X(met_DSinBE, g->met->DSinBE) \
++    X(met_TempStress, g->met->TempStress) \
++    X(met_TminStress, g->met->TminStress)
++
++#define CD_COUNT(name, expr) +1
++#define CD_NFIELDS (9 + (0 FIELDS(CD_COUNT)) + 6)
++#define CD_VAL(name, expr) buf[p++] = (double) (expr);
++
++void
++crop_dump_step(FILE *f)
++{
++    extern domain_struct        local_domain;
++    extern option_struct        options;
++    extern plugin_option_struct plugin_options;
++    extern all_vars_struct     *all_vars;
++    extern veg_con_map_struct  *veg_con_map;
++    extern veg_con_struct     **veg_con;
++    extern soil_con_struct     *soil_con;
++    extern force_data_struct   *force;
++    extern co2_force_struct    *co2_force;
++    extern crop_con_map_struct *crop_con_map;
++    extern crop_con_struct    **crop_con;
++    extern dmy_struct          *dmy;
++    extern size_t               current;
++    extern size_t               NR;
++    extern SimUnit           ***Grid;
++
++    size_t   nc = local_domain.ncells_active;
++    size_t   nb = options.SNOW_BAND;
++    size_t   NC = plugin_options.NCROPTYPES;
++    size_t   F = CD_NFIELDS;
++    size_t   n = 3 + nc * nb * NC * F;
++    size_t   i, b, k, p;
++    double  *buf = malloc(n * sizeof(double));
++    int32_t  tag = 8;
++    int64_t  m = (int64_t) n;
++
++    for (p = 0; p < n; p++) {
++        buf[p] = NAN;
++    }
++    buf[0] = NC;
++    buf[1] = nb;
++    buf[2] = F;
++    for (i = 0; i < nc; i++) {
++        for (b = 0; b < nb; b++) {
++            SimUnit *g = Grid[i][b];
++            while (g) {
++                size_t   crop_class = g->met->crop_class;
++                int      vc = crop_con_map[i].veg_class[crop_class];
++                int      iv = veg_con_map[i].vidx[vc];
++                int      c = crop_con_map[i].cidx[crop_class];
++                double   sw = 0., swa = 0.;
++                int      nl = 0;
++                Green   *l;
++                p = 3 + ((i * nb + b) * NC + crop_class) * F;
++                buf[p++] = force[i].air_temp[NR];
++                buf[p++] = force[i].shortwave[NR];
++                buf[p++] = co2_force[i].CO2;
++                buf[p++] = all_vars[i].cell[iv][b].pot_evap;
++                buf[p++] = all_vars[i].cell[iv][b].water_stress;
++                buf[p++] = soil_con[i].Tfactor[b];
++                buf[p++] = soil_con[i].AreaFract[b];
++                buf[p++] = veg_con[i][iv].Cv;
++                buf[p++] = crop_con_map[i].Cc[crop_class][dmy[current].month - 1];
++                FIELDS(CD_VAL)
++                for (l = g->crp->LeaveProperties; l; l = l->next) {
++                    nl++;
++                    sw += l->weight;
++                    swa += l->weight * l->area;
++                }
++                buf[p++] = nl;
++                buf[p++] = sw;
++                buf[p++] = swa;
++                buf[p++] = g->crp->LeaveProperties ?
++                           g->crp->LeaveProperties->age : NAN;
++                buf[p++] = crop_con[i][c].tsum1;
++                buf[p++] = crop_con[i][c].tsum2;
++                g = g->next;
++            }
++        }
++    }
++    fwrite(&tag, sizeof(tag), 1, f);
++    fwrite(&m, sizeof(m), 1, f);
++    fwrite(buf, sizeof(double), n, f);
++    free(buf);
++}

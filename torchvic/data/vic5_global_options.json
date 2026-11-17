@@ -1,0 +1,1471 @@
+{
+  "drivers": [
+    "image",
+    "classic",
+    "cesm"
+  ],
+  "generated_by": "tools/extract_vic_options.py",
+  "options": {
+    "AERO_RESIST_CANSNOW": {
+      "boolean": false,
+      "drivers": [
+        "image",
+        "classic",
+        "cesm"
+      ],
+      "note": "AR_406_FULL and AR_406 are run as VIC runs them (basin.simulate(aero_resist_cansnow=...)); AR_410 and AR_406_LS are refused (image driver: torchvic/io/options.py, docs/OPTIONS.md)",
+      "parsed_elsewhere": false,
+      "rejected_by": [],
+      "status": "unsupported"
+    },
+    "AGGFREQ": {
+      "boolean": false,
+      "drivers": [
+        "image",
+        "classic",
+        "cesm"
+      ],
+      "note": "aggregation period, VIC's alarm: NSTEPS, NSECONDS..NDAYS, NMONTHS, NYEARS, DATE, NEVER; END and an absent AGGFREQ, which VIC 5 writes nothing for, are one whole-run record and every step",
+      "parsed_elsewhere": true,
+      "rejected_by": [],
+      "status": "implemented"
+    },
+    "ALBEDO": {
+      "boolean": false,
+      "drivers": [
+        "cesm"
+      ],
+      "note": "CESM-driver forcing declaration",
+      "parsed_elsewhere": false,
+      "rejected_by": [
+        "cesm"
+      ],
+      "status": "unsupported"
+    },
+    "ALB_SRC": {
+      "boolean": false,
+      "drivers": [
+        "image",
+        "classic",
+        "cesm"
+      ],
+      "note": "FROM_VEGLIB and FROM_VEGPARAM read the parameter file's albedo, FROM_VEGHIST the per-step albedo of FORCING2 (io.veghist) (image driver: torchvic/io/options.py, docs/OPTIONS.md)",
+      "parsed_elsewhere": false,
+      "rejected_by": [],
+      "status": "implemented"
+    },
+    "ALMA_OUTPUT": {
+      "boolean": false,
+      "drivers": [
+        "classic"
+      ],
+      "note": "deprecated in VIC 5; the classic driver refuses it",
+      "parsed_elsewhere": false,
+      "rejected_by": [
+        "classic"
+      ],
+      "status": "unsupported"
+    },
+    "ARC_SOIL": {
+      "boolean": false,
+      "drivers": [
+        "classic"
+      ],
+      "note": "ARC/INFO soil files (classic driver)",
+      "parsed_elsewhere": false,
+      "rejected_by": [
+        "classic"
+      ],
+      "status": "unsupported"
+    },
+    "ARNO_PARAMS": {
+      "boolean": false,
+      "drivers": [
+        "image",
+        "classic",
+        "cesm"
+      ],
+      "note": "read as BASEFLOW NIJSSEN2001 (TRUE) or ARNO (FALSE), the replacement VIC's own error text names",
+      "parsed_elsewhere": false,
+      "rejected_by": [
+        "image",
+        "classic",
+        "cesm"
+      ],
+      "status": "implemented"
+    },
+    "ATMOS_STEPS_PER_DAY": {
+      "boolean": false,
+      "drivers": [
+        "image",
+        "classic"
+      ],
+      "note": "the classic driver's key; validated as get_global_param.c:811-856 does, no effect on results (it only sets atmos_dt, which is logged)",
+      "parsed_elsewhere": false,
+      "rejected_by": [
+        "image"
+      ],
+      "status": "ignored"
+    },
+    "BASEFLOW": {
+      "boolean": false,
+      "drivers": [
+        "image",
+        "classic",
+        "cesm"
+      ],
+      "note": "ARNO runs as the column (soil.arno_baseflow); NIJSSEN2001 reaches it as ARNO's Ds, Dsmax, Ws, c (soil.nijssen2001_to_arno)",
+      "parsed_elsewhere": false,
+      "rejected_by": [],
+      "status": "implemented"
+    },
+    "BINARY_OUTPUT": {
+      "boolean": false,
+      "drivers": [
+        "classic"
+      ],
+      "note": "deprecated in VIC 5; the classic driver refuses it",
+      "parsed_elsewhere": false,
+      "rejected_by": [
+        "classic"
+      ],
+      "status": "unsupported"
+    },
+    "BINARY_STATE_FILE": {
+      "boolean": false,
+      "drivers": [
+        "classic"
+      ],
+      "note": "renamed STATE_FORMAT in VIC 5",
+      "parsed_elsewhere": false,
+      "rejected_by": [
+        "classic"
+      ],
+      "status": "unsupported"
+    },
+    "BLOWING": {
+      "boolean": true,
+      "drivers": [
+        "image",
+        "classic",
+        "cesm"
+      ],
+      "note": "CalcBlowingSnow.c (torchvic.core.blowing); sigma_slope, lag_one and fetch are read from the classic vegetation file and the image parameter file",
+      "parsed_elsewhere": false,
+      "rejected_by": [],
+      "status": "implemented"
+    },
+    "BLOWING_CALC_PROB": {
+      "boolean": true,
+      "drivers": [
+        "image",
+        "classic",
+        "cesm"
+      ],
+      "note": "the probability of blowing snow occurring, CalcBlowingSnow.c:582-616; off gives probability 1 ",
+      "parsed_elsewhere": false,
+      "rejected_by": [],
+      "status": "implemented"
+    },
+    "BLOWING_FETCH": {
+      "boolean": true,
+      "drivers": [
+        "image",
+        "classic",
+        "cesm"
+      ],
+      "note": "the fetch correction to the saltation transport, CalcBlowingSnow.c:750-752 and :787-789 ",
+      "parsed_elsewhere": false,
+      "rejected_by": [],
+      "status": "implemented"
+    },
+    "BLOWING_SIMPLE": {
+      "boolean": true,
+      "drivers": [
+        "image",
+        "classic",
+        "cesm"
+      ],
+      "note": "the SBSM single-expression sublimation, CalcBlowingSnow.c:729-741 ",
+      "parsed_elsewhere": false,
+      "rejected_by": [],
+      "status": "implemented"
+    },
+    "BLOWING_SPATIAL_WIND": {
+      "boolean": true,
+      "drivers": [
+        "image",
+        "classic",
+        "cesm"
+      ],
+      "note": "the log-normal wind distribution cut into BLOWING_NUMINCS increments, CalcBlowingSnow.c:123-180 ",
+      "parsed_elsewhere": false,
+      "rejected_by": [],
+      "status": "implemented"
+    },
+    "BLOWING_VAR_THRESHOLD": {
+      "boolean": true,
+      "drivers": [
+        "image",
+        "classic",
+        "cesm"
+      ],
+      "note": "the variable threshold shear of Li and Pomeroy (1997), CalcBlowingSnow.c:645-650; the constant one is there too ",
+      "parsed_elsewhere": false,
+      "rejected_by": [],
+      "status": "implemented"
+    },
+    "BULK_DENSITY_COMB": {
+      "boolean": true,
+      "drivers": [
+        "image",
+        "classic",
+        "cesm"
+      ],
+      "note": "bulk density is read as the mineral value; the combined-with-organic convention is not honoured",
+      "parsed_elsewhere": false,
+      "rejected_by": [],
+      "status": "unsupported"
+    },
+    "CALENDAR": {
+      "boolean": false,
+      "drivers": [
+        "image",
+        "classic"
+      ],
+      "note": "the dates are the forcing file's; a CALENDAR that disagrees with it is refused",
+      "parsed_elsewhere": false,
+      "rejected_by": [],
+      "status": "implemented"
+    },
+    "CANOPY_LAYERS": {
+      "boolean": false,
+      "drivers": [
+        "image",
+        "classic",
+        "cesm"
+      ],
+      "note": "the canopy is split into Ncanopy layers of equal leaf area for the carbon step, as read_vegparam.c:124-128 splits it, with the absorbed PAR and the nitrogen scaling computed per layer (faparl.c, calc_Nscale_factors.c). Three by default, as VIC has it; basin.simulate takes carbon_options={'ncanopy': n}",
+      "parsed_elsewhere": false,
+      "rejected_by": [],
+      "status": "implemented"
+    },
+    "CARBON": {
+      "boolean": true,
+      "drivers": [
+        "image",
+        "classic",
+        "cesm"
+      ],
+      "note": "canopy_assimilation and photosynth verified against VIC's own compiled functions to 1e-12 (torchvic.core.carbon), called from the step loop at the point surface_fluxes.c:732 calls them -- after the water and energy are settled, from the canopy resistance the transpiration already computed. With VIC's default RC_MODE of RC_JARVIS the carbon step only reads that resistance, so every water and energy row is bitwise unchanged with CARBON on (tests/test_carbon_run.py). The CATM, PAR and FDIR forcings VIC 5 demands and no sample data has are derived as initialize_atmos.c:1588-1700 derives them (torchvic.forcing.daily, carbon=True). VIC 5's photosynth.c uses a per-kilomole gas constant in nine per-mole formulas, and compute_soil_resp.c divides two of three pool turnover times by hours where dt is seconds; both are reproduced by default and corrected on request (basin.simulate carbon_options). The three soil pools need the surface energy balance for their node temperatures and a soil file with `bubble` for the lumped water table; without either the vegetation fluxes run and the pool rows are absent rather than zero",
+      "parsed_elsewhere": false,
+      "rejected_by": [],
+      "status": "implemented"
+    },
+    "CLOSE_ENERGY": {
+      "boolean": true,
+      "drivers": [
+        "image",
+        "classic",
+        "cesm"
+      ],
+      "note": "the canopy air temperature is solved and the ground/canopy balances iterate to closure (basin._ce_step)",
+      "parsed_elsewhere": false,
+      "rejected_by": [],
+      "status": "implemented"
+    },
+    "COMPRESS": {
+      "boolean": false,
+      "drivers": [
+        "image",
+        "classic",
+        "cesm"
+      ],
+      "note": "zlib level of netCDF-4 history files",
+      "parsed_elsewhere": true,
+      "rejected_by": [],
+      "status": "implemented"
+    },
+    "COMPUTE_TREELINE": {
+      "boolean": false,
+      "drivers": [
+        "image",
+        "classic",
+        "cesm"
+      ],
+      "note": "the classic driver's treeline (compute_treeline.c, put_data.c); VIC's image driver stops on it",
+      "parsed_elsewhere": false,
+      "rejected_by": [],
+      "status": "implemented"
+    },
+    "CONSTANTS": {
+      "boolean": false,
+      "drivers": [
+        "image",
+        "classic",
+        "cesm"
+      ],
+      "note": "read by GlobalParam.constants(): VEG_LAI_WATER_FACTOR is applied (p['lai_water_factor']); any other constant in the file is refused by name, not ignored",
+      "parsed_elsewhere": false,
+      "rejected_by": [],
+      "status": "implemented"
+    },
+    "CONTINUEONERROR": {
+      "boolean": true,
+      "drivers": [
+        "classic"
+      ],
+      "note": "error policy; TorchVIC raises",
+      "parsed_elsewhere": false,
+      "rejected_by": [],
+      "status": "ignored"
+    },
+    "CORRPREC": {
+      "boolean": true,
+      "drivers": [
+        "image",
+        "classic",
+        "cesm"
+      ],
+      "note": "gauge undercatch correction is not applied",
+      "parsed_elsewhere": false,
+      "rejected_by": [],
+      "status": "unsupported"
+    },
+    "DOMAIN": {
+      "boolean": false,
+      "drivers": [
+        "image",
+        "cesm"
+      ],
+      "note": "the domain file is opened and its mask selects the active cells (vic_image.ImageDomain)",
+      "parsed_elsewhere": false,
+      "rejected_by": [],
+      "status": "implemented"
+    },
+    "DOMAIN_TYPE": {
+      "boolean": false,
+      "drivers": [
+        "image",
+        "cesm"
+      ],
+      "note": "every domain variable name is taken from the file, not assumed",
+      "parsed_elsewhere": false,
+      "rejected_by": [],
+      "status": "implemented"
+    },
+    "ENDDAY": {
+      "boolean": false,
+      "drivers": [
+        "image",
+        "classic"
+      ],
+      "note": "the simulation window: torchvic.case.window runs the forcing records from STARTYEAR..STARTSEC to the end of ENDYEAR/ENDMONTH/ENDDAY, or NRECS model steps, and refuses a forcing that does not cover it",
+      "parsed_elsewhere": false,
+      "rejected_by": [],
+      "status": "implemented"
+    },
+    "ENDMONTH": {
+      "boolean": false,
+      "drivers": [
+        "image",
+        "classic"
+      ],
+      "note": "the simulation window: torchvic.case.window runs the forcing records from STARTYEAR..STARTSEC to the end of ENDYEAR/ENDMONTH/ENDDAY, or NRECS model steps, and refuses a forcing that does not cover it",
+      "parsed_elsewhere": false,
+      "rejected_by": [],
+      "status": "implemented"
+    },
+    "ENDYEAR": {
+      "boolean": false,
+      "drivers": [
+        "image",
+        "classic"
+      ],
+      "note": "the simulation window: torchvic.case.window runs the forcing records from STARTYEAR..STARTSEC to the end of ENDYEAR/ENDMONTH/ENDDAY, or NRECS model steps, and refuses a forcing that does not cover it",
+      "parsed_elsewhere": false,
+      "rejected_by": [],
+      "status": "implemented"
+    },
+    "EQUAL_AREA": {
+      "boolean": true,
+      "drivers": [
+        "classic"
+      ],
+      "note": "cell areas come from the domain file (classic driver)",
+      "parsed_elsewhere": false,
+      "rejected_by": [],
+      "status": "unsupported"
+    },
+    "EXP_TRANS": {
+      "boolean": true,
+      "drivers": [
+        "image",
+        "classic",
+        "cesm"
+      ],
+      "note": "the node grid of the finite-difference profile; TRUE with QUICK_FLUX is refused, as VIC refuses it (image driver: torchvic/io/options.py, docs/OPTIONS.md)",
+      "parsed_elsewhere": false,
+      "rejected_by": [],
+      "status": "implemented"
+    },
+    "FCANOPY": {
+      "boolean": false,
+      "drivers": [
+        "cesm"
+      ],
+      "note": "CESM-driver forcing declaration",
+      "parsed_elsewhere": false,
+      "rejected_by": [
+        "cesm"
+      ],
+      "status": "unsupported"
+    },
+    "FCAN_SRC": {
+      "boolean": false,
+      "drivers": [
+        "image",
+        "classic",
+        "cesm"
+      ],
+      "note": "FROM_DEFAULT, FROM_VEGLIB and FROM_VEGPARAM as VIC (a file without fcanopy refused), FROM_VEGHIST the per-step fcanopy of FORCING2 (io.veghist) (image driver: torchvic/io/options.py, docs/OPTIONS.md)",
+      "parsed_elsewhere": false,
+      "rejected_by": [],
+      "status": "implemented"
+    },
+    "FORCEDAY": {
+      "boolean": false,
+      "drivers": [
+        "classic"
+      ],
+      "note": "see FORCEYEAR",
+      "parsed_elsewhere": false,
+      "rejected_by": [],
+      "status": "implemented"
+    },
+    "FORCEMONTH": {
+      "boolean": false,
+      "drivers": [
+        "classic"
+      ],
+      "note": "see FORCEYEAR",
+      "parsed_elsewhere": false,
+      "rejected_by": [],
+      "status": "implemented"
+    },
+    "FORCESEC": {
+      "boolean": false,
+      "drivers": [
+        "classic"
+      ],
+      "note": "see FORCEYEAR",
+      "parsed_elsewhere": false,
+      "rejected_by": [],
+      "status": "implemented"
+    },
+    "FORCEYEAR": {
+      "boolean": false,
+      "drivers": [
+        "classic"
+      ],
+      "note": "classic forcing start, honoured by vic_classic.ClassicForcing",
+      "parsed_elsewhere": false,
+      "rejected_by": [],
+      "status": "implemented"
+    },
+    "FORCE_DT": {
+      "boolean": false,
+      "drivers": [
+        "classic"
+      ],
+      "note": "forcing step (classic driver); the step comes from the forcing time axis",
+      "parsed_elsewhere": false,
+      "rejected_by": [
+        "classic"
+      ],
+      "status": "unsupported"
+    },
+    "FORCE_ENDIAN": {
+      "boolean": false,
+      "drivers": [
+        "classic"
+      ],
+      "note": "binary forcing byte order (classic driver)",
+      "parsed_elsewhere": false,
+      "rejected_by": [],
+      "status": "unsupported"
+    },
+    "FORCE_FORMAT": {
+      "boolean": false,
+      "drivers": [
+        "classic"
+      ],
+      "note": "ASCII is read by vic_classic.ClassicForcing; BINARY is refused by name",
+      "parsed_elsewhere": false,
+      "rejected_by": [],
+      "status": "implemented"
+    },
+    "FORCE_STEPS_PER_DAY": {
+      "boolean": false,
+      "drivers": [
+        "classic"
+      ],
+      "note": "sets the classic forcing time axis in vic_classic.ClassicForcing",
+      "parsed_elsewhere": false,
+      "rejected_by": [],
+      "status": "implemented"
+    },
+    "FORCE_TYPE": {
+      "boolean": false,
+      "drivers": [
+        "image",
+        "classic"
+      ],
+      "note": "the NetCDF variable holding each forcing is taken from the file",
+      "parsed_elsewhere": false,
+      "rejected_by": [],
+      "status": "implemented"
+    },
+    "FORCING1": {
+      "boolean": false,
+      "drivers": [
+        "image",
+        "classic"
+      ],
+      "note": "the forcing prefix is globbed and every year read (vic_image.ImageForcing)",
+      "parsed_elsewhere": false,
+      "rejected_by": [],
+      "status": "implemented"
+    },
+    "FORCING2": {
+      "boolean": false,
+      "drivers": [
+        "image",
+        "classic"
+      ],
+      "note": "the vegetation history file (io.veghist): LAI, fcanopy and albedo for the *_SRC set to FROM_VEGHIST; VIC reads no other variable from it",
+      "parsed_elsewhere": false,
+      "rejected_by": [],
+      "status": "implemented"
+    },
+    "FROZEN_SOIL": {
+      "boolean": true,
+      "drivers": [
+        "image",
+        "classic",
+        "cesm"
+      ],
+      "note": "the QUICK_FLUX path: the layer ice the unfrozen-water curve leaves, that ice in the column and in the thermal properties, and the latent heat of fusion in the surface balance; and the full node profile (QUICK_FLUX FALSE, which is what VIC switches to by default under FROZEN_SOIL), solved in torchvic.core.soiltemp",
+      "parsed_elsewhere": false,
+      "rejected_by": [],
+      "status": "implemented"
+    },
+    "FULL_ENERGY": {
+      "boolean": true,
+      "drivers": [
+        "image",
+        "classic",
+        "cesm"
+      ],
+      "note": "the surface energy balance in torchvic.core.energy: one root find per tile per step, for the configuration with no snow on the surface, no overstory, on the QUICK_FLUX path and on the finite-difference profile; the runner reads the flag from the global file. Snow-coupled and overstory energy terms are not solved yet, and are said so rather than run on the wrong branch",
+      "parsed_elsewhere": false,
+      "rejected_by": [],
+      "status": "implemented"
+    },
+    "GRID_DECIMAL": {
+      "boolean": false,
+      "drivers": [
+        "classic"
+      ],
+      "note": "decimal places in the classic forcing filename (make_in_and_outfiles.c:47-58), honoured by vic_classic",
+      "parsed_elsewhere": false,
+      "rejected_by": [],
+      "status": "implemented"
+    },
+    "GRND_FLUX_TYPE": {
+      "boolean": false,
+      "drivers": [
+        "image",
+        "classic",
+        "cesm"
+      ],
+      "note": "GF_410 runs as the two-term Liang flux and GF_406 as the surface term alone, on both thermal paths (energy._residual, soiltemp.profile_ground_terms, energy.water_balance_ground_flux)",
+      "parsed_elsewhere": false,
+      "rejected_by": [],
+      "status": "implemented"
+    },
+    "HISTFREQ": {
+      "boolean": false,
+      "drivers": [
+        "image"
+      ],
+      "note": "history file splitting, VIC's write alarm",
+      "parsed_elsewhere": true,
+      "rejected_by": [],
+      "status": "implemented"
+    },
+    "IMPLICIT": {
+      "boolean": true,
+      "drivers": [
+        "image",
+        "classic",
+        "cesm"
+      ],
+      "note": "the solver of the finite-difference profile; TRUE with QUICK_FLUX is refused, as VIC refuses it (image driver: torchvic/io/options.py, docs/OPTIONS.md)",
+      "parsed_elsewhere": false,
+      "rejected_by": [],
+      "status": "implemented"
+    },
+    "INIT_STATE": {
+      "boolean": false,
+      "drivers": [
+        "image",
+        "classic",
+        "cesm"
+      ],
+      "note": "no state is restored; every run starts from torchvic.model.basin.initial_states",
+      "parsed_elsewhere": false,
+      "rejected_by": [],
+      "status": "unsupported"
+    },
+    "JULY_TAVG_SUPPLIED": {
+      "boolean": true,
+      "drivers": [
+        "image",
+        "classic",
+        "cesm"
+      ],
+      "note": "read with COMPUTE_TREELINE, which is the only reader of July_Tavg (image driver: torchvic/io/options.py, docs/OPTIONS.md)",
+      "parsed_elsewhere": false,
+      "rejected_by": [],
+      "status": "implemented"
+    },
+    "LAI": {
+      "boolean": false,
+      "drivers": [
+        "cesm"
+      ],
+      "note": "CESM-driver forcing declaration",
+      "parsed_elsewhere": false,
+      "rejected_by": [
+        "cesm"
+      ],
+      "status": "unsupported"
+    },
+    "LAI_SRC": {
+      "boolean": false,
+      "drivers": [
+        "image",
+        "classic",
+        "cesm"
+      ],
+      "note": "FROM_VEGLIB and FROM_VEGPARAM read the parameter file's LAI, FROM_VEGHIST the per-step LAI of FORCING2 (io.veghist) (image driver: torchvic/io/options.py, docs/OPTIONS.md)",
+      "parsed_elsewhere": false,
+      "rejected_by": [],
+      "status": "implemented"
+    },
+    "LAKES": {
+      "boolean": true,
+      "drivers": [
+        "image",
+        "classic",
+        "cesm"
+      ],
+      "note": "all of lakes.eb.c, ice_melt.c, water_energy_balance.c, water_under_ice.c and IceEnergyBalance.c is implemented and verified against VIC's own compiled functions (torchvic.core.lake): the thermal profile and its convective mixing, the open water and under-ice energy balances, the ice and its snowpack, the basin geometry, the water balance and the area the lake trades with the wetland. torchvic.core.lake.lake_step runs one lake tile a step, and a 720-step run tracks VIC to 4e-07 on the lake volume. What is NOT here is the coupling into basin.simulate, which carries one soil column per grid cell rather than the lake-plus-wetland pair this option splits a cell into, so a global file cannot yet reach it",
+      "parsed_elsewhere": false,
+      "rejected_by": [],
+      "status": "unsupported"
+    },
+    "LAKE_NODES": {
+      "boolean": false,
+      "drivers": [
+        "image",
+        "classic",
+        "cesm"
+      ],
+      "note": "the node grid is implemented (MAX_LAKE_NODES = 20, compute_derived_lake_dimensions); the option is unreachable only because LAKES is",
+      "parsed_elsewhere": false,
+      "rejected_by": [],
+      "status": "unsupported"
+    },
+    "LAKE_PROFILE": {
+      "boolean": true,
+      "drivers": [
+        "image",
+        "classic",
+        "cesm"
+      ],
+      "note": "read_lakeparam and compute_lake_params are implemented for both the given and the generated depth-area curve and are exact against VIC (torchvic.core.lake.read_lakeparam); the option is unreachable only because LAKES is",
+      "parsed_elsewhere": false,
+      "rejected_by": [],
+      "status": "unsupported"
+    },
+    "LOG_DIR": {
+      "boolean": false,
+      "drivers": [
+        "image",
+        "classic",
+        "cesm"
+      ],
+      "note": "logging goes to the caller's log function",
+      "parsed_elsewhere": false,
+      "rejected_by": [],
+      "status": "ignored"
+    },
+    "MAX_SNOW_ALBEDO": {
+      "boolean": true,
+      "drivers": [
+        "image",
+        "classic",
+        "cesm"
+      ],
+      "note": "per-cell maximum snow albedo from the parameter file; TorchVIC uses a single new_snow_albedo run parameter",
+      "parsed_elsewhere": false,
+      "rejected_by": [],
+      "status": "unsupported"
+    },
+    "MAX_SNOW_TEMP": {
+      "boolean": false,
+      "drivers": [
+        "classic"
+      ],
+      "note": "the rain/snow partition uses the t_max_snow run parameter, not this key (classic driver)",
+      "parsed_elsewhere": false,
+      "rejected_by": [
+        "classic"
+      ],
+      "status": "unsupported"
+    },
+    "MIN_RAIN_TEMP": {
+      "boolean": false,
+      "drivers": [
+        "classic"
+      ],
+      "note": "the rain/snow partition uses the t_min_rain run parameter, not this key (classic driver)",
+      "parsed_elsewhere": false,
+      "rejected_by": [
+        "classic"
+      ],
+      "status": "unsupported"
+    },
+    "MODEL_STEPS_PER_DAY": {
+      "boolean": false,
+      "drivers": [
+        "image",
+        "classic"
+      ],
+      "note": "the model step: the forcing's own, or 1 (the day's records averaged, vic_force.c:404-412); other steps are refused (image driver: torchvic/io/options.py, docs/OPTIONS.md)",
+      "parsed_elsewhere": false,
+      "rejected_by": [],
+      "status": "implemented"
+    },
+    "MOISTFRACT": {
+      "boolean": false,
+      "drivers": [
+        "classic"
+      ],
+      "note": "deprecated in VIC 5; replaced by the OUT_SOIL_*_FRAC output variables",
+      "parsed_elsewhere": false,
+      "rejected_by": [
+        "classic"
+      ],
+      "status": "unsupported"
+    },
+    "NIJSSEN2001_BASEFLOW": {
+      "boolean": false,
+      "drivers": [
+        "image",
+        "classic",
+        "cesm"
+      ],
+      "note": "read as BASEFLOW NIJSSEN2001 (TRUE) or ARNO (FALSE), the replacement VIC's own error text names",
+      "parsed_elsewhere": false,
+      "rejected_by": [
+        "image",
+        "classic",
+        "cesm"
+      ],
+      "status": "implemented"
+    },
+    "NLAYER": {
+      "boolean": false,
+      "drivers": [
+        "classic",
+        "cesm"
+      ],
+      "note": "the layer count comes from the parameter file's nlayer dimension, not from the global file",
+      "parsed_elsewhere": false,
+      "rejected_by": [],
+      "status": "unsupported"
+    },
+    "NODES": {
+      "boolean": false,
+      "drivers": [
+        "image",
+        "classic",
+        "cesm"
+      ],
+      "note": "the thermal node count off the QUICK_FLUX path; with QUICK_FLUX VIC resets it to 3",
+      "parsed_elsewhere": false,
+      "rejected_by": [],
+      "status": "implemented"
+    },
+    "NOFLUX": {
+      "boolean": true,
+      "drivers": [
+        "image",
+        "classic",
+        "cesm"
+      ],
+      "note": "the bottom boundary of the finite-difference profile; not read on the QUICK_FLUX path (image driver: torchvic/io/options.py, docs/OPTIONS.md)",
+      "parsed_elsewhere": false,
+      "rejected_by": [],
+      "status": "implemented"
+    },
+    "NO_FLUX": {
+      "boolean": true,
+      "drivers": [
+        "image",
+        "classic",
+        "cesm"
+      ],
+      "note": "alias of NOFLUX (image driver: torchvic/io/options.py, docs/OPTIONS.md)",
+      "parsed_elsewhere": false,
+      "rejected_by": [],
+      "status": "implemented"
+    },
+    "NRECS": {
+      "boolean": false,
+      "drivers": [
+        "image",
+        "classic"
+      ],
+      "note": "the simulation window: torchvic.case.window runs the forcing records from STARTYEAR..STARTSEC to the end of ENDYEAR/ENDMONTH/ENDDAY, or NRECS model steps, and refuses a forcing that does not cover it",
+      "parsed_elsewhere": false,
+      "rejected_by": [],
+      "status": "implemented"
+    },
+    "ORGANIC_FRACT": {
+      "boolean": true,
+      "drivers": [
+        "image",
+        "classic",
+        "cesm"
+      ],
+      "note": "organic soil fractions are not read from the parameter file",
+      "parsed_elsewhere": false,
+      "rejected_by": [],
+      "status": "unsupported"
+    },
+    "OUTFILE": {
+      "boolean": false,
+      "drivers": [
+        "image",
+        "classic",
+        "cesm"
+      ],
+      "note": "one history stream per OUTFILE (torchvic.io.history.parse_streams), written by torchvic run / Case.write_history",
+      "parsed_elsewhere": true,
+      "rejected_by": [],
+      "status": "implemented"
+    },
+    "OUTPUT_FORCE": {
+      "boolean": false,
+      "drivers": [
+        "image"
+      ],
+      "note": "VIC 4.2.d writes its forcing files (write_forcing_file.c); so does TorchVIC, in the same files",
+      "parsed_elsewhere": false,
+      "rejected_by": [
+        "image"
+      ],
+      "status": "implemented"
+    },
+    "OUTPUT_STEPS_PER_DAY": {
+      "boolean": false,
+      "drivers": [
+        "cesm"
+      ],
+      "note": "history output step (CESM driver)",
+      "parsed_elsewhere": true,
+      "rejected_by": [],
+      "status": "ignored"
+    },
+    "OUTVAR": {
+      "boolean": false,
+      "drivers": [
+        "image",
+        "classic",
+        "cesm"
+      ],
+      "note": "the stream's variables, their AGG_TYPE (5th token; VIC's per-variable default otherwise) and OUT_TYPE; a variable TorchVIC does not compute is named and left out",
+      "parsed_elsewhere": true,
+      "rejected_by": [],
+      "status": "implemented"
+    },
+    "OUT_DT": {
+      "boolean": false,
+      "drivers": [
+        "classic"
+      ],
+      "note": "deprecated in VIC 5; replaced by AGGFREQ",
+      "parsed_elsewhere": false,
+      "rejected_by": [
+        "classic"
+      ],
+      "status": "unsupported"
+    },
+    "OUT_FORMAT": {
+      "boolean": false,
+      "drivers": [
+        "image",
+        "classic",
+        "cesm"
+      ],
+      "note": "netCDF format of history files (NETCDF4_CLASSIC, the default, is written as netCDF-3 classic, as VIC's get_nc_mode does)",
+      "parsed_elsewhere": true,
+      "rejected_by": [],
+      "status": "implemented"
+    },
+    "OUT_TIME_UNITS": {
+      "boolean": false,
+      "drivers": [
+        "image",
+        "classic",
+        "cesm"
+      ],
+      "note": "the time units of the history files torchvic.io.history writes (default DAYS, since 0001-01-01 as VIC)",
+      "parsed_elsewhere": false,
+      "rejected_by": [],
+      "status": "implemented"
+    },
+    "PARAMETERS": {
+      "boolean": false,
+      "drivers": [
+        "image",
+        "cesm"
+      ],
+      "note": "soil, vegetation and band fields are read from it (vic_image.ImageParams)",
+      "parsed_elsewhere": false,
+      "rejected_by": [],
+      "status": "implemented"
+    },
+    "PRT_HEADER": {
+      "boolean": false,
+      "drivers": [
+        "classic"
+      ],
+      "note": "deprecated in VIC 5; the classic driver refuses it",
+      "parsed_elsewhere": false,
+      "rejected_by": [
+        "classic"
+      ],
+      "status": "unsupported"
+    },
+    "PRT_SNOW_BAND": {
+      "boolean": false,
+      "drivers": [
+        "classic"
+      ],
+      "note": "deprecated in VIC 5; the classic driver refuses it",
+      "parsed_elsewhere": false,
+      "rejected_by": [
+        "classic"
+      ],
+      "status": "unsupported"
+    },
+    "QUICK_FLUX": {
+      "boolean": true,
+      "drivers": [
+        "image",
+        "classic",
+        "cesm"
+      ],
+      "note": "TRUE is the two-node flux; FALSE solves the finite-difference profile at every trial surface temperature (image driver: torchvic/io/options.py, docs/OPTIONS.md)",
+      "parsed_elsewhere": false,
+      "rejected_by": [],
+      "status": "implemented"
+    },
+    "QUICK_SOLVE": {
+      "boolean": true,
+      "drivers": [
+        "image",
+        "classic",
+        "cesm"
+      ],
+      "note": "bracketing on the reduced column off the QUICK_FLUX path; with QUICK_FLUX it finds the same root (image driver: torchvic/io/options.py, docs/OPTIONS.md)",
+      "parsed_elsewhere": false,
+      "rejected_by": [],
+      "status": "implemented"
+    },
+    "RC_MODE": {
+      "boolean": false,
+      "drivers": [
+        "image",
+        "classic",
+        "cesm"
+      ],
+      "note": "RC_JARVIS (default) and RC_PHOTO, the canopy resistance from photosynthetic demand (canopy_evap.c:296-307, penman.c calc_rc_ps); RC_PHOTO needs CARBON, as VIC resets it without. Verified against VIC on Walnut Gulch (verification/matrix.py section 14)",
+      "parsed_elsewhere": false,
+      "rejected_by": [],
+      "status": "implemented"
+    },
+    "RESOLUTION": {
+      "boolean": false,
+      "drivers": [
+        "classic"
+      ],
+      "note": "grid resolution comes from the domain file (classic driver)",
+      "parsed_elsewhere": false,
+      "rejected_by": [],
+      "status": "unsupported"
+    },
+    "RESULT_DIR": {
+      "boolean": false,
+      "drivers": [
+        "image",
+        "classic",
+        "cesm"
+      ],
+      "note": "where torchvic.io.history writes the OUTFILE streams (torchvic run; --result-dir overrides)",
+      "parsed_elsewhere": false,
+      "rejected_by": [],
+      "status": "implemented"
+    },
+    "ROOT_ZONES": {
+      "boolean": false,
+      "drivers": [
+        "classic"
+      ],
+      "note": "root zone count for the classic vegetation file, honoured by vic_classic",
+      "parsed_elsewhere": false,
+      "rejected_by": [],
+      "status": "implemented"
+    },
+    "ROUT_PARAM": {
+      "boolean": false,
+      "drivers": [
+        "image"
+      ],
+      "note": "routing is a unit hydrograph over one outlet (torchvic.model.routing), not RVIC's parameter file",
+      "parsed_elsewhere": false,
+      "rejected_by": [],
+      "status": "unsupported"
+    },
+    "RUNOFF_STEPS_PER_DAY": {
+      "boolean": false,
+      "drivers": [
+        "image",
+        "classic"
+      ],
+      "note": "passed to column.SoilParams and sub-steps the runoff solution",
+      "parsed_elsewhere": false,
+      "rejected_by": [],
+      "status": "implemented"
+    },
+    "SHARE_LAYER_MOIST": {
+      "boolean": true,
+      "drivers": [
+        "image",
+        "classic",
+        "cesm"
+      ],
+      "note": "both cases of canopy_evap.c:287-362 -- CASE 1, where a layer above its critical moisture makes up the shortfall of a rooted layer below it, and CASE 2, where each layer transpires on its own resistance. vic_classic.py reads the flag and basin.simulate(share_layer_moist=...) selects the case, with VIC's default of TRUE when the key is absent",
+      "parsed_elsewhere": false,
+      "rejected_by": [],
+      "status": "implemented"
+    },
+    "SKIPYEAR": {
+      "boolean": false,
+      "drivers": [
+        "classic",
+        "cesm"
+      ],
+      "note": "deprecated in the classic driver; the CESM driver parses and drops it",
+      "parsed_elsewhere": false,
+      "rejected_by": [
+        "classic"
+      ],
+      "status": "unsupported"
+    },
+    "SNOW_BAND": {
+      "boolean": true,
+      "drivers": [
+        "image",
+        "classic",
+        "cesm"
+      ],
+      "note": "TRUE runs only where every cell has one band with area; more bands are refused (one column per cell) (image driver: torchvic/io/options.py, docs/OPTIONS.md)",
+      "parsed_elsewhere": false,
+      "rejected_by": [],
+      "status": "unsupported"
+    },
+    "SNOW_DENSITY": {
+      "boolean": false,
+      "drivers": [
+        "image",
+        "classic",
+        "cesm"
+      ],
+      "note": "only VIC's default DENS_BRAS is implemented (snow.snow_density_bras); a file asking for DENS_SNTHRM would get DENS_BRAS",
+      "parsed_elsewhere": false,
+      "rejected_by": [],
+      "status": "unsupported"
+    },
+    "SNOW_STEP": {
+      "boolean": false,
+      "drivers": [
+        "classic"
+      ],
+      "note": "renamed SNOW_STEPS_PER_DAY in VIC 5",
+      "parsed_elsewhere": false,
+      "rejected_by": [
+        "classic"
+      ],
+      "status": "unsupported"
+    },
+    "SNOW_STEPS_PER_DAY": {
+      "boolean": false,
+      "drivers": [
+        "image",
+        "classic"
+      ],
+      "note": "must be the forcing's step; a daily model step whose forcing can snow is refused, since VIC sub-steps the snow at this rate and TorchVIC does not (image driver: torchvic/io/options.py, docs/OPTIONS.md)",
+      "parsed_elsewhere": false,
+      "rejected_by": [],
+      "status": "unsupported"
+    },
+    "SOIL": {
+      "boolean": false,
+      "drivers": [
+        "classic"
+      ],
+      "note": "the classic ASCII soil file, read by vic_classic.ClassicDomain with the column order generated from read_soilparam.c",
+      "parsed_elsewhere": false,
+      "rejected_by": [],
+      "status": "implemented"
+    },
+    "SPATIAL_FROST": {
+      "boolean": true,
+      "drivers": [
+        "image",
+        "classic",
+        "cesm"
+      ],
+      "note": "sub-grid frost distribution is not modelled; ice is identically zero",
+      "parsed_elsewhere": false,
+      "rejected_by": [],
+      "status": "unsupported"
+    },
+    "SPATIAL_SNOW": {
+      "boolean": true,
+      "drivers": [
+        "image",
+        "classic",
+        "cesm"
+      ],
+      "note": "calc_snow_coverage.c is implemented and runs from the classic soil file; the image driver refuses TRUE, not verified against VIC (image driver: torchvic/io/options.py, docs/OPTIONS.md)",
+      "parsed_elsewhere": false,
+      "rejected_by": [],
+      "status": "unsupported"
+    },
+    "STARTDAY": {
+      "boolean": false,
+      "drivers": [
+        "image",
+        "classic"
+      ],
+      "note": "the simulation window: torchvic.case.window runs the forcing records from STARTYEAR..STARTSEC to the end of ENDYEAR/ENDMONTH/ENDDAY, or NRECS model steps, and refuses a forcing that does not cover it",
+      "parsed_elsewhere": false,
+      "rejected_by": [],
+      "status": "implemented"
+    },
+    "STARTMONTH": {
+      "boolean": false,
+      "drivers": [
+        "image",
+        "classic"
+      ],
+      "note": "the simulation window: torchvic.case.window runs the forcing records from STARTYEAR..STARTSEC to the end of ENDYEAR/ENDMONTH/ENDDAY, or NRECS model steps, and refuses a forcing that does not cover it",
+      "parsed_elsewhere": false,
+      "rejected_by": [],
+      "status": "implemented"
+    },
+    "STARTSEC": {
+      "boolean": false,
+      "drivers": [
+        "image",
+        "classic"
+      ],
+      "note": "the simulation window: torchvic.case.window runs the forcing records from STARTYEAR..STARTSEC to the end of ENDYEAR/ENDMONTH/ENDDAY, or NRECS model steps, and refuses a forcing that does not cover it",
+      "parsed_elsewhere": false,
+      "rejected_by": [],
+      "status": "implemented"
+    },
+    "STARTYEAR": {
+      "boolean": false,
+      "drivers": [
+        "image",
+        "classic"
+      ],
+      "note": "the simulation window: torchvic.case.window runs the forcing records from STARTYEAR..STARTSEC to the end of ENDYEAR/ENDMONTH/ENDDAY, or NRECS model steps, and refuses a forcing that does not cover it",
+      "parsed_elsewhere": false,
+      "rejected_by": [],
+      "status": "implemented"
+    },
+    "STATEDAY": {
+      "boolean": false,
+      "drivers": [
+        "image",
+        "classic"
+      ],
+      "note": "no state file is written",
+      "parsed_elsewhere": false,
+      "rejected_by": [],
+      "status": "unsupported"
+    },
+    "STATEMONTH": {
+      "boolean": false,
+      "drivers": [
+        "image",
+        "classic"
+      ],
+      "note": "no state file is written",
+      "parsed_elsewhere": false,
+      "rejected_by": [],
+      "status": "unsupported"
+    },
+    "STATENAME": {
+      "boolean": false,
+      "drivers": [
+        "image",
+        "classic"
+      ],
+      "note": "no state file is written",
+      "parsed_elsewhere": false,
+      "rejected_by": [],
+      "status": "unsupported"
+    },
+    "STATENAME_CESM": {
+      "boolean": true,
+      "drivers": [
+        "cesm"
+      ],
+      "note": "no state file is written",
+      "parsed_elsewhere": false,
+      "rejected_by": [],
+      "status": "unsupported"
+    },
+    "STATESEC": {
+      "boolean": false,
+      "drivers": [
+        "image",
+        "classic"
+      ],
+      "note": "no state file is written",
+      "parsed_elsewhere": false,
+      "rejected_by": [],
+      "status": "unsupported"
+    },
+    "STATEYEAR": {
+      "boolean": false,
+      "drivers": [
+        "image",
+        "classic"
+      ],
+      "note": "no state file is written",
+      "parsed_elsewhere": false,
+      "rejected_by": [],
+      "status": "unsupported"
+    },
+    "STATE_FORMAT": {
+      "boolean": false,
+      "drivers": [
+        "image",
+        "classic",
+        "cesm"
+      ],
+      "note": "no state file is written",
+      "parsed_elsewhere": false,
+      "rejected_by": [],
+      "status": "unsupported"
+    },
+    "TFALLBACK": {
+      "boolean": true,
+      "drivers": [
+        "image",
+        "classic",
+        "cesm"
+      ],
+      "note": "TRUE (default): a temperature solve with no root keeps the previous temperature and is counted; FALSE stops at the first such solve (surface, snow pack, canopy foliage, canopy air), naming step, cell and solve (core/tfallback.py)",
+      "parsed_elsewhere": false,
+      "rejected_by": [],
+      "status": "implemented"
+    },
+    "TIME_STEP": {
+      "boolean": false,
+      "drivers": [
+        "classic"
+      ],
+      "note": "renamed MODEL_STEPS_PER_DAY in VIC 5",
+      "parsed_elsewhere": false,
+      "rejected_by": [
+        "classic"
+      ],
+      "status": "unsupported"
+    },
+    "VEGCOVER_SRC": {
+      "boolean": false,
+      "drivers": [
+        "classic"
+      ],
+      "note": "earlier spelling of FCAN_SRC (classic driver)",
+      "parsed_elsewhere": false,
+      "rejected_by": [
+        "classic"
+      ],
+      "status": "unsupported"
+    },
+    "VEGLIB": {
+      "boolean": false,
+      "drivers": [
+        "classic"
+      ],
+      "note": "the classic vegetation library, read by vic_classic per read_veglib.c including the bare-soil tile",
+      "parsed_elsewhere": false,
+      "rejected_by": [],
+      "status": "implemented"
+    },
+    "VEGLIB_FCAN": {
+      "boolean": true,
+      "drivers": [
+        "classic"
+      ],
+      "note": "fcanopy column in the classic library, read by vic_classic",
+      "parsed_elsewhere": false,
+      "rejected_by": [],
+      "status": "implemented"
+    },
+    "VEGLIB_PHOTO": {
+      "boolean": true,
+      "drivers": [
+        "image",
+        "classic",
+        "cesm"
+      ],
+      "note": "the seven photosynthesis columns read_veglib.c:162-192 adds -- Ctype, MaxCarboxRate, MaxETransport, CO2Specificity, NscaleFlag, Wnpp_inhib, NPPfactor_sat -- are read by both the classic library reader and the image parameter reader, and are what CARBON runs on",
+      "parsed_elsewhere": false,
+      "rejected_by": [],
+      "status": "implemented"
+    },
+    "VEGLIB_VEGCOVER": {
+      "boolean": false,
+      "drivers": [
+        "classic"
+      ],
+      "note": "classic-driver vegetation library layout",
+      "parsed_elsewhere": false,
+      "rejected_by": [
+        "classic"
+      ],
+      "status": "unsupported"
+    },
+    "VEGPARAM": {
+      "boolean": false,
+      "drivers": [
+        "classic"
+      ],
+      "note": "the classic per-cell vegetation file, read by vic_classic per read_vegparam.c",
+      "parsed_elsewhere": false,
+      "rejected_by": [],
+      "status": "implemented"
+    },
+    "VEGPARAM_ALB": {
+      "boolean": true,
+      "drivers": [
+        "classic"
+      ],
+      "note": "albedo lines in the classic vegetation file, read by vic_classic",
+      "parsed_elsewhere": false,
+      "rejected_by": [],
+      "status": "implemented"
+    },
+    "VEGPARAM_FCAN": {
+      "boolean": true,
+      "drivers": [
+        "classic"
+      ],
+      "note": "fcanopy lines in the classic vegetation file, read by vic_classic",
+      "parsed_elsewhere": false,
+      "rejected_by": [],
+      "status": "implemented"
+    },
+    "VEGPARAM_LAI": {
+      "boolean": true,
+      "drivers": [
+        "classic"
+      ],
+      "note": "LAI lines in the classic vegetation file, read by vic_classic",
+      "parsed_elsewhere": false,
+      "rejected_by": [],
+      "status": "implemented"
+    },
+    "VEGPARAM_VEGCOVER": {
+      "boolean": false,
+      "drivers": [
+        "classic"
+      ],
+      "note": "classic-driver vegetation library layout",
+      "parsed_elsewhere": false,
+      "rejected_by": [
+        "classic"
+      ],
+      "status": "unsupported"
+    },
+    "WIND_H": {
+      "boolean": false,
+      "drivers": [
+        "image",
+        "classic"
+      ],
+      "note": "the wind measurement height, resolved by torchvic.case.resolve_wind_h",
+      "parsed_elsewhere": false,
+      "rejected_by": [],
+      "status": "implemented"
+    }
+  },
+  "sub_options": {
+    "DOMAIN_TYPE": [
+      "AREA",
+      "FRAC",
+      "LAT",
+      "LON",
+      "MASK",
+      "XDIM",
+      "YDIM"
+    ],
+    "FORCE_TYPE": [
+      "AIR_TEMP",
+      "ALBEDO",
+      "CATM",
+      "CHANNEL_IN",
+      "FCANOPY",
+      "FDIR",
+      "LAI",
+      "LWDOWN",
+      "PAR",
+      "PREC",
+      "PRESSURE",
+      "SKIP",
+      "SWDOWN",
+      "VP",
+      "WIND"
+    ]
+  },
+  "vic_source": [
+    "vic/drivers/image/src/get_global_param.c",
+    "vic/drivers/classic/src/get_global_param.c",
+    "vic/drivers/cesm/src/get_global_param.c"
+  ],
+  "vic_version": "5.0.1"
+}

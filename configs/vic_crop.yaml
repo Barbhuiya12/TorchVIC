@@ -1,0 +1,50 @@
+# VIC + crop growth (connectors vic, crop; optional irrigation).
+#   torchvic validate --config configs/vic_crop.yaml
+#   torchvic run --config configs/vic_crop.yaml --out results_vic_crop
+# VIC owns the soil water; WOFOST 7.2 runs in 'external' water mode with the
+# transpiration reduction RFTRA = vic.transp / vic.pet each day, and returns
+# LAI, rooting depth, development stage, yield and crop_active. LAI reaches
+# VIC only through the vegetation-history input (FORCING2, LAI_SRC
+# FROM_VEGHIST), in a second pass: connectors.crop.write_veghist (see the
+# module docstring). With the irrigation module, uncomment the last three
+# connections: the crop calendar and rooting depth drive the irrigation demand.
+# TORCHVIC_SAMPLE_DATA is UW-Hydro's VIC_sample_data (tools/get_test_data.sh).
+version: 1
+run:
+  device: auto
+  dtype: float64
+modules:
+  vic:
+    connector: vic
+    global_param: ${TORCHVIC_SAMPLE_DATA}/image/WalnutGulch/parameters/global_param.WalnutGulch.L2015.txt
+    core: 5.1.0
+    exchange: day
+    soil_add_mode: cap
+  crop:
+    connector: crop
+    global_param: ${TORCHVIC_SAMPLE_DATA}/image/WalnutGulch/parameters/global_param.WalnutGulch.L2015.txt
+    core: 5.1.0
+    params_file: crop_params_sbarley.json   # one WOFOST 7.2 parameter set (PCSE demo spring
+                               # barley; json, relative to this file)
+    start_day: 0               # run day on which the crop starts (emergence)
+    # height_table: [0.0, 0.05, 1.0, 0.9, 2.0, 1.0]   # crop height (m) vs DVS, optional
+  irrigation:
+    enabled: false             # set true with the three connections below
+    connector: irrigation
+    global_param: ${TORCHVIC_SAMPLE_DATA}/image/WalnutGulch/parameters/global_param.WalnutGulch.L2015.txt
+    core: 5.1.0
+connections:
+  - {from: vic.transp, to: crop.transp}
+  - {from: vic.pet,    to: crop.pet}
+#  - {from: vic.soil_moisture,  to: irrigation.soil_moisture}
+#  - {from: vic.soil_add_unmet, to: irrigation.soil_unmet}
+#  - {from: irrigation.soil_add, to: vic.soil_add, lag: 1}
+#  - {from: crop.crop_active,   to: irrigation.season}
+#  - {from: crop.root_depth,    to: irrigation.root_depth}
+ledger:
+  enabled: true
+  on_violation: reject
+output:
+  dir: results_vic_crop
+  history: true
+  ledger: true

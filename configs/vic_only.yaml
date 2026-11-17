@@ -1,0 +1,21 @@
+# VIC alone through the runtime (equals the direct run).
+# ISC domain (112,825 cells, 1/16 degree, India), one year (2004), VIC 5.1.0.
+#   torchvic validate --config configs/vic_only.yaml
+#   torchvic run --config configs/vic_only.yaml --out results_vic_only
+# Environment (data are not in the package):
+#   TORCHVIC_GLOBAL      ISC global file (benchmarks/isc/isc_vic5_3h.txt with
+#                        RESULT_DIR / dates filled; `run_combos.py global`)
+#   TORCHVIC_FDIR        flow map, FILE.nc:fdir (<data root>/static/isc_fdir.nc)
+#   TORCHVIC_DOMAIN      domain.nc (lat, lon, mask, area, frac, elev)
+#   TORCHVIC_GAUGES      gauges csv (lat, lng)
+#   TORCHVIC_DAMS        dam table (`run_combos.py prepare`)
+#   TORCHVIC_COMBO_DATA  inputs from `run_combos.py prepare`
+#   TORCHVIC_ALL_DATA    <data root> (flood basin)
+#   TORCHVIC_CROP_PARAMS configs/crop_params_sbarley.json
+version: 1
+run: {device: auto, dtype: float64}
+modules:
+  vic: {connector: vic, global_param: '${TORCHVIC_GLOBAL}', core: 5.1.0, snow_bands: mean, window_days: 31}
+connections: []
+ledger: {enabled: true, on_violation: reject}
+output: {dir: results_vic_only, history: true, ledger: true}

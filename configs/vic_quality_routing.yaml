@@ -1,0 +1,43 @@
+# VIC -> river routing with water temperature and constituents carried by
+# the router (the quality option of the routing configuration).
+#   torchvic validate --config configs/vic_quality_routing.yaml
+# Environment as configs/vic_routing.yaml. With `reservoirs: reservoir` on the
+# routing module and a reservoir module (configs/vic_reservoir_routing.yaml)
+# the same sweep carries both; each dam is then a well-mixed store of
+# constituents and heat.
+version: 1
+run:
+  device: auto
+  dtype: float64
+modules:
+  vic:
+    connector: vic
+    global_param: ${TORCHVIC_GLOBAL}
+    core: 5.1.0
+    window_days: 31
+  routing:
+    connector: routing
+    fdir: ${TORCHVIC_FDIR}
+    domain: ${TORCHVIC_DOMAIN}
+    gauges: ${TORCHVIC_GAUGES}
+    step_s: 86400
+    quality: quality
+  quality:
+    connector: quality
+    routing: routing
+    constituents:           # first-order decay rate, 1 s-1 (0: conservative)
+      nitrate: 2.0e-7
+      tracer: 0.0
+    temperature: {depth: 1.0, k_ref: 30.0}   # mean depth m
+    loads: {nitrate: 3.0, tracer: 1.5}       # kg per cell per step (scalar or list per cell)
+    met: {t_air: 12.0, vp: 0.9, wind: 2.0, sw: 180.0}   # C, kPa, m s-1, W m-2
+    t_runoff: 4.0           # C of the runoff (default: air temperature, floored at 0)
+connections:
+  - {from: vic.total_runoff_daily, to: routing.inflow}
+ledger:
+  enabled: true
+  on_violation: reject
+output:
+  dir: results_vic_quality_routing
+  history: true
+  ledger: true

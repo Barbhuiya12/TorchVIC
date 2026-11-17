@@ -1,0 +1,20 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+title: "TorchVIC: the VIC 5 land surface model in PyTorch"
+version: 0.4.8
+license: GPL-3.0-or-later
+url: "https://barbhuiya12.github.io/TorchVIC/"
+repository-code: "https://github.com/Barbhuiya12/TorchVIC"
+authors:
+  - family-names: Barbhuiya
+    given-names: Siddik
+    alias: Barbhuiya12
+    email: siddikbarbhuiya@gmail.com
+  - family-names: Gupta
+    given-names: Vivek
+references:
+  - type: software
+    title: "VIC: Variable Infiltration Capacity macroscale hydrologic model, version 5"
+    authors:
+      - name: "The Computational Hydrology Group, University of Washington"
+    url: "https://github.com/UW-Hydro/VIC"

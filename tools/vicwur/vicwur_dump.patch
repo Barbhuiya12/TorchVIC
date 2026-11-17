@@ -1,0 +1,303 @@
+--- a/vic/plugins/general/src/plugin_simulation.c
++++ b/vic/plugins/general/src/plugin_simulation.c
+@@ -181,6 +181,7 @@
+     for (i = 0; i < local_domain.ncells_active; i++) {
+         plugin_put_data(i);
+     }
++    plugin_dump_step();   /* dump-only: no-op unless VICWUR_DUMP is set */
+ }
+ 
+ /******************************************
+--- a/vic/plugins/general/include/plugin_driver_shared_image.h
++++ b/vic/plugins/general/include/plugin_driver_shared_image.h
+@@ -76,6 +76,7 @@
+ void plugin_get_default_outvar_aggtype(unsigned int varid, unsigned int *);
+ void plugin_store_error(size_t);
+ void plugin_put_data_all(void);
++void plugin_dump_step(void);
+ void plugin_put_data(size_t);
+ 
+ // states
+--- a/dev/null
++++ b/vic/plugins/general/src/plugin_dump.c
+@@ -0,0 +1,280 @@
++/******************************************************************************
++ * @section DESCRIPTION
++ *
++ * Dump-only instrumentation (TorchVIC).  Writes the per-step
++ * plugin state and the per-tile soil moisture to a binary file for the
++ * level-2 replay tests.  Active only when the environment variable
++ * VICWUR_DUMP names an output file; otherwise this function returns at once
++ * and nothing in the model is touched.  It only reads model state.
++ *
++ * File format: sequence of records  int32 tag, int64 n, n x float64.
++ *   tag 0 dims  : ncells nt_max nbands nlayers nfrost ring_len ni_max nd_max
++ *                 hist_len nrout_flag nwu_flag nirr_flag ndam_flag nbasevars
++ *   tag 1 step  : current year month day
++ *   tag 2 soil  : [cell][tile][band][layer][3+nfrost+4]  moist, ice[*], Ksat,
++ *                 water_stress, esoil, evap, transp  (NaN where tile absent)
++ *   tag 3 Cv    : [cell][tile]
++ *   tag 4 rout  : [cell][5+ring_len] runoff inflow stream nonrenew_deficit
++ *                 discharge dt_discharge[ring_len]
++ *   tag 5 wu    : [cell][NWUTYPES][22] wu_var_struct fields in declaration order
++ *                 (sector type j; NaN where the sector is inactive)
++ *   tag 6 irr   : [cell][ni_max][band][8] received leftover applied shortage
++ *                 requirement flag_req offset prev_Cv
++ *   tag 7 dam   : [cell][nd_max][6+2+5+5+3*hist_len+...] see code
++ *****************************************************************************/
++
++#include <vic_driver_image.h>
++#include <plugin.h>
++#include <math.h>
++
++static FILE *vwdump = NULL;
++static int   vwdump_init = 0;
++
++static void
++vw_rec(int tag, size_t n, const double *d)
++{
++    int32_t t = (int32_t) tag;
++    int64_t m = (int64_t) n;
++
++    fwrite(&t, sizeof(t), 1, vwdump);
++    fwrite(&m, sizeof(m), 1, vwdump);
++    fwrite(d, sizeof(double), n, vwdump);
++}
++
++void
++plugin_dump_step(void)
++{
++    extern domain_struct        local_domain;
++    extern option_struct        options;
++    extern global_param_struct  global_param;
++    extern plugin_option_struct plugin_options;
++    extern plugin_global_param_struct plugin_global_param;
++    extern all_vars_struct     *all_vars;
++    extern veg_con_map_struct  *veg_con_map;
++    extern veg_con_struct     **veg_con;
++    extern size_t               current;
++    extern dmy_struct          *dmy;
++
++    size_t nc = local_domain.ncells_active;
++    size_t nb = options.SNOW_BAND;
++    size_t nl = options.Nlayer;
++    size_t nf = MAX_FROST_AREAS;
++    size_t i, t, b, l, k, j;
++    size_t ntmax = 0, nimax = 0, ndmax = 0, ring = 0, hist;
++    size_t nsv = 7 + nf;
++    double *buf;
++    size_t n, p;
++    double nan = NAN;
++
++    if (!vwdump_init) {
++        const char *fn = getenv("VICWUR_DUMP");
++        vwdump_init = 1;
++        if (fn != NULL && fn[0] != '\0') {
++            vwdump = fopen(fn, "wb");
++        }
++    }
++    if (vwdump == NULL) {
++        return;
++    }
++
++    for (i = 0; i < nc; i++) {
++        if (veg_con_map[i].nv_active > ntmax) {
++            ntmax = veg_con_map[i].nv_active;
++        }
++        if (plugin_options.IRRIGATION && irr_con_map[i].ni_active > nimax) {
++            nimax = irr_con_map[i].ni_active;
++        }
++        if (plugin_options.DAMS && dam_con_map[i].nd_active > ndmax) {
++            ndmax = dam_con_map[i].nd_active;
++        }
++    }
++    if (plugin_options.ROUTING ||
++        (plugin_options.WATERUSE && plugin_options.NONRENEW_WITH)) {
++        ring = plugin_options.UH_LENGTH +
++               plugin_global_param.rout_steps_per_day /
++               global_param.model_steps_per_day - 1;
++    }
++    hist = plugin_options.DAMS ? MONTHS_PER_YEAR * DAM_HIST_YEARS : 0;
++
++    if (current == 0) {
++        double d[15] = {(double) nc, (double) ntmax, (double) nb, (double) nl,
++                        (double) nf, (double) ring, (double) nimax,
++                        (double) ndmax, (double) hist,
++                        (double) (ring > 0), (double) plugin_options.WATERUSE,
++                        (double) plugin_options.IRRIGATION,
++                        (double) plugin_options.DAMS, (double) nsv, (double) plugin_options.NWUTYPES};
++        vw_rec(0, 15, d);
++    }
++    {
++        double d[4] = {(double) current, (double) dmy[current].year,
++                       (double) dmy[current].month, (double) dmy[current].day};
++        vw_rec(1, 4, d);
++    }
++
++    // soil
++    n = nc * ntmax * nb * nl * nsv;
++    buf = malloc(n * sizeof(double));
++    for (p = 0; p < n; p++) {
++        buf[p] = nan;
++    }
++    for (i = 0; i < nc; i++) {
++        for (t = 0; t < veg_con_map[i].nv_active; t++) {
++            for (b = 0; b < nb; b++) {
++                for (l = 0; l < nl; l++) {
++                    layer_data_struct *ly = &(all_vars[i].cell[t][b].layer[l]);
++                    p = ((((i * ntmax + t) * nb + b) * nl) + l) * nsv;
++                    buf[p++] = ly->moist;
++                    for (k = 0; k < nf; k++) {
++                        buf[p++] = ly->ice[k];
++                    }
++                    buf[p++] = ly->Ksat;
++                    buf[p++] = ly->water_stress;
++                    buf[p++] = ly->esoil;
++                    buf[p++] = ly->evap;
++                    buf[p++] = ly->transp;
++                }
++            }
++        }
++    }
++    vw_rec(2, n, buf);
++    free(buf);
++
++    // Cv
++    n = nc * ntmax;
++    buf = malloc(n * sizeof(double));
++    for (p = 0; p < n; p++) {
++        buf[p] = nan;
++    }
++    for (i = 0; i < nc; i++) {
++        for (t = 0; t < veg_con_map[i].nv_active; t++) {
++            buf[i * ntmax + t] = veg_con[i][t].Cv;
++        }
++    }
++    vw_rec(3, n, buf);
++    free(buf);
++
++    if (ring > 0) {
++        n = nc * (5 + ring);
++        buf = malloc(n * sizeof(double));
++        for (i = 0; i < nc; i++) {
++            p = i * (5 + ring);
++            buf[p++] = rout_var[i].runoff;
++            buf[p++] = rout_var[i].inflow;
++            buf[p++] = rout_var[i].stream;
++            buf[p++] = rout_var[i].nonrenew_deficit;
++            buf[p++] = rout_var[i].discharge;
++            for (k = 0; k < ring; k++) {
++                buf[p++] = rout_var[i].dt_discharge[k];
++            }
++        }
++        vw_rec(4, n, buf);
++        free(buf);
++    }
++
++    if (plugin_options.WATERUSE) {
++        size_t nw = plugin_options.NWUTYPES;
++        n = nc * nw * 22;
++        buf = malloc(n * sizeof(double));
++        for (p = 0; p < n; p++) {
++            buf[p] = nan;
++        }
++        for (i = 0; i < nc; i++) {
++            for (j = 0; j < nw; j++) {
++                wu_var_struct *w;
++                double v[22];
++                if (wu_con_map[i].sidx[j] == NODATA_WU) {
++                    continue;
++                }
++                w = &(wu_var[i][wu_con_map[i].sidx[j]]);
++                v[0] = w->available_gw; v[1] = w->available_surf;
++                v[2] = w->available_dam; v[3] = w->available_tremote;
++                v[4] = w->available_remote; v[5] = w->available_nonrenew;
++                v[6] = w->demand_gw; v[7] = w->demand_surf;
++                v[8] = w->demand_tremote; v[9] = w->demand_remote;
++                v[10] = w->demand_nonrenew; v[11] = w->withdrawn_gw;
++                v[12] = w->withdrawn_surf; v[13] = w->withdrawn_dam;
++                v[14] = w->withdrawn_tremote; v[15] = w->withdrawn_remote;
++                v[16] = w->withdrawn_nonrenew; v[17] = w->returned;
++                v[18] = w->consumed; v[19] = w->available_remote_tmp;
++                v[20] = w->demand_remote_tmp; v[21] = w->withdrawn_remote_tmp;
++                memcpy(&buf[(i * nw + j) * 22], v, sizeof(v));
++            }
++        }
++        vw_rec(5, n, buf);
++        free(buf);
++    }
++
++    if (plugin_options.IRRIGATION) {
++        n = nc * nimax * nb * 8;
++        buf = malloc(n * sizeof(double));
++        for (p = 0; p < n; p++) {
++            buf[p] = nan;
++        }
++        for (i = 0; i < nc; i++) {
++            for (j = 0; j < irr_con_map[i].ni_active; j++) {
++                for (b = 0; b < nb; b++) {
++                    irr_var_struct *v = &(irr_var[i][j][b]);
++                    p = ((i * nimax + j) * nb + b) * 8;
++                    buf[p++] = v->received;
++                    buf[p++] = v->leftover;
++                    buf[p++] = v->applied;
++                    buf[p++] = v->shortage;
++                    buf[p++] = v->requirement;
++                    buf[p++] = (double) v->flag_req;
++                    buf[p++] = (double) v->offset;
++                    buf[p++] = v->prev_Cv;
++                }
++            }
++        }
++        vw_rec(6, n, buf);
++        free(buf);
++    }
++
++    if (plugin_options.DAMS) {
++        // per dam: active inflow demand efr release storage op_month
++        // months_running total_inflow total_demand total_efr register_steps
++        // (11) + history_inflow/demand/efr (3*hist) + op_release/op_storage
++        // (2*12)
++        size_t w = 11 + 3 * hist + 2 * MONTHS_PER_YEAR;
++        n = nc * ndmax * w;
++        buf = malloc(n * sizeof(double));
++        for (p = 0; p < n; p++) {
++            buf[p] = nan;
++        }
++        for (i = 0; i < nc; i++) {
++            for (j = 0; j < dam_con_map[i].nd_active; j++) {
++                dam_var_struct *d = &(dam_var[i][j]);
++                p = (i * ndmax + j) * w;
++                buf[p++] = (double) d->active;
++                buf[p++] = d->inflow;
++                buf[p++] = d->demand;
++                buf[p++] = d->efr;
++                buf[p++] = d->release;
++                buf[p++] = d->storage;
++                buf[p++] = (double) d->op_month;
++                buf[p++] = (double) d->months_running;
++                buf[p++] = d->total_inflow;
++                buf[p++] = d->total_demand;
++                buf[p++] = d->total_efr;
++                for (k = 0; k < hist; k++) {
++                    buf[p++] = d->history_inflow[k];
++                }
++                for (k = 0; k < hist; k++) {
++                    buf[p++] = d->history_demand[k];
++                }
++                for (k = 0; k < hist; k++) {
++                    buf[p++] = d->history_efr[k];
++                }
++                for (k = 0; k < MONTHS_PER_YEAR; k++) {
++                    buf[p++] = d->op_release[k];
++                }
++                for (k = 0; k < MONTHS_PER_YEAR; k++) {
++                    buf[p++] = d->op_storage[k];
++                }
++            }
++        }
++        vw_rec(7, n, buf);
++        free(buf);
++    }
++    fflush(vwdump);
++}

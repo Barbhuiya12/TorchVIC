@@ -1,0 +1,1493 @@
+{
+ "default_agg_fallback": "AVG",
+ "generated_by": "scripts/extract_vic_outvars.py",
+ "variables": {
+  "OUT_ADVECTION": {
+   "default_agg": "AVG",
+   "description": "advected energy ",
+   "dim": null,
+   "long_name": "advection",
+   "nelem": "1",
+   "standard_name": "advected_energy",
+   "units": "W m-2"
+  },
+  "OUT_ADVECTION_BAND": {
+   "default_agg": "AVG",
+   "description": "advected energy ",
+   "dim": "snow_band",
+   "long_name": "advection_band",
+   "nelem": "options.SNOW_BAND",
+   "standard_name": "advected_energy",
+   "units": "W m-2"
+  },
+  "OUT_ADV_SENS": {
+   "default_agg": "AVG",
+   "description": "net sensible heat advected to snow pack",
+   "dim": null,
+   "long_name": "adv_sens",
+   "nelem": "1",
+   "standard_name": "net_sensible_heat_flux_to_snow_pack",
+   "units": "W m-2"
+  },
+  "OUT_ADV_SENS_BAND": {
+   "default_agg": "AVG",
+   "description": "net sensible heat advected to snow pack",
+   "dim": "snow_band",
+   "long_name": "adv_sens_band",
+   "nelem": "options.SNOW_BAND",
+   "standard_name": "net_sensible_heat_flux_to_snow_pack",
+   "units": "W m-2"
+  },
+  "OUT_AERO_COND": {
+   "default_agg": "AVG",
+   "description": "scene aerodynamic conductance (tiles with overstory contribute overstory conductance; others contribue surface conductance)",
+   "dim": null,
+   "long_name": "aero_cond",
+   "nelem": "1",
+   "standard_name": "aerodynamic_conductance",
+   "units": "m/s"
+  },
+  "OUT_AERO_COND1": {
+   "default_agg": "AVG",
+   "description": "surface aerodynamic conductance",
+   "dim": null,
+   "long_name": "aero_cond1",
+   "nelem": "1",
+   "standard_name": "aerodynamic_conductance_surface",
+   "units": "m/s"
+  },
+  "OUT_AERO_COND2": {
+   "default_agg": "AVG",
+   "description": "overstory aerodynamic conductance",
+   "dim": null,
+   "long_name": "aero_cond2",
+   "nelem": "1",
+   "standard_name": "aerodynamic_conductance_overstory",
+   "units": "m/s"
+  },
+  "OUT_AERO_RESIST": {
+   "default_agg": "AVG",
+   "description": "scene aerodynamic resistance (tiles with overstory contribute overstory resistance; others contribue surface resistance)",
+   "dim": null,
+   "long_name": "aero_resist",
+   "nelem": "1",
+   "standard_name": "aerodynamic_resistance",
+   "units": "s m-1"
+  },
+  "OUT_AERO_RESIST1": {
+   "default_agg": "AVG",
+   "description": "surface aerodynamic resistance",
+   "dim": null,
+   "long_name": "aero_resist1",
+   "nelem": "1",
+   "standard_name": "aerodynamic_resistance_surface",
+   "units": "s m-1"
+  },
+  "OUT_AERO_RESIST2": {
+   "default_agg": "AVG",
+   "description": "overstory aerodynamic resistance",
+   "dim": null,
+   "long_name": "aero_resist2",
+   "nelem": "1",
+   "standard_name": "aerodynamic_resistance_overstory",
+   "units": "s m-1"
+  },
+  "OUT_AIR_TEMP": {
+   "default_agg": "AVG",
+   "description": "air temperature",
+   "dim": null,
+   "long_name": "air_temp",
+   "nelem": "1",
+   "standard_name": "air_temperature",
+   "units": "C"
+  },
+  "OUT_ALBEDO": {
+   "default_agg": "AVG",
+   "description": "albedo",
+   "dim": null,
+   "long_name": "albedo",
+   "nelem": "1",
+   "standard_name": "surface_albedo",
+   "units": "1"
+  },
+  "OUT_ALBEDO_BAND": {
+   "default_agg": "AVG",
+   "description": "albedo",
+   "dim": "snow_band",
+   "long_name": "albedo_band",
+   "nelem": "options.SNOW_BAND",
+   "standard_name": "surface_albedo",
+   "units": "1"
+  },
+  "OUT_APAR": {
+   "default_agg": "AVG",
+   "description": "absorbed PAR",
+   "dim": null,
+   "long_name": "apar",
+   "nelem": "1",
+   "standard_name": "absorbed_surface_diffuse_downwelling_photosynthetic_radiative_flux",
+   "units": "W m-2"
+  },
+  "OUT_ASAT": {
+   "default_agg": "END",
+   "description": "saturated area fraction",
+   "dim": null,
+   "long_name": "asat",
+   "nelem": "1",
+   "standard_name": "saturated_area_fraction",
+   "units": "1"
+  },
+  "OUT_BARESOILT": {
+   "default_agg": "AVG",
+   "description": "bare soil surface temperature",
+   "dim": null,
+   "long_name": "baresoilt",
+   "nelem": "1",
+   "standard_name": "surface_temperature_bare_soil",
+   "units": "C"
+  },
+  "OUT_BASEFLOW": {
+   "default_agg": "SUM",
+   "description": "baseflow out of the bottom layer",
+   "dim": null,
+   "long_name": "baseflow",
+   "nelem": "1",
+   "standard_name": "baseflow_amount",
+   "units": "mm"
+  },
+  "OUT_CATM": {
+   "default_agg": "AVG",
+   "description": "atmospheric CO2 concentration",
+   "dim": null,
+   "long_name": "catm",
+   "nelem": "1",
+   "standard_name": "concentration_of_carbon_dioxide_in_air",
+   "units": "ppm"
+  },
+  "OUT_CINTER": {
+   "default_agg": "AVG",
+   "description": "intermediate pool carbon density",
+   "dim": null,
+   "long_name": "cinter",
+   "nelem": "1",
+   "standard_name": "intermediate_pool_carbon_content",
+   "units": "g m-2"
+  },
+  "OUT_CLITTER": {
+   "default_agg": "AVG",
+   "description": "litter pool carbon density",
+   "dim": null,
+   "long_name": "clitter",
+   "nelem": "1",
+   "standard_name": "litter_carbon_content",
+   "units": "g m-2"
+  },
+  "OUT_CSLOW": {
+   "default_agg": "AVG",
+   "description": "slow pool carbon density",
+   "dim": null,
+   "long_name": "cslow",
+   "nelem": "1",
+   "standard_name": "slow_pool_carbon_content",
+   "units": "g m-2"
+  },
+  "OUT_DELINTERCEPT": {
+   "default_agg": "SUM",
+   "description": "change in canopy interception storage",
+   "dim": null,
+   "long_name": "delintercept",
+   "nelem": "1",
+   "standard_name": "change_in_canopy_interception_amount",
+   "units": "mm"
+  },
+  "OUT_DELSOILMOIST": {
+   "default_agg": "SUM",
+   "description": "change in soil water content",
+   "dim": null,
+   "long_name": "delsoilmoist",
+   "nelem": "1",
+   "standard_name": "change_in_soil_water_amount",
+   "units": "mm"
+  },
+  "OUT_DELSURFSTOR": {
+   "default_agg": "SUM",
+   "description": "change in surface liquid water storage",
+   "dim": null,
+   "long_name": "delsurfstor",
+   "nelem": "1",
+   "standard_name": "change_in_surface_liquid_water_storage",
+   "units": "mm"
+  },
+  "OUT_DELSWE": {
+   "default_agg": "SUM",
+   "description": "change in snow water equivalent",
+   "dim": null,
+   "long_name": "delswe",
+   "nelem": "1",
+   "standard_name": "change_in_snow_lwe_thickness",
+   "units": "mm"
+  },
+  "OUT_DELTACC": {
+   "default_agg": "AVG",
+   "description": "rate of change in cold content in snow pack",
+   "dim": null,
+   "long_name": "deltacc",
+   "nelem": "1",
+   "standard_name": "rate_change_in_snow_pack_cold_content",
+   "units": "W m-2"
+  },
+  "OUT_DELTACC_BAND": {
+   "default_agg": "SUM",
+   "description": "rate of change in cold content in snow pack",
+   "dim": "snow_band",
+   "long_name": "deltacc_band",
+   "nelem": "options.SNOW_BAND",
+   "standard_name": "rate_change_in_snow_pack_cold_content",
+   "units": "W m-2"
+  },
+  "OUT_DELTAH": {
+   "default_agg": "AVG",
+   "description": "rate of change in heat storage",
+   "dim": null,
+   "long_name": "deltah",
+   "nelem": "1",
+   "standard_name": "rate_change_in_heat_storage",
+   "units": "W m-2"
+  },
+  "OUT_DENSITY": {
+   "default_agg": "AVG",
+   "description": "near-surface atmospheric density",
+   "dim": null,
+   "long_name": "density",
+   "nelem": "1",
+   "standard_name": "air_density",
+   "units": "kg m-3"
+  },
+  "OUT_DISCHARGE": {
+   "default_agg": "AVG",
+   "description": "The water flux or volume transport in rivers is the amount of water flowing in the river channel and flood plain. 'Water' means water in all phases",
+   "dim": null,
+   "long_name": "water_volume_transport_in_river_channel",
+   "nelem": "1",
+   "standard_name": "river_discharge",
+   "units": "m3 s-1"
+  },
+  "OUT_ENERGY_ERROR": {
+   "default_agg": "AVG",
+   "description": "energy budget error",
+   "dim": null,
+   "long_name": "energy_error",
+   "nelem": "1",
+   "standard_name": "energy_budget_error",
+   "units": "W m-2"
+  },
+  "OUT_EVAP": {
+   "default_agg": "SUM",
+   "description": "total net evaporation",
+   "dim": null,
+   "long_name": "evap",
+   "nelem": "1",
+   "standard_name": "water_evaporation_flux_net",
+   "units": "mm"
+  },
+  "OUT_EVAP_BARE": {
+   "default_agg": "SUM",
+   "description": "net evaporation from bare soil",
+   "dim": null,
+   "long_name": "evap_bare",
+   "nelem": "1",
+   "standard_name": "water_evaporation_from_soil",
+   "units": "mm"
+  },
+  "OUT_EVAP_CANOP": {
+   "default_agg": "SUM",
+   "description": "net evaporation from canopy interception",
+   "dim": null,
+   "long_name": "evap_canop",
+   "nelem": "1",
+   "standard_name": "water_evaporation_from_canopy",
+   "units": "mm"
+  },
+  "OUT_FCANOPY": {
+   "default_agg": "AVG",
+   "description": "fractional area covered by plant canopy",
+   "dim": null,
+   "long_name": "fcanopy",
+   "nelem": "1",
+   "standard_name": "canopy_cover_area_fraction",
+   "units": "1"
+  },
+  "OUT_FDEPTH": {
+   "default_agg": "AVG",
+   "description": "depth of freezing fronts for each freezing front",
+   "dim": "front",
+   "long_name": "fdepth",
+   "nelem": "MAX_FRONTS",
+   "standard_name": "freezing_fronts_depth",
+   "units": "cm"
+  },
+  "OUT_FDIR": {
+   "default_agg": "AVG",
+   "description": "fraction of incoming shortwave that is direct",
+   "dim": null,
+   "long_name": "fdir",
+   "nelem": "1",
+   "standard_name": "fraction_of_incoming_shorwave_radiation_that_is_direct",
+   "units": "1"
+  },
+  "OUT_FUSION": {
+   "default_agg": "AVG",
+   "description": "net energy used to melt/freeze soil moisture",
+   "dim": null,
+   "long_name": "fusion",
+   "nelem": "1",
+   "standard_name": "energy_of_fusion_in_soil_moisture",
+   "units": "W m-2"
+  },
+  "OUT_GPP": {
+   "default_agg": "AVG",
+   "description": "gross primary productivity",
+   "dim": null,
+   "long_name": "gpp",
+   "nelem": "1",
+   "standard_name": "gross_primary_productivity_of_biomass_expressed_as_carbon",
+   "units": "g m-2 s-1"
+  },
+  "OUT_GRND_FLUX": {
+   "default_agg": "AVG",
+   "description": "net heat flux into ground",
+   "dim": null,
+   "long_name": "grnd_flux",
+   "nelem": "1",
+   "standard_name": "downward_heat_flux_in_soil",
+   "units": "W m-2"
+  },
+  "OUT_GRND_FLUX_BAND": {
+   "default_agg": "AVG",
+   "description": "net heat flux into ground",
+   "dim": "snow_band",
+   "long_name": "grnd_flux_band",
+   "nelem": "options.SNOW_BAND",
+   "standard_name": "downward_heat_flux_in_soil",
+   "units": "W m-2"
+  },
+  "OUT_INFLOW": {
+   "default_agg": "SUM",
+   "description": "moisture that reaches top of soil column",
+   "dim": null,
+   "long_name": "inflow",
+   "nelem": "1",
+   "standard_name": "soil_column_inflow",
+   "units": "mm"
+  },
+  "OUT_IN_LONG": {
+   "default_agg": "AVG",
+   "description": "incoming longwave flux at surface (under veg)",
+   "dim": null,
+   "long_name": "in_long",
+   "nelem": "1",
+   "standard_name": "downwelling_longwave_flux_at_ground_surface",
+   "units": "W m-2"
+  },
+  "OUT_IN_LONG_BAND": {
+   "default_agg": "AVG",
+   "description": "incoming longwave flux at surface (under veg)",
+   "dim": "snow_band",
+   "long_name": "in_long_band",
+   "nelem": "options.SNOW_BAND",
+   "standard_name": "downwelling_longwave_flux_at_ground_surface",
+   "units": "W m-2"
+  },
+  "OUT_LAI": {
+   "default_agg": "AVG",
+   "description": "leaf area index",
+   "dim": null,
+   "long_name": "lai",
+   "nelem": "1",
+   "standard_name": "leaf_area_index",
+   "units": "1"
+  },
+  "OUT_LAKE_AREA_FRAC": {
+   "default_agg": "END",
+   "description": "lake surface area as fraction of grid cell area",
+   "dim": null,
+   "long_name": "lake_area_frac",
+   "nelem": "1",
+   "standard_name": "lake_area_fraction",
+   "units": "1"
+  },
+  "OUT_LAKE_BF_IN": {
+   "default_agg": "SUM",
+   "description": "incoming baseflow from lake catchment",
+   "dim": null,
+   "long_name": "lake_bf_in",
+   "nelem": "1",
+   "standard_name": "infiltration_amount",
+   "units": "mm"
+  },
+  "OUT_LAKE_BF_IN_V": {
+   "default_agg": "SUM",
+   "description": "incoming volumetric baseflow from lake catchment",
+   "dim": null,
+   "long_name": "lake_bf_in_v",
+   "nelem": "1",
+   "standard_name": "baseflow_volume_from_lake_catchment",
+   "units": "m3"
+  },
+  "OUT_LAKE_BF_OUT": {
+   "default_agg": "SUM",
+   "description": "outgoing baseflow lake",
+   "dim": null,
+   "long_name": "lake_bf_out",
+   "nelem": "1",
+   "standard_name": "baseflow_outgoing_lake",
+   "units": "mm"
+  },
+  "OUT_LAKE_BF_OUT_V": {
+   "default_agg": "SUM",
+   "description": "outgoing volumetric baseflow from lake",
+   "dim": null,
+   "long_name": "lake_bf_out_v",
+   "nelem": "1",
+   "standard_name": "baseflow_outgoing_volume_lake",
+   "units": "m3"
+  },
+  "OUT_LAKE_CHAN_IN": {
+   "default_agg": "SUM",
+   "description": "channel inflow into lake",
+   "dim": null,
+   "long_name": "lake_chan_in",
+   "nelem": "1",
+   "standard_name": "channel_inflow_into_lake",
+   "units": "mm"
+  },
+  "OUT_LAKE_CHAN_IN_V": {
+   "default_agg": "SUM",
+   "description": "volumetric channel inflow into lake",
+   "dim": null,
+   "long_name": "lake_chan_in_v",
+   "nelem": "1",
+   "standard_name": "channel_inflow_volume_into_lake",
+   "units": "m3"
+  },
+  "OUT_LAKE_CHAN_OUT": {
+   "default_agg": "SUM",
+   "description": "channel outflow from lake",
+   "dim": null,
+   "long_name": "lake_chan_out",
+   "nelem": "1",
+   "standard_name": "channel_outflow_from_lake",
+   "units": "mm"
+  },
+  "OUT_LAKE_CHAN_OUT_V": {
+   "default_agg": "SUM",
+   "description": "volumetric channel outflow from lake",
+   "dim": null,
+   "long_name": "lake_chan_out_v",
+   "nelem": "1",
+   "standard_name": "channel_outflow_volume_from_lake",
+   "units": "m3"
+  },
+  "OUT_LAKE_DEPTH": {
+   "default_agg": "END",
+   "description": "lake depth",
+   "dim": null,
+   "long_name": "lake_depth",
+   "nelem": "1",
+   "standard_name": "lake_depth",
+   "units": "m"
+  },
+  "OUT_LAKE_DSTOR": {
+   "default_agg": "SUM",
+   "description": "change in lake moisture storage (liquid plus ice cover)",
+   "dim": null,
+   "long_name": "lake_dstor",
+   "nelem": "1",
+   "standard_name": "change_in_lake_moisture_amount",
+   "units": "mm"
+  },
+  "OUT_LAKE_DSTOR_V": {
+   "default_agg": "SUM",
+   "description": "volumetric change in lake moisture storage (liquid plus ice cover)",
+   "dim": null,
+   "long_name": "lake_dstor_v",
+   "nelem": "1",
+   "standard_name": "change_in_lake_moisture_volume",
+   "units": "m3"
+  },
+  "OUT_LAKE_DSWE": {
+   "default_agg": "SUM",
+   "description": "change in snowpack on top of lake ice",
+   "dim": null,
+   "long_name": "lake_dswe",
+   "nelem": "1",
+   "standard_name": "change_in_snow_lwe_thickness_on_lake_ice",
+   "units": "mm"
+  },
+  "OUT_LAKE_DSWE_V": {
+   "default_agg": "SUM",
+   "description": "volumetric change in snowpack on top of lake ice",
+   "dim": null,
+   "long_name": "lake_dswe_v",
+   "nelem": "1",
+   "standard_name": "change_in_snow_lwe_volume_on_lake_ice",
+   "units": "m3"
+  },
+  "OUT_LAKE_EVAP": {
+   "default_agg": "SUM",
+   "description": "net evaporation from lake surface",
+   "dim": null,
+   "long_name": "lake_evap",
+   "nelem": "1",
+   "standard_name": "water_evaporation_from_lake",
+   "units": "mm"
+  },
+  "OUT_LAKE_EVAP_V": {
+   "default_agg": "SUM",
+   "description": "net volumetric evaporation from lake surface",
+   "dim": null,
+   "long_name": "lake_evap_v",
+   "nelem": "1",
+   "standard_name": "water_evaporation_volume_from_lake",
+   "units": "m3"
+  },
+  "OUT_LAKE_ICE": {
+   "default_agg": "END",
+   "description": "moisture stored as lake ice",
+   "dim": null,
+   "long_name": "lake_ice",
+   "nelem": "1",
+   "standard_name": "lake_ice",
+   "units": "mm"
+  },
+  "OUT_LAKE_ICE_FRACT": {
+   "default_agg": "END",
+   "description": "fractional coverage of lake ice",
+   "dim": null,
+   "long_name": "lake_ice_fract",
+   "nelem": "1",
+   "standard_name": "lake_ice_area_fraction",
+   "units": "1"
+  },
+  "OUT_LAKE_ICE_HEIGHT": {
+   "default_agg": "END",
+   "description": "thickness of lake ice",
+   "dim": null,
+   "long_name": "lake_ice_height",
+   "nelem": "1",
+   "standard_name": "lake_ice_height",
+   "units": "cm"
+  },
+  "OUT_LAKE_ICE_TEMP": {
+   "default_agg": "AVG",
+   "description": "lake ice temperature",
+   "dim": null,
+   "long_name": "lake_ice_temp",
+   "nelem": "1",
+   "standard_name": "lake_ice_temperature",
+   "units": "K"
+  },
+  "OUT_LAKE_MOIST": {
+   "default_agg": "END",
+   "description": "liquid water stored in lake",
+   "dim": null,
+   "long_name": "lake_moist",
+   "nelem": "1",
+   "standard_name": "lake_moisture",
+   "units": "mm"
+  },
+  "OUT_LAKE_PREC_V": {
+   "default_agg": "SUM",
+   "description": "volumetric precipitation over lake surface",
+   "dim": null,
+   "long_name": "lake_prec_v",
+   "nelem": "1",
+   "standard_name": "precipitation_over_lake_volume",
+   "units": "m3"
+  },
+  "OUT_LAKE_RCHRG": {
+   "default_agg": "SUM",
+   "description": "recharge from lake to surrounding wetland",
+   "dim": null,
+   "long_name": "lake_rchrg",
+   "nelem": "1",
+   "standard_name": "recharge_from_lake_to_wetland",
+   "units": "mm"
+  },
+  "OUT_LAKE_RCHRG_V": {
+   "default_agg": "SUM",
+   "description": "volumetric recharge from lake to surrounding wetland",
+   "dim": null,
+   "long_name": "lake_rchrg_v",
+   "nelem": "1",
+   "standard_name": "",
+   "units": "m3"
+  },
+  "OUT_LAKE_RO_IN": {
+   "default_agg": "SUM",
+   "description": "incoming runoff from lake catchment",
+   "dim": null,
+   "long_name": "lake_ro_in",
+   "nelem": "1",
+   "standard_name": "recharge_volume_from_lake_to_wetland",
+   "units": "mm"
+  },
+  "OUT_LAKE_RO_IN_V": {
+   "default_agg": "SUM",
+   "description": "incoming volumetric runoff from lake catchment",
+   "dim": null,
+   "long_name": "lake_ro_in_v",
+   "nelem": "1",
+   "standard_name": "runoff_volume_from_lake_catchment",
+   "units": "m3"
+  },
+  "OUT_LAKE_SURF_AREA": {
+   "default_agg": "END",
+   "description": "lake surface area",
+   "dim": null,
+   "long_name": "lake_surf_area",
+   "nelem": "1",
+   "standard_name": "lake_area",
+   "units": "m2"
+  },
+  "OUT_LAKE_SURF_TEMP": {
+   "default_agg": "AVG",
+   "description": "lake surface temperature",
+   "dim": null,
+   "long_name": "lake_surf_temp",
+   "nelem": "1",
+   "standard_name": "lake_surface_temperature",
+   "units": "K"
+  },
+  "OUT_LAKE_SWE": {
+   "default_agg": "END",
+   "description": "liquid water equivalent of snow on top of lake ice",
+   "dim": null,
+   "long_name": "lake_swe",
+   "nelem": "1",
+   "standard_name": "lwe_thickness_of_snow_on_lake",
+   "units": "m"
+  },
+  "OUT_LAKE_SWE_V": {
+   "default_agg": "END",
+   "description": "liquid water equivalent of snow on top of lake ice",
+   "dim": null,
+   "long_name": "lake_swe_v",
+   "nelem": "1",
+   "standard_name": "lwe_volume_of_snow_on_lake",
+   "units": "m3"
+  },
+  "OUT_LAKE_VAPFLX": {
+   "default_agg": "SUM",
+   "description": "sublimation from lake snow pack",
+   "dim": null,
+   "long_name": "lake_vapflx",
+   "nelem": "1",
+   "standard_name": "water_sublimation_flux_from_lake_snow",
+   "units": "mm"
+  },
+  "OUT_LAKE_VAPFLX_V": {
+   "default_agg": "SUM",
+   "description": "volumetric sublimation from lake snow pack",
+   "dim": null,
+   "long_name": "lake_vapflx_v",
+   "nelem": "1",
+   "standard_name": "water_sublimation_flux_volume_from_lake_snow",
+   "units": "m3"
+  },
+  "OUT_LAKE_VOLUME": {
+   "default_agg": "END",
+   "description": "lake volume",
+   "dim": null,
+   "long_name": "lake_volume",
+   "nelem": "1",
+   "standard_name": "lake_volume",
+   "units": "m3"
+  },
+  "OUT_LATENT": {
+   "default_agg": "AVG",
+   "description": "net upward latent heat flux",
+   "dim": null,
+   "long_name": "latent",
+   "nelem": "1",
+   "standard_name": "surface_upward_latent_heat_flux",
+   "units": "W m-2"
+  },
+  "OUT_LATENT_BAND": {
+   "default_agg": "AVG",
+   "description": "net upward latent heat flux",
+   "dim": "snow_band",
+   "long_name": "latent_band",
+   "nelem": "options.SNOW_BAND",
+   "standard_name": "surface_upward_latent_heat_flux",
+   "units": "W m-2"
+  },
+  "OUT_LATENT_SUB": {
+   "default_agg": "AVG",
+   "description": "net upward latent heat flux from sublimation",
+   "dim": null,
+   "long_name": "latent_sub",
+   "nelem": "1",
+   "standard_name": "surface_net_latent_heat_flux_from_sublimation",
+   "units": "W m-2"
+  },
+  "OUT_LATENT_SUB_BAND": {
+   "default_agg": "AVG",
+   "description": "net upward latent heat flux from sublimation",
+   "dim": "snow_band",
+   "long_name": "latent_sub_band",
+   "nelem": "options.SNOW_BAND",
+   "standard_name": "surface_net_latent_heat_flux_from_sublimation",
+   "units": "W m-2"
+  },
+  "OUT_LITTERFALL": {
+   "default_agg": "AVG",
+   "description": "flux of carbon from living biomass into soil",
+   "dim": null,
+   "long_name": "litterfall",
+   "nelem": "1",
+   "standard_name": "carbon_mass_flux_into_soil_from_litter",
+   "units": "g m-2 d-1"
+  },
+  "OUT_LWDOWN": {
+   "default_agg": "AVG",
+   "description": "incoming longwave",
+   "dim": null,
+   "long_name": "lwdown",
+   "nelem": "1",
+   "standard_name": "downwelling_longwave_flux_in_air",
+   "units": "W m-2"
+  },
+  "OUT_LWNET": {
+   "default_agg": "AVG",
+   "description": "net downward longwave flux",
+   "dim": null,
+   "long_name": "lwnet",
+   "nelem": "1",
+   "standard_name": "net_downward_longwave_flux_at_surface",
+   "units": "W m-2"
+  },
+  "OUT_LWNET_BAND": {
+   "default_agg": "AVG",
+   "description": "net downward longwave flux",
+   "dim": "snow_band",
+   "long_name": "lwnet_band",
+   "nelem": "options.SNOW_BAND",
+   "standard_name": "net_downward_longwave_flux_at_surface",
+   "units": "W m-2"
+  },
+  "OUT_MELT_ENERGY": {
+   "default_agg": "AVG",
+   "description": "energy of fusion (melting)",
+   "dim": null,
+   "long_name": "melt_energy",
+   "nelem": "1",
+   "standard_name": "energy_of_fusion",
+   "units": "W m-2"
+  },
+  "OUT_MELT_ENERGY_BAND": {
+   "default_agg": "AVG",
+   "description": "energy of fusion (melting)",
+   "dim": "snow_band",
+   "long_name": "melt_energy_band",
+   "nelem": "options.SNOW_BAND",
+   "standard_name": "energy_of_fusion",
+   "units": "W m-2"
+  },
+  "OUT_NEE": {
+   "default_agg": "AVG",
+   "description": "net ecosystem exchange",
+   "dim": null,
+   "long_name": "nee",
+   "nelem": "1",
+   "standard_name": "net_ecosystem_exhanged_expressed_as_carbon",
+   "units": "g m-2 d-1"
+  },
+  "OUT_NPP": {
+   "default_agg": "AVG",
+   "description": "et primary productivity",
+   "dim": null,
+   "long_name": "npp",
+   "nelem": "1",
+   "standard_name": "net_primary_productivity_of_biomass_expressed_as_carbon",
+   "units": "g m-2 s-1"
+  },
+  "OUT_PAR": {
+   "default_agg": "AVG",
+   "description": "incoming photosynthetically active radiation",
+   "dim": null,
+   "long_name": "par",
+   "nelem": "1",
+   "standard_name": "surface_downwelling_photosynthetic_radiative_flux_in_air",
+   "units": "W m-2"
+  },
+  "OUT_PET": {
+   "default_agg": "SUM",
+   "description": "Potential evapotranspiration (= area-weighted sum of potential transpiration and potential soil evaporation)",
+   "dim": null,
+   "long_name": "pet",
+   "nelem": "1",
+   "standard_name": "water_potential_evaporation_amount",
+   "units": "mm"
+  },
+  "OUT_PREC": {
+   "default_agg": "SUM",
+   "description": "incoming precipitation",
+   "dim": null,
+   "long_name": "prec",
+   "nelem": "1",
+   "standard_name": "precipitation_amount",
+   "units": "mm"
+  },
+  "OUT_PRESSURE": {
+   "default_agg": "AVG",
+   "description": "near surface atmospheric pressure",
+   "dim": null,
+   "long_name": "pressure",
+   "nelem": "1",
+   "standard_name": "surface_air_pressure",
+   "units": "kPa"
+  },
+  "OUT_QAIR": {
+   "default_agg": "AVG",
+   "description": "specific humidity",
+   "dim": null,
+   "long_name": "qair",
+   "nelem": "1",
+   "standard_name": "specific_humidity",
+   "units": "1"
+  },
+  "OUT_RAD_TEMP": {
+   "default_agg": "AVG",
+   "description": "average radiative surface temperature",
+   "dim": null,
+   "long_name": "rad_temp",
+   "nelem": "1",
+   "standard_name": "surface_radiative_temperature",
+   "units": "K"
+  },
+  "OUT_RAINF": {
+   "default_agg": "SUM",
+   "description": "liquid rainfall amount",
+   "dim": null,
+   "long_name": "rainf",
+   "nelem": "1",
+   "standard_name": "rainfall_amount",
+   "units": "mm"
+  },
+  "OUT_RAUT": {
+   "default_agg": "AVG",
+   "description": "autotrophic respiration",
+   "dim": null,
+   "long_name": "raut",
+   "nelem": "1",
+   "standard_name": "autotrophic_respiration_carbon_flux",
+   "units": "g m-2 s-1"
+  },
+  "OUT_REFREEZE": {
+   "default_agg": "SUM",
+   "description": "refreezing of water in the snow",
+   "dim": null,
+   "long_name": "refreeze",
+   "nelem": "1",
+   "standard_name": "lwe_thickness_of_refreezing_water_in_snow",
+   "units": "mm"
+  },
+  "OUT_REL_HUMID": {
+   "default_agg": "AVG",
+   "description": "relative humidity",
+   "dim": null,
+   "long_name": "rel_humid",
+   "nelem": "1",
+   "standard_name": "relative_humidity",
+   "units": "1"
+  },
+  "OUT_RFRZ_ENERGY": {
+   "default_agg": "AVG",
+   "description": "net energy used to refreeze liquid water in snowpack",
+   "dim": null,
+   "long_name": "rfrz_energy",
+   "nelem": "1",
+   "standard_name": "net_energy_used_to_refreeze_water_in_snowpack",
+   "units": "W m-2"
+  },
+  "OUT_RFRZ_ENERGY_BAND": {
+   "default_agg": "AVG",
+   "description": "net energy used to refreeze liquid water in snowpack",
+   "dim": "snow_band",
+   "long_name": "rfrz_energy_band",
+   "nelem": "options.SNOW_BAND",
+   "standard_name": "net_energy_used_to_refreeze_water_in_snowpack",
+   "units": "W m-2"
+  },
+  "OUT_RHET": {
+   "default_agg": "AVG",
+   "description": "heterotrophic respiration",
+   "dim": null,
+   "long_name": "rhet",
+   "nelem": "1",
+   "standard_name": "heterotrophic_respiration",
+   "units": "g m-2 d-1"
+  },
+  "OUT_ROOTMOIST": {
+   "default_agg": "END",
+   "description": "root zone soil moisture",
+   "dim": null,
+   "long_name": "rootmoist",
+   "nelem": "1",
+   "standard_name": "soil_moisture_in_root_zone",
+   "units": "mm"
+  },
+  "OUT_RUNOFF": {
+   "default_agg": "SUM",
+   "description": "surface runoff",
+   "dim": null,
+   "long_name": "runoff",
+   "nelem": "1",
+   "standard_name": "runoff_amount",
+   "units": "mm"
+  },
+  "OUT_R_NET": {
+   "default_agg": "AVG",
+   "description": "net downward radiation flux",
+   "dim": null,
+   "long_name": "r_net",
+   "nelem": "1",
+   "standard_name": "net_downward_radiation_flux_at_surface",
+   "units": "W m-2"
+  },
+  "OUT_SALBEDO": {
+   "default_agg": "AVG",
+   "description": "snow albedo",
+   "dim": null,
+   "long_name": "salbedo",
+   "nelem": "1",
+   "standard_name": "snow_albedo",
+   "units": "1"
+  },
+  "OUT_SENSIBLE": {
+   "default_agg": "AVG",
+   "description": "net upward sensible heat flux",
+   "dim": null,
+   "long_name": "sensible",
+   "nelem": "1",
+   "standard_name": "surface_upward_net_sensible_heat_flux",
+   "units": "W m-2"
+  },
+  "OUT_SENSIBLE_BAND": {
+   "default_agg": "AVG",
+   "description": "net upward sensible heat flux",
+   "dim": "snow_band",
+   "long_name": "sensible_band",
+   "nelem": "options.SNOW_BAND",
+   "standard_name": "surface_upward_net_sensible_heat_flux",
+   "units": "W m-2"
+  },
+  "OUT_SMFROZFRAC": {
+   "default_agg": "END",
+   "description": "fraction of soil moisture (by mass) that is ice, for each soil layer",
+   "dim": "nlayer",
+   "long_name": "smfrozfrac",
+   "nelem": "options.Nlayer",
+   "standard_name": "soil_moisture_ice_fraction",
+   "units": "1"
+  },
+  "OUT_SMLIQFRAC": {
+   "default_agg": "END",
+   "description": "fraction of soil moisture (by mass) that is liquid, for each soil layer",
+   "dim": "nlayer",
+   "long_name": "smliqfrac",
+   "nelem": "options.Nlayer",
+   "standard_name": "soil_moisture_liquid_fraction",
+   "units": "1"
+  },
+  "OUT_SNOWF": {
+   "default_agg": "SUM",
+   "description": "snowfall",
+   "dim": null,
+   "long_name": "snowf",
+   "nelem": "1",
+   "standard_name": "snowfall_lwe_amount",
+   "units": "mm"
+  },
+  "OUT_SNOWT_FBFLAG": {
+   "default_agg": "SUM",
+   "description": "snow surface temperature flag",
+   "dim": null,
+   "long_name": "snowt_fbflag",
+   "nelem": "1",
+   "standard_name": "snow_surface_temperature_flag",
+   "units": "1"
+  },
+  "OUT_SNOW_CANOPY": {
+   "default_agg": "END",
+   "description": "snow interception storage in canopy",
+   "dim": null,
+   "long_name": "snow_canopy",
+   "nelem": "1",
+   "standard_name": "lwe_thickness_of_canopy_intercepted_snow",
+   "units": "mm"
+  },
+  "OUT_SNOW_CANOPY_BAND": {
+   "default_agg": "END",
+   "description": "snow interception storage in canopy",
+   "dim": "snow_band",
+   "long_name": "snow_canopy_band",
+   "nelem": "options.SNOW_BAND",
+   "standard_name": "lwe_thickness_of_canopy_intercepted_snow",
+   "units": "mm"
+  },
+  "OUT_SNOW_COVER": {
+   "default_agg": "END",
+   "description": "fractional area of snow cover",
+   "dim": null,
+   "long_name": "snow_cover",
+   "nelem": "1",
+   "standard_name": "snow_cover_area_fraction",
+   "units": "1"
+  },
+  "OUT_SNOW_COVER_BAND": {
+   "default_agg": "END",
+   "description": "fractional area of snow cover",
+   "dim": "snow_band",
+   "long_name": "snow_cover_band",
+   "nelem": "options.SNOW_BAND",
+   "standard_name": "snow_cover_area_fraction",
+   "units": "1"
+  },
+  "OUT_SNOW_DEPTH": {
+   "default_agg": "END",
+   "description": "depth of snow pack",
+   "dim": null,
+   "long_name": "snow_depth",
+   "nelem": "1",
+   "standard_name": "thickness_of_snow",
+   "units": "cm"
+  },
+  "OUT_SNOW_DEPTH_BAND": {
+   "default_agg": "END",
+   "description": "depth of snow pack",
+   "dim": "snow_band",
+   "long_name": "snow_depth_band",
+   "nelem": "options.SNOW_BAND",
+   "standard_name": "thickness_of_snow",
+   "units": "cm"
+  },
+  "OUT_SNOW_FLUX": {
+   "default_agg": "AVG",
+   "description": "energy flux through snow pack",
+   "dim": null,
+   "long_name": "snow_flux",
+   "nelem": "1",
+   "standard_name": "energy_flux_through_snow_pack",
+   "units": "W m-2"
+  },
+  "OUT_SNOW_FLUX_BAND": {
+   "default_agg": "AVG",
+   "description": "energy flux through snow pack",
+   "dim": "snow_band",
+   "long_name": "snow_flux_band",
+   "nelem": "options.SNOW_BAND",
+   "standard_name": "energy_flux_through_snow_pack",
+   "units": "W m-2"
+  },
+  "OUT_SNOW_MELT": {
+   "default_agg": "SUM",
+   "description": "snow melt",
+   "dim": null,
+   "long_name": "snow_melt",
+   "nelem": "1",
+   "standard_name": "snow_melt_amount",
+   "units": "mm"
+  },
+  "OUT_SNOW_MELT_BAND": {
+   "default_agg": "AVG",
+   "description": "snow melt",
+   "dim": "snow_band",
+   "long_name": "snow_melt_band",
+   "nelem": "options.SNOW_BAND",
+   "standard_name": "snow_melt_amount",
+   "units": "mm"
+  },
+  "OUT_SNOW_PACKT_BAND": {
+   "default_agg": "AVG",
+   "description": "snow pack temperature",
+   "dim": "snow_band",
+   "long_name": "snow_packt_band",
+   "nelem": "options.SNOW_BAND",
+   "standard_name": "snow_pack_temperature",
+   "units": "C"
+  },
+  "OUT_SNOW_PACK_TEMP": {
+   "default_agg": "AVG",
+   "description": "snow pack temperature",
+   "dim": null,
+   "long_name": "snow_pack_temp",
+   "nelem": "1",
+   "standard_name": "snow_pack_temperature",
+   "units": "C"
+  },
+  "OUT_SNOW_SURFT_BAND": {
+   "default_agg": "AVG",
+   "description": "snow surface temperature",
+   "dim": "snow_band",
+   "long_name": "snow_surft_band",
+   "nelem": "options.SNOW_BAND",
+   "standard_name": "snow_surface_temperature",
+   "units": "C"
+  },
+  "OUT_SNOW_SURF_TEMP": {
+   "default_agg": "AVG",
+   "description": "snow surface temperature",
+   "dim": null,
+   "long_name": "snow_surf_temp",
+   "nelem": "1",
+   "standard_name": "snow_surface_temperature",
+   "units": "C"
+  },
+  "OUT_SOILT_FBFLAG": {
+   "default_agg": "SUM",
+   "description": "soil temperature flag for each soil thermal node",
+   "dim": "node",
+   "long_name": "soilt_fbflag",
+   "nelem": "options.Nnode",
+   "standard_name": "soil_temperature_flag",
+   "units": "1"
+  },
+  "OUT_SOIL_ICE": {
+   "default_agg": "END",
+   "description": "soil ice content for each soil layer",
+   "dim": "nlayer",
+   "long_name": "soil_ice",
+   "nelem": "options.Nlayer",
+   "standard_name": "soil_moisture_ice_depth",
+   "units": "mm"
+  },
+  "OUT_SOIL_ICE_FRAC": {
+   "default_agg": "AVG",
+   "description": "soil ice content fraction for each soil layer",
+   "dim": "nlayer",
+   "long_name": "soil_ice_frac",
+   "nelem": "options.Nlayer",
+   "standard_name": "soil_moisture_ice_depth_fraction",
+   "units": "1"
+  },
+  "OUT_SOIL_LIQ": {
+   "default_agg": "END",
+   "description": "soil liquid moisture content for each soil layer",
+   "dim": "nlayer",
+   "long_name": "soil_liq",
+   "nelem": "options.Nlayer",
+   "standard_name": "soil_moisture_liquid_depth",
+   "units": "mm"
+  },
+  "OUT_SOIL_LIQ_FRAC": {
+   "default_agg": "AVG",
+   "description": "soil liquid moisture content fraction for each soil layer",
+   "dim": "nlayer",
+   "long_name": "soil_liq_frac",
+   "nelem": "options.Nlayer",
+   "standard_name": "soil_moisture_liquid_depth_fraction",
+   "units": "1"
+  },
+  "OUT_SOIL_MOIST": {
+   "default_agg": "END",
+   "description": "soil total moisture content",
+   "dim": "nlayer",
+   "long_name": "soil_moist",
+   "nelem": "options.Nlayer",
+   "standard_name": "soil_moisture",
+   "units": "mm"
+  },
+  "OUT_SOIL_TEMP": {
+   "default_agg": "AVG",
+   "description": "soil temperature for each soil layer",
+   "dim": "nlayer",
+   "long_name": "soil_temp",
+   "nelem": "options.Nlayer",
+   "standard_name": "soil_temperature",
+   "units": "C"
+  },
+  "OUT_SOIL_TNODE": {
+   "default_agg": "AVG",
+   "description": "soil temperature for each soil thermal node",
+   "dim": "node",
+   "long_name": "soil_tnode",
+   "nelem": "options.Nnode",
+   "standard_name": "soil_temperature",
+   "units": "C"
+  },
+  "OUT_SOIL_TNODE_WL": {
+   "default_agg": "AVG",
+   "description": "soil temperature for each soil thermal node in the wetland",
+   "dim": "node",
+   "long_name": "soil_tnode_wl",
+   "nelem": "options.Nnode",
+   "standard_name": "soil_temperature",
+   "units": "C"
+  },
+  "OUT_SOIL_WET": {
+   "default_agg": "END",
+   "description": "vertical average of (soil moisture - wilting point)/(maximum soil moisture - wilting point)",
+   "dim": null,
+   "long_name": "soil_wet",
+   "nelem": "1",
+   "standard_name": "soil_moisture_wetness_fraction",
+   "units": "1"
+  },
+  "OUT_SUB_BLOWING": {
+   "default_agg": "SUM",
+   "description": "net sublimation of blowing snow",
+   "dim": null,
+   "long_name": "sub_blowing",
+   "nelem": "1",
+   "standard_name": "submlimation_amount_from_blowing_snow",
+   "units": "mm"
+  },
+  "OUT_SUB_CANOP": {
+   "default_agg": "SUM",
+   "description": "net sublimation from snow stored in canopy",
+   "dim": null,
+   "long_name": "sub_canop",
+   "nelem": "1",
+   "standard_name": "sublimation_amount_from_canopy_snow",
+   "units": "mm"
+  },
+  "OUT_SUB_SNOW": {
+   "default_agg": "SUM",
+   "description": "net sublimation from snow pack (surface and blowing)",
+   "dim": null,
+   "long_name": "sub_snow",
+   "nelem": "1",
+   "standard_name": "sublimation_amount_from_snow_pack",
+   "units": "mm"
+  },
+  "OUT_SUB_SURFACE": {
+   "default_agg": "SUM",
+   "description": "net sublimation from snow pack surface",
+   "dim": null,
+   "long_name": "sub_surface",
+   "nelem": "1",
+   "standard_name": "sublimation_amount_from_snow_pack_surface",
+   "units": "mm"
+  },
+  "OUT_SURFSTOR": {
+   "default_agg": "END",
+   "description": "storage of liquid water on surface (ponding)",
+   "dim": null,
+   "long_name": "surfstor",
+   "nelem": "1",
+   "standard_name": "surface_liquid_water_storage",
+   "units": "mm"
+  },
+  "OUT_SURFT_FBFLAG": {
+   "default_agg": "SUM",
+   "description": "surface temperature flag",
+   "dim": null,
+   "long_name": "surft_fbflag",
+   "nelem": "1",
+   "standard_name": "surface_temperature_flag",
+   "units": "1"
+  },
+  "OUT_SURF_COND": {
+   "default_agg": "AVG",
+   "description": "surface conductance",
+   "dim": null,
+   "long_name": "surf_cond",
+   "nelem": "1",
+   "standard_name": "surface_conductance",
+   "units": "m s-1"
+  },
+  "OUT_SURF_FROST_FRAC": {
+   "default_agg": "END",
+   "description": "fraction of soil surface that is frozen",
+   "dim": null,
+   "long_name": "surf_frost_frac",
+   "nelem": "1",
+   "standard_name": "frozen_soil_surface_fraction",
+   "units": "1"
+  },
+  "OUT_SURF_TEMP": {
+   "default_agg": "AVG",
+   "description": "average surface temperature",
+   "dim": null,
+   "long_name": "surf_temp",
+   "nelem": "1",
+   "standard_name": "surface_temperature",
+   "units": "C"
+  },
+  "OUT_SWDOWN": {
+   "default_agg": "AVG",
+   "description": "incoming shortwave",
+   "dim": null,
+   "long_name": "swdown",
+   "nelem": "1",
+   "standard_name": "incoming shortwave",
+   "units": "W m-2"
+  },
+  "OUT_SWE": {
+   "default_agg": "END",
+   "description": "snow water equivalent in snow pack",
+   "dim": null,
+   "long_name": "swe",
+   "nelem": "1",
+   "standard_name": "lwe_thickness_of_snow",
+   "units": "mm"
+  },
+  "OUT_SWE_BAND": {
+   "default_agg": "END",
+   "description": "snow water equivalent in snow pack",
+   "dim": "snow_band",
+   "long_name": "swe_band",
+   "nelem": "options.SNOW_BAND",
+   "standard_name": "lwe_thickness_of_snow",
+   "units": "mm"
+  },
+  "OUT_SWNET": {
+   "default_agg": "AVG",
+   "description": "net downward shortwave flux",
+   "dim": null,
+   "long_name": "swnet",
+   "nelem": "1",
+   "standard_name": "net_downward_shortwave_flux_at_surface",
+   "units": "W m-2"
+  },
+  "OUT_SWNET_BAND": {
+   "default_agg": "AVG",
+   "description": "net downward shortwave flux",
+   "dim": "snow_band",
+   "long_name": "swnet_band",
+   "nelem": "options.SNOW_BAND",
+   "standard_name": "net_downward_shortwave_flux_at_surface",
+   "units": "W m-2"
+  },
+  "OUT_TCAN_FBFLAG": {
+   "default_agg": "SUM",
+   "description": "Canopy temperature fallback flag",
+   "dim": null,
+   "long_name": "tcan_fbflag",
+   "nelem": "1",
+   "standard_name": "canopy_temperature_flag",
+   "units": "1"
+  },
+  "OUT_TDEPTH": {
+   "default_agg": "AVG",
+   "description": "depth of thawing fronts for each thawing front",
+   "dim": "front",
+   "long_name": "tdepth",
+   "nelem": "MAX_FRONTS",
+   "standard_name": "depth_of_thawing_fronts",
+   "units": "cm"
+  },
+  "OUT_TFOL_FBFLAG": {
+   "default_agg": "SUM",
+   "description": "average vegetation canopy temperature",
+   "dim": null,
+   "long_name": "tfol_fbflag",
+   "nelem": "1",
+   "standard_name": "foliage_temperature_flag",
+   "units": "1"
+  },
+  "OUT_TIME_VICRUN_CPU": {
+   "default_agg": "AVG",
+   "description": "CPU time spent inside vic_run",
+   "dim": null,
+   "long_name": "time_vicrun_cpu",
+   "nelem": "1",
+   "standard_name": "vic_run_cpu_time",
+   "units": "seconds"
+  },
+  "OUT_TIME_VICRUN_WALL": {
+   "default_agg": "AVG",
+   "description": "Wall time spent inside vic_run",
+   "dim": null,
+   "long_name": "time_vicrun_wall",
+   "nelem": "1",
+   "standard_name": "vic_run_wall_time",
+   "units": "seconds"
+  },
+  "OUT_TRANSP_VEG": {
+   "default_agg": "SUM",
+   "description": "net transpiration from vegetation",
+   "dim": null,
+   "long_name": "transp_veg",
+   "nelem": "1",
+   "standard_name": "transpiration_amount",
+   "units": "mm"
+  },
+  "OUT_VEGT": {
+   "default_agg": "AVG",
+   "description": null,
+   "dim": null,
+   "long_name": "vegt",
+   "nelem": "1",
+   "standard_name": "canopy_temperature",
+   "units": "C"
+  },
+  "OUT_VP": {
+   "default_agg": "AVG",
+   "description": "near surface vapor pressure",
+   "dim": null,
+   "long_name": "vp",
+   "nelem": "1",
+   "standard_name": "water_vapor_pressure",
+   "units": "kPa"
+  },
+  "OUT_VPD": {
+   "default_agg": "AVG",
+   "description": "near surface vapor pressure deficit",
+   "dim": null,
+   "long_name": "vpd",
+   "nelem": "1",
+   "standard_name": "water_vapor_saturation_deficit",
+   "units": "kPa"
+  },
+  "OUT_WATER_ERROR": {
+   "default_agg": "AVG",
+   "description": "water budget error",
+   "dim": null,
+   "long_name": "water_error",
+   "nelem": "1",
+   "standard_name": "water_budget_error",
+   "units": "mm"
+  },
+  "OUT_WDEW": {
+   "default_agg": "END",
+   "description": "total moisture interception storage in canopy",
+   "dim": null,
+   "long_name": "wdew",
+   "nelem": "1",
+   "standard_name": "soil_moisture_storage_depth_in_canopy",
+   "units": "mm"
+  },
+  "OUT_WIND": {
+   "default_agg": "AVG",
+   "description": "near surface wind speed",
+   "dim": null,
+   "long_name": "wind",
+   "nelem": "1",
+   "standard_name": "wind_speed",
+   "units": "m s-1"
+  },
+  "OUT_ZWT": {
+   "default_agg": "END",
+   "description": "water table position (zwt within lowest unsaturated layer)",
+   "dim": null,
+   "long_name": "zwt",
+   "nelem": "1",
+   "standard_name": "water_table_position_lowest_layer",
+   "units": "cm"
+  },
+  "OUT_ZWT_LUMPED": {
+   "default_agg": "END",
+   "description": "lumped water table position (zwt of total moisture across all layers, lumped together)",
+   "dim": null,
+   "long_name": "zwt_lumped",
+   "nelem": "1",
+   "standard_name": "lumped_water_table_position",
+   "units": "cm"
+  }
+ },
+ "vic_source": "reference/VIC-5.1.0/vic",
+ "vic_version_h": "5.0.1"
+}

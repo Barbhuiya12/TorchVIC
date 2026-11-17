@@ -1,0 +1,43 @@
+From 5de71f6f0e502c397c72b419a666045943460b71 Mon Sep 17 00:00:00 2001
+From: Barbhuiya12 <siddikbarbhuiya@gmail.com>
+Date: Tue, 17 Nov 2026 14:24:40 +0530
+Subject: [PATCH] image driver: read CHANNEL_IN record by record
+
+vic_force() computed the time index of the CHANNEL_IN read before the loop
+over the forcing steps, using the value of j left by the previous loop (NF),
+read one record, and copied it to all NF steps. With LAKES TRUE and
+CHANNEL_IN supplied this reads the records of the next forcing block (and a
+record beyond the end of the file at the last step of each year), and the
+steps of one block all get the same value.
+
+Read CHANNEL_IN inside the loop over the forcing steps, with the same time
+index as the other forcing variables.
+---
+ vic/drivers/image/src/vic_force.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/vic/drivers/image/src/vic_force.c b/vic/drivers/image/src/vic_force.c
+index 45971565..5065dfe0 100644
+--- a/vic/drivers/image/src/vic_force.c
++++ b/vic/drivers/image/src/vic_force.c
+@@ -168,12 +168,12 @@ vic_force(void)
+         // Channel inflow to lake
+         // If channel_in not supplied, it defaults to 0 from calloc
+         if (param_set.TYPE[CHANNEL_IN].SUPPLIED) {
+-            d3start[0] = global_param.forceskip[0] +
+-                         global_param.forceoffset[0] + j;
+-            get_scatter_nc_field_double(&(filenames.forcing[0]),
+-                                        param_set.TYPE[CHANNEL_IN].varname,
+-                                        d3start, d3count, dvar);
+             for (j = 0; j < NF; j++) {
++                d3start[0] = global_param.forceskip[0] +
++                             global_param.forceoffset[0] + j;
++                get_scatter_nc_field_double(&(filenames.forcing[0]),
++                                            param_set.TYPE[CHANNEL_IN].varname,
++                                            d3start, d3count, dvar);
+                 for (i = 0; i < local_domain.ncells_active; i++) {
+                     force[i].channel_in[j] = (double) dvar[i];
+                 }
+-- 
+2.43.0
+

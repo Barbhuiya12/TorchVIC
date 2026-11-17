@@ -1,0 +1,129 @@
+# VIC + routing + flood (Guwahati box, one way).
+# ISC domain (112,825 cells, 1/16 degree, India), one year (2004), VIC 5.1.0.
+#   torchvic validate --config configs/vic_flood.yaml
+#   torchvic run --config configs/vic_flood.yaml --out results_vic_flood
+# Environment (data are not in the package):
+#   TORCHVIC_GLOBAL      ISC global file (benchmarks/isc/isc_vic5_3h.txt with
+#                        RESULT_DIR / dates filled; `run_combos.py global`)
+#   TORCHVIC_FDIR        flow map, FILE.nc:fdir (<data root>/static/isc_fdir.nc)
+#   TORCHVIC_DOMAIN      domain.nc (lat, lon, mask, area, frac, elev)
+#   TORCHVIC_GAUGES      gauges csv (lat, lng)
+#   TORCHVIC_DAMS        dam table (`run_combos.py prepare`)
+#   TORCHVIC_COMBO_DATA  inputs from `run_combos.py prepare`
+#   TORCHVIC_ALL_DATA    <data root> (flood basin)
+#   TORCHVIC_CROP_PARAMS configs/crop_params_sbarley.json
+version: 1
+run: {device: auto, dtype: float64}
+modules:
+  vic: {connector: vic, global_param: '${TORCHVIC_GLOBAL}', core: 5.1.0, snow_bands: mean, window_days: 1,
+    exchange: day, soil_add_mode: cap}
+  routing: {connector: routing, fdir: '${TORCHVIC_FDIR}', domain: '${TORCHVIC_DOMAIN}', gauges: '${TORCHVIC_COMBO_DATA}/gauges_flood.csv',
+    step_s: 86400}
+  split: {connector: split, cells: '${TORCHVIC_COMBO_DATA}/box_cells.csv', domain: '${TORCHVIC_DOMAIN}'}
+  flood:
+    connector: flood
+    basin: ${TORCHVIC_ALL_DATA}/static/flood_basins/brahmaputra_guwahati_100m.npz
+    interval_s: 86400
+    free_edges:
+    - [W, 0.0001]
+    inflow_points:
+    - [720, 992]
+    - [721, 992]
+    - [722, 992]
+    - [723, 992]
+    - [724, 992]
+    - [725, 992]
+    - [726, 992]
+    - [727, 992]
+    - [728, 992]
+    - [729, 992]
+    - [730, 992]
+    - [731, 992]
+    - [732, 992]
+    - [733, 992]
+    - [734, 992]
+    - [736, 992]
+    - [737, 992]
+    - [738, 992]
+    - [739, 992]
+    - [746, 992]
+    - [755, 992]
+    - [756, 992]
+    - [757, 992]
+    - [758, 992]
+    - [759, 992]
+    - [760, 992]
+    - [761, 992]
+    - [762, 992]
+    - [763, 992]
+    - [764, 992]
+    - [765, 992]
+    - [766, 992]
+    - [767, 992]
+    - [768, 992]
+    - [769, 992]
+    - [770, 992]
+    - [771, 992]
+    - [772, 992]
+    - [773, 992]
+    - [774, 992]
+    - [775, 992]
+    - [776, 992]
+    - [777, 992]
+    - [778, 992]
+    - [779, 992]
+    - [780, 992]
+    - [781, 992]
+    - [782, 992]
+    - [783, 992]
+    - [784, 992]
+    - [785, 992]
+    - [786, 992]
+    - [787, 992]
+    - [788, 992]
+    - [789, 992]
+    - [790, 992]
+    - [791, 992]
+    - [792, 992]
+    - [793, 992]
+    - [794, 992]
+    - [795, 992]
+    - [796, 992]
+    - [797, 992]
+    - [798, 992]
+    - [799, 992]
+    - [800, 992]
+    - [801, 992]
+    - [802, 992]
+    - [803, 992]
+    - [804, 992]
+    - [807, 992]
+    - [847, 992]
+    - [848, 992]
+    - [849, 992]
+    - [851, 992]
+    - [858, 992]
+    - [877, 992]
+    - [3, 166]
+    inflow_map:
+    - - 318
+      - [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25,
+        26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49,
+        50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73,
+        74, 75, 76]
+    - - 337
+      - [77]
+    - - 315
+      - [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25,
+        26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49,
+        50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73,
+        74, 75, 76]
+connections:
+- {from: vic.total_runoff, to: split.runoff}
+- {from: split.routed, to: routing.inflow}
+- {from: split.box, to: flood.runoff, mapping: vic_to_flood}
+- {from: routing.discharge, to: flood.upstream_discharge}
+mappings:
+  vic_to_flood: {source: box_cells, target: flood_cells, file: '${TORCHVIC_ALL_DATA}/static/flood_basins/brahmaputra_guwahati_100m_vic_pairs.csv'}
+ledger: {enabled: true, on_violation: reject}
+output: {dir: results_vic_flood, history: true, ledger: true}

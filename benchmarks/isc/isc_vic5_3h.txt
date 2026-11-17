@@ -1,0 +1,64 @@
+# VIC 5.1.0 image-driver global parameter file: full Indian subcontinent (ISC),
+# 105,113 cells at 1/16 deg, water balance, 3-hourly forcing, 2004-2005
+# (2004 spin-up, 2005 compared). Read by pristine vic_image.exe and by
+# TorchVIC (benchmarks/run_isc_torchvic.py). RESULT_DIR and LOG_DIR are set
+# per run by benchmarks/run_isc.sh.
+
+MODEL_STEPS_PER_DAY   8
+SNOW_STEPS_PER_DAY    8
+RUNOFF_STEPS_PER_DAY  8
+STARTYEAR   2004
+STARTMONTH  1
+STARTDAY    1
+ENDYEAR     2005
+ENDMONTH    12
+ENDDAY      31
+CALENDAR    PROLEPTIC_GREGORIAN
+
+FULL_ENERGY  FALSE
+FROZEN_SOIL  FALSE
+NODES        3
+
+DOMAIN       @DATA_ROOT@/vic_params_isc/domain.nc
+DOMAIN_TYPE  LAT   lat
+DOMAIN_TYPE  LON   lon
+DOMAIN_TYPE  MASK  mask
+DOMAIN_TYPE  AREA  area
+DOMAIN_TYPE  FRAC  frac
+DOMAIN_TYPE  YDIM  lat
+DOMAIN_TYPE  XDIM  lon
+
+# 3-hourly forcing: the daily ERA5 forcing disaggregated by TorchVIC's MTCLIM
+# chain (benchmarks/make_isc_forcing.py subdaily)
+FORCING1     @DATA_ROOT@/forcing/vic5_3h/isc_3h.
+FORCE_TYPE   AIR_TEMP  air_temp
+FORCE_TYPE   PREC      prec
+FORCE_TYPE   PRESSURE  pressure
+FORCE_TYPE   SWDOWN    swdown
+FORCE_TYPE   LWDOWN    lwdown
+FORCE_TYPE   VP        vp
+FORCE_TYPE   WIND      wind
+WIND_H       10.0
+
+PARAMETERS   @DATA_ROOT@/vic_params_isc/params.nc
+SNOW_BAND    TRUE
+BASEFLOW     ARNO
+JULY_TAVG_SUPPLIED  FALSE
+ORGANIC_FRACT       FALSE
+LAI_SRC      FROM_VEGLIB
+FCAN_SRC     FROM_VEGLIB
+ALB_SRC      FROM_VEGLIB
+
+RESULT_DIR   @RESULT_DIR@
+LOG_DIR      @LOG_DIR@
+
+OUTFILE      fluxes
+AGGFREQ      NDAYS 1
+HISTFREQ     NYEARS 1
+OUT_FORMAT   NETCDF4
+OUTVAR       OUT_PREC
+OUTVAR       OUT_EVAP
+OUTVAR       OUT_RUNOFF
+OUTVAR       OUT_BASEFLOW
+OUTVAR       OUT_SWE
+OUTVAR       OUT_SOIL_MOIST

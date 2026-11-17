@@ -1,0 +1,185 @@
+# Full coupled system: VIC, routing, reservoirs, quality, irrigation, crop, groundwater, flood.
+# ISC domain (112,825 cells, 1/16 degree, India), one year (2004), VIC 5.1.0.
+#   torchvic validate --config configs/full_coupled_system.yaml
+#   torchvic run --config configs/full_coupled_system.yaml --out results_full_coupled_system
+# Environment (data are not in the package):
+#   TORCHVIC_GLOBAL      ISC global file (benchmarks/isc/isc_vic5_3h.txt with
+#                        RESULT_DIR / dates filled; `run_combos.py global`)
+#   TORCHVIC_FDIR        flow map, FILE.nc:fdir (<data root>/static/isc_fdir.nc)
+#   TORCHVIC_DOMAIN      domain.nc (lat, lon, mask, area, frac, elev)
+#   TORCHVIC_GAUGES      gauges csv (lat, lng)
+#   TORCHVIC_DAMS        dam table (`run_combos.py prepare`)
+#   TORCHVIC_COMBO_DATA  inputs from `run_combos.py prepare`
+#   TORCHVIC_ALL_DATA    <data root> (flood basin)
+#   TORCHVIC_CROP_PARAMS configs/crop_params_sbarley.json
+# TORCHVIC_GLOBAL here is benchmarks/isc/isc_vic5_3h_eb.txt (FULL_ENERGY:
+# the crop needs VIC's potential evaporation, OUT_PET, an energy-balance
+# output).
+# Irrigation river/reservoir sources are stub stores; groundwater is
+# wired (pumping). Crop is one spring barley set for all cells
+# (synthetic). Quality loads/meteorology are synthetic constants.
+version: 1
+run: {device: auto, dtype: float64}
+modules:
+  vic: {connector: vic, global_param: '${TORCHVIC_GLOBAL}', core: 5.1.0, window_days: 1, exchange: day,
+    soil_add_mode: cap}
+  irrigation:
+    connector: irrigation
+    vic: &id001 {global_param: '${TORCHVIC_GLOBAL}', core: 5.1.0}
+    irrigated_fraction: {file: '${TORCHVIC_COMBO_DATA}/isc_irrigation.nc', var: irr_frac}
+    gw_fraction: {file: '${TORCHVIC_COMBO_DATA}/isc_irrigation.nc', var: gw_frac}
+    efficiency: 0.7
+    conveyance_loss: 0.1
+    allocation: priority
+    loss_return: river
+    groundwater: true
+  crop:
+    connector: crop
+    vic: *id001
+    params_file: ${TORCHVIC_CROP_PARAMS}
+    start_day: 60
+  groundwater:
+    connector: groundwater
+    global_param: ${TORCHVIC_GLOBAL}
+    interval_days: 1
+    aquifer:
+      k: 5.0
+      sy: 0.1
+      ss: 1.0e-05
+      thickness: 100.0
+      top: {file: '${TORCHVIC_DOMAIN}', var: elev}
+      depth_to_water: 10.0
+    drain: {depth: 3.0}
+    pumping: true
+    afr: 0.1
+  reservoir: {connector: reservoir, dams: '${TORCHVIC_DAMS}', routing: routing, start_date: '2004-01-01',
+    relax_steps: 10, evap_m: 0.004}
+  quality:
+    connector: quality
+    routing: routing
+    constituents: {nitrate: 2.0e-07, tracer: 0.0}
+    temperature: {depth: 1.0, k_ref: 30.0}
+    loads: {nitrate: 3.0, tracer: 1.5}
+    met: {t_air: 12.0, vp: 0.9, wind: 2.0, sw: 180.0}
+    t_runoff: 4.0
+  routing: {connector: routing, fdir: '${TORCHVIC_FDIR}', domain: '${TORCHVIC_DOMAIN}', gauges: '${TORCHVIC_COMBO_DATA}/gauges_flood.csv',
+    step_s: 86400, reservoirs: reservoir, quality: quality}
+  split: {connector: split, cells: '${TORCHVIC_COMBO_DATA}/box_cells.csv', domain: '${TORCHVIC_DOMAIN}'}
+  flood:
+    connector: flood
+    basin: ${TORCHVIC_ALL_DATA}/static/flood_basins/brahmaputra_guwahati_100m.npz
+    interval_s: 86400
+    free_edges:
+    - [W, 0.0001]
+    inflow_points:
+    - [720, 992]
+    - [721, 992]
+    - [722, 992]
+    - [723, 992]
+    - [724, 992]
+    - [725, 992]
+    - [726, 992]
+    - [727, 992]
+    - [728, 992]
+    - [729, 992]
+    - [730, 992]
+    - [731, 992]
+    - [732, 992]
+    - [733, 992]
+    - [734, 992]
+    - [736, 992]
+    - [737, 992]
+    - [738, 992]
+    - [739, 992]
+    - [746, 992]
+    - [755, 992]
+    - [756, 992]
+    - [757, 992]
+    - [758, 992]
+    - [759, 992]
+    - [760, 992]
+    - [761, 992]
+    - [762, 992]
+    - [763, 992]
+    - [764, 992]
+    - [765, 992]
+    - [766, 992]
+    - [767, 992]
+    - [768, 992]
+    - [769, 992]
+    - [770, 992]
+    - [771, 992]
+    - [772, 992]
+    - [773, 992]
+    - [774, 992]
+    - [775, 992]
+    - [776, 992]
+    - [777, 992]
+    - [778, 992]
+    - [779, 992]
+    - [780, 992]
+    - [781, 992]
+    - [782, 992]
+    - [783, 992]
+    - [784, 992]
+    - [785, 992]
+    - [786, 992]
+    - [787, 992]
+    - [788, 992]
+    - [789, 992]
+    - [790, 992]
+    - [791, 992]
+    - [792, 992]
+    - [793, 992]
+    - [794, 992]
+    - [795, 992]
+    - [796, 992]
+    - [797, 992]
+    - [798, 992]
+    - [799, 992]
+    - [800, 992]
+    - [801, 992]
+    - [802, 992]
+    - [803, 992]
+    - [804, 992]
+    - [807, 992]
+    - [847, 992]
+    - [848, 992]
+    - [849, 992]
+    - [851, 992]
+    - [858, 992]
+    - [877, 992]
+    - [3, 166]
+    inflow_map:
+    - - 318
+      - [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25,
+        26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49,
+        50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73,
+        74, 75, 76]
+    - - 337
+      - [77]
+    - - 315
+      - [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25,
+        26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49,
+        50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73,
+        74, 75, 76]
+connections:
+- {from: vic.soil_moisture, to: irrigation.soil_moisture}
+- {from: vic.soil_add_unmet, to: irrigation.soil_unmet}
+- {from: irrigation.soil_add, to: vic.soil_add, lag: 1}
+- {from: vic.transp, to: crop.transp}
+- {from: vic.pet, to: crop.pet}
+- {from: crop.crop_active, to: irrigation.season}
+- {from: crop.root_depth, to: irrigation.root_depth}
+- {from: vic.baseflow, to: groundwater.recharge}
+- {from: irrigation.gw_request, to: groundwater.pumping_request}
+- {from: groundwater.pumping, to: irrigation.gw_pumped, lag: 1}
+- {from: vic.runoff, to: split.runoff}
+- {from: split.routed, to: routing.inflow}
+- {from: groundwater.discharge, to: routing.inflow}
+- {from: split.box, to: flood.runoff, mapping: vic_to_flood}
+- {from: routing.discharge, to: flood.upstream_discharge}
+mappings:
+  vic_to_flood: {source: box_cells, target: flood_cells, file: '${TORCHVIC_ALL_DATA}/static/flood_basins/brahmaputra_guwahati_100m_vic_pairs.csv'}
+ledger: {enabled: true, on_violation: reject}
+output: {dir: results_full_coupled_system, history: true, ledger: true}

@@ -1,0 +1,2006 @@
+{
+ "aggregation_branches": {
+  "AVG": "aggdata += out_data[v].data[i]/out_step_ratio",
+  "END": "aggdata = out_data[v].data[i]",
+  "SUM": "aggdata += out_data[v].data[i]"
+ },
+ "aggregation_overrides": [
+  "out_data[OUT_AERO_RESIST].aggdata[0] = 1/out_data[OUT_AERO_COND].aggdata[0];",
+  "out_data[OUT_AERO_RESIST1].aggdata[0] = 1/out_data[OUT_AERO_COND1].aggdata[0];",
+  "out_data[OUT_AERO_RESIST2].aggdata[0] = 1/out_data[OUT_AERO_COND2].aggdata[0];"
+ ],
+ "alma_output": [
+  [
+   "OUT_BASEFLOW",
+   "0",
+   "/=",
+   "out_dt_sec"
+  ],
+  [
+   "OUT_EVAP",
+   "0",
+   "/=",
+   "out_dt_sec"
+  ],
+  [
+   "OUT_EVAP_BARE",
+   "0",
+   "/=",
+   "out_dt_sec"
+  ],
+  [
+   "OUT_EVAP_CANOP",
+   "0",
+   "/=",
+   "out_dt_sec"
+  ],
+  [
+   "OUT_INFLOW",
+   "0",
+   "/=",
+   "out_dt_sec"
+  ],
+  [
+   "OUT_LAKE_BF_IN",
+   "0",
+   "/=",
+   "out_dt_sec"
+  ],
+  [
+   "OUT_LAKE_BF_IN_V",
+   "0",
+   "/=",
+   "out_dt_sec"
+  ],
+  [
+   "OUT_LAKE_BF_OUT",
+   "0",
+   "/=",
+   "out_dt_sec"
+  ],
+  [
+   "OUT_LAKE_BF_OUT_V",
+   "0",
+   "/=",
+   "out_dt_sec"
+  ],
+  [
+   "OUT_LAKE_CHAN_IN",
+   "0",
+   "/=",
+   "out_dt_sec"
+  ],
+  [
+   "OUT_LAKE_CHAN_IN_V",
+   "0",
+   "/=",
+   "out_dt_sec"
+  ],
+  [
+   "OUT_LAKE_CHAN_OUT",
+   "0",
+   "/=",
+   "out_dt_sec"
+  ],
+  [
+   "OUT_LAKE_CHAN_OUT_V",
+   "0",
+   "/=",
+   "out_dt_sec"
+  ],
+  [
+   "OUT_LAKE_DSTOR",
+   "0",
+   "/=",
+   "out_dt_sec"
+  ],
+  [
+   "OUT_LAKE_DSTOR_V",
+   "0",
+   "/=",
+   "out_dt_sec"
+  ],
+  [
+   "OUT_LAKE_DSWE",
+   "0",
+   "/=",
+   "out_dt_sec"
+  ],
+  [
+   "OUT_LAKE_DSWE_V",
+   "0",
+   "/=",
+   "out_dt_sec"
+  ],
+  [
+   "OUT_LAKE_EVAP",
+   "0",
+   "/=",
+   "out_dt_sec"
+  ],
+  [
+   "OUT_LAKE_EVAP_V",
+   "0",
+   "/=",
+   "out_dt_sec"
+  ],
+  [
+   "OUT_LAKE_ICE_TEMP",
+   "0",
+   "+=",
+   "KELVIN"
+  ],
+  [
+   "OUT_LAKE_PREC_V",
+   "0",
+   "/=",
+   "out_dt_sec"
+  ],
+  [
+   "OUT_LAKE_RCHRG",
+   "0",
+   "/=",
+   "out_dt_sec"
+  ],
+  [
+   "OUT_LAKE_RCHRG_V",
+   "0",
+   "/=",
+   "out_dt_sec"
+  ],
+  [
+   "OUT_LAKE_RO_IN",
+   "0",
+   "/=",
+   "out_dt_sec"
+  ],
+  [
+   "OUT_LAKE_RO_IN_V",
+   "0",
+   "/=",
+   "out_dt_sec"
+  ],
+  [
+   "OUT_LAKE_VAPFLX",
+   "0",
+   "/=",
+   "out_dt_sec"
+  ],
+  [
+   "OUT_LAKE_VAPFLX_V",
+   "0",
+   "/=",
+   "out_dt_sec"
+  ],
+  [
+   "OUT_LAKE_SURF_TEMP",
+   "0",
+   "+=",
+   "KELVIN"
+  ],
+  [
+   "OUT_PREC",
+   "0",
+   "/=",
+   "out_dt_sec"
+  ],
+  [
+   "OUT_RAINF",
+   "0",
+   "/=",
+   "out_dt_sec"
+  ],
+  [
+   "OUT_REFREEZE",
+   "0",
+   "/=",
+   "out_dt_sec"
+  ],
+  [
+   "OUT_RUNOFF",
+   "0",
+   "/=",
+   "out_dt_sec"
+  ],
+  [
+   "OUT_SNOW_MELT",
+   "0",
+   "/=",
+   "out_dt_sec"
+  ],
+  [
+   "OUT_SNOWF",
+   "0",
+   "/=",
+   "out_dt_sec"
+  ],
+  [
+   "OUT_SUB_BLOWING",
+   "0",
+   "/=",
+   "out_dt_sec"
+  ],
+  [
+   "OUT_SUB_CANOP",
+   "0",
+   "/=",
+   "out_dt_sec"
+  ],
+  [
+   "OUT_SUB_SNOW",
+   "0",
+   "/=",
+   "out_dt_sec"
+  ],
+  [
+   "OUT_SUB_SNOW",
+   "0",
+   "+=",
+   "OUT_SUB_CANOP"
+  ],
+  [
+   "OUT_SUB_SURFACE",
+   "0",
+   "/=",
+   "out_dt_sec"
+  ],
+  [
+   "OUT_TRANSP_VEG",
+   "0",
+   "/=",
+   "out_dt_sec"
+  ],
+  [
+   "OUT_BARESOILT",
+   "0",
+   "+=",
+   "KELVIN"
+  ],
+  [
+   "OUT_SNOW_PACK_TEMP",
+   "0",
+   "+=",
+   "KELVIN"
+  ],
+  [
+   "OUT_SNOW_SURF_TEMP",
+   "0",
+   "+=",
+   "KELVIN"
+  ],
+  [
+   "OUT_SOIL_TEMP",
+   "all",
+   "+=",
+   "KELVIN"
+  ],
+  [
+   "OUT_SOIL_TNODE",
+   "all",
+   "+=",
+   "KELVIN"
+  ],
+  [
+   "OUT_SOIL_TNODE_WL",
+   "all",
+   "+=",
+   "KELVIN"
+  ],
+  [
+   "OUT_SURF_TEMP",
+   "0",
+   "+=",
+   "KELVIN"
+  ],
+  [
+   "OUT_VEGT",
+   "0",
+   "+=",
+   "KELVIN"
+  ],
+  [
+   "OUT_FDEPTH",
+   "0",
+   "/=",
+   "100"
+  ],
+  [
+   "OUT_TDEPTH",
+   "0",
+   "/=",
+   "100"
+  ],
+  [
+   "OUT_DELTACC",
+   "0",
+   "*=",
+   "out_dt_sec"
+  ],
+  [
+   "OUT_DELTAH",
+   "0",
+   "*=",
+   "out_dt_sec"
+  ],
+  [
+   "OUT_AIR_TEMP",
+   "0",
+   "+=",
+   "KELVIN"
+  ],
+  [
+   "OUT_PRESSURE",
+   "0",
+   "*=",
+   "1000"
+  ],
+  [
+   "OUT_VP",
+   "0",
+   "*=",
+   "1000"
+  ],
+  [
+   "OUT_VPD",
+   "0",
+   "*=",
+   "1000"
+  ]
+ ],
+ "default_agg_fallback": "AVG",
+ "generated_by": "scripts/extract_vic42d_outvars.py",
+ "n_outvar_types": 180,
+ "variables": {
+  "OUT_ADVECTION": {
+   "alma": null,
+   "alma_units": null,
+   "comment": "advected energy [W/m2]",
+   "default_agg": "AVG",
+   "index": 96,
+   "nelem": "1",
+   "units": "W/m2"
+  },
+  "OUT_ADVECTION_BAND": {
+   "alma": null,
+   "alma_units": null,
+   "comment": "advected energy [W/m2]",
+   "default_agg": "AVG",
+   "index": 137,
+   "nelem": "options.SNOW_BAND",
+   "units": "W/m2"
+  },
+  "OUT_ADV_SENS": {
+   "alma": null,
+   "alma_units": null,
+   "comment": "net sensible flux advected to snow pack [W/m2]",
+   "default_agg": "AVG",
+   "index": 95,
+   "nelem": "1",
+   "units": "W/m2"
+  },
+  "OUT_ADV_SENS_BAND": {
+   "alma": null,
+   "alma_units": null,
+   "comment": "net sensible heat flux advected to snow pack [W/m2]",
+   "default_agg": "AVG",
+   "index": 136,
+   "nelem": "options.SNOW_BAND",
+   "units": "W/m2"
+  },
+  "OUT_AERO_COND": {
+   "alma": null,
+   "alma_units": null,
+   "comment": "\"scene\" aerodynamic conductance [m/s] (tiles with overstory contribute overstory conductance; others contribute surface conductance)",
+   "default_agg": "AVG",
+   "index": 112,
+   "nelem": "1",
+   "units": "m/s"
+  },
+  "OUT_AERO_COND1": {
+   "alma": null,
+   "alma_units": null,
+   "comment": "surface aerodynamic conductance [m/s]",
+   "default_agg": "AVG",
+   "index": 113,
+   "nelem": "1",
+   "units": "m/s"
+  },
+  "OUT_AERO_COND2": {
+   "alma": null,
+   "alma_units": null,
+   "comment": "overstory aerodynamic conductance [m/s]",
+   "default_agg": "AVG",
+   "index": 114,
+   "nelem": "1",
+   "units": "m/s"
+  },
+  "OUT_AERO_RESIST": {
+   "alma": null,
+   "alma_units": null,
+   "comment": "\"scene\"canopy aerodynamic resistance [s/m] (tiles with overstory contribute overstory resistance; others contribute surface resistance)",
+   "default_agg": "AVG",
+   "index": 115,
+   "nelem": "1",
+   "units": "s/m"
+  },
+  "OUT_AERO_RESIST1": {
+   "alma": null,
+   "alma_units": null,
+   "comment": "surface aerodynamic resistance [s/m]",
+   "default_agg": "AVG",
+   "index": 116,
+   "nelem": "1",
+   "units": "s/m"
+  },
+  "OUT_AERO_RESIST2": {
+   "alma": null,
+   "alma_units": null,
+   "comment": "overstory aerodynamic resistance [s/m]",
+   "default_agg": "AVG",
+   "index": 117,
+   "nelem": "1",
+   "units": "s/m"
+  },
+  "OUT_AIR_TEMP": {
+   "alma": [
+    "aggdata[0] += KELVIN"
+   ],
+   "alma_units": "K",
+   "comment": "air temperature [C] (ALMA_OUTPUT: [K])",
+   "default_agg": "AVG",
+   "index": 118,
+   "nelem": "1",
+   "units": "C"
+  },
+  "OUT_ALBEDO": {
+   "alma": null,
+   "alma_units": null,
+   "comment": "average surface albedo [fraction]",
+   "default_agg": "AVG",
+   "index": 75,
+   "nelem": "1",
+   "units": "fraction"
+  },
+  "OUT_ALBEDO_BAND": {
+   "alma": null,
+   "alma_units": null,
+   "comment": "average surface albedo [fraction]",
+   "default_agg": "AVG",
+   "index": 138,
+   "nelem": "options.SNOW_BAND",
+   "units": "fraction"
+  },
+  "OUT_APAR": {
+   "alma": null,
+   "alma_units": null,
+   "comment": "absorbed PAR [W/m2]",
+   "default_agg": "AVG",
+   "index": 157,
+   "nelem": "1",
+   "units": "W/m2"
+  },
+  "OUT_ASAT": {
+   "alma": null,
+   "alma_units": null,
+   "comment": "Saturated Area Fraction",
+   "default_agg": "END",
+   "index": 0,
+   "nelem": "1",
+   "units": null
+  },
+  "OUT_BARESOILT": {
+   "alma": [
+    "aggdata[0] += KELVIN"
+   ],
+   "alma_units": "K",
+   "comment": "bare soil surface temperature [C] (ALMA_OUTPUT: [K])",
+   "default_agg": "AVG",
+   "index": 76,
+   "nelem": "1",
+   "units": "C"
+  },
+  "OUT_BASEFLOW": {
+   "alma": [
+    "aggdata[0] /= out_dt_sec"
+   ],
+   "alma_units": "mm/s",
+   "comment": "baseflow out of the bottom layer [mm] (ALMA_OUTPUT: [mm/s])",
+   "default_agg": "SUM",
+   "index": 27,
+   "nelem": "1",
+   "units": "mm"
+  },
+  "OUT_CATM": {
+   "alma": null,
+   "alma_units": null,
+   "comment": "atmospheric CO2 concentrtaion [ppm]",
+   "default_agg": "AVG",
+   "index": 119,
+   "nelem": "1",
+   "units": "ppm"
+  },
+  "OUT_CINTER": {
+   "alma": null,
+   "alma_units": null,
+   "comment": "Carbon density in intermediate pool [g C/m2]",
+   "default_agg": "AVG",
+   "index": 165,
+   "nelem": "1",
+   "units": "g C/m2"
+  },
+  "OUT_CLITTER": {
+   "alma": null,
+   "alma_units": null,
+   "comment": "Carbon density in litter pool [g C/m2]",
+   "default_agg": "AVG",
+   "index": 164,
+   "nelem": "1",
+   "units": "g C/m2"
+  },
+  "OUT_COSZEN": {
+   "alma": null,
+   "alma_units": null,
+   "comment": "cosine of solar zenith angle [fraction]",
+   "default_agg": "AVG",
+   "index": 120,
+   "nelem": "1",
+   "units": "fraction"
+  },
+  "OUT_CSLOW": {
+   "alma": null,
+   "alma_units": null,
+   "comment": "Carbon density in slow pool [g C/m2]",
+   "default_agg": "AVG",
+   "index": 166,
+   "nelem": "1",
+   "units": "g C/m2"
+  },
+  "OUT_DELINTERCEPT": {
+   "alma": null,
+   "alma_units": null,
+   "comment": "change in canopy interception storage [mm]",
+   "default_agg": "SUM",
+   "index": 28,
+   "nelem": "1",
+   "units": "mm"
+  },
+  "OUT_DELSOILMOIST": {
+   "alma": null,
+   "alma_units": null,
+   "comment": "change in soil water content [mm]",
+   "default_agg": "SUM",
+   "index": 29,
+   "nelem": "1",
+   "units": "mm"
+  },
+  "OUT_DELSURFSTOR": {
+   "alma": null,
+   "alma_units": null,
+   "comment": "change in surface liquid water storage [mm]",
+   "default_agg": "SUM",
+   "index": 30,
+   "nelem": "1",
+   "units": "mm"
+  },
+  "OUT_DELSWE": {
+   "alma": null,
+   "alma_units": null,
+   "comment": "change in snow water equivalent [mm]",
+   "default_agg": "SUM",
+   "index": 31,
+   "nelem": "1",
+   "units": "mm"
+  },
+  "OUT_DELTACC": {
+   "alma": [
+    "aggdata[0] *= out_dt_sec"
+   ],
+   "alma_units": "J/m2",
+   "comment": "rate of change in cold content in snow pack [W/m2] (ALMA_OUTPUT: [J/m2])",
+   "default_agg": "AVG",
+   "index": 97,
+   "nelem": "1",
+   "units": "W/m2"
+  },
+  "OUT_DELTACC_BAND": {
+   "alma": null,
+   "alma_units": null,
+   "comment": "change in cold content in snow pack [W/m2]",
+   "default_agg": "SUM",
+   "index": 139,
+   "nelem": "options.SNOW_BAND",
+   "units": "W/m2"
+  },
+  "OUT_DELTAH": {
+   "alma": [
+    "aggdata[0] *= out_dt_sec"
+   ],
+   "alma_units": "J/m2",
+   "comment": "rate of change in heat storage [W/m2] (ALMA_OUTPUT: [J/m2])",
+   "default_agg": "AVG",
+   "index": 98,
+   "nelem": "1",
+   "units": "W/m2"
+  },
+  "OUT_DENSITY": {
+   "alma": null,
+   "alma_units": null,
+   "comment": "near-surface atmospheric density [kg/m3]",
+   "default_agg": "AVG",
+   "index": 121,
+   "nelem": "1",
+   "units": "kg/m3"
+  },
+  "OUT_ENERGY_ERROR": {
+   "alma": null,
+   "alma_units": null,
+   "comment": "energy budget error [W/m2]",
+   "default_agg": "AVG",
+   "index": 99,
+   "nelem": "1",
+   "units": "W/m2"
+  },
+  "OUT_EVAP": {
+   "alma": [
+    "aggdata[0] /= out_dt_sec"
+   ],
+   "alma_units": "mm/s",
+   "comment": "total net evaporation [mm] (ALMA_OUTPUT: [mm/s])",
+   "default_agg": "SUM",
+   "index": 32,
+   "nelem": "1",
+   "units": "mm"
+  },
+  "OUT_EVAP_BARE": {
+   "alma": [
+    "aggdata[0] /= out_dt_sec"
+   ],
+   "alma_units": "mm/s",
+   "comment": "net evaporation from bare soil [mm] (ALMA_OUTPUT: [mm/s])",
+   "default_agg": "SUM",
+   "index": 33,
+   "nelem": "1",
+   "units": "mm"
+  },
+  "OUT_EVAP_CANOP": {
+   "alma": [
+    "aggdata[0] /= out_dt_sec"
+   ],
+   "alma_units": "mm/s",
+   "comment": "net evaporation from canopy interception [mm] (ALMA_OUTPUT: [mm/s])",
+   "default_agg": "SUM",
+   "index": 34,
+   "nelem": "1",
+   "units": "mm"
+  },
+  "OUT_FDEPTH": {
+   "alma": [
+    "aggdata[0] /= 100"
+   ],
+   "alma_units": "m",
+   "comment": "depth of freezing fronts [cm] (ALMA_OUTPUT: [m]) for each freezing front",
+   "default_agg": "AVG",
+   "index": 77,
+   "nelem": "MAX_FRONTS if options.FROZEN_SOIL else 1",
+   "units": "cm"
+  },
+  "OUT_FDIR": {
+   "alma": null,
+   "alma_units": null,
+   "comment": "fraction of incoming shortwave that is direct [fraction]",
+   "default_agg": "AVG",
+   "index": 122,
+   "nelem": "1",
+   "units": "fraction"
+  },
+  "OUT_FUSION": {
+   "alma": null,
+   "alma_units": null,
+   "comment": "net energy used to melt/freeze soil moisture [W/m2]",
+   "default_agg": "AVG",
+   "index": 100,
+   "nelem": "1",
+   "units": "W/m2"
+  },
+  "OUT_GPP": {
+   "alma": null,
+   "alma_units": null,
+   "comment": "gross primary productivity [g C/m2d]",
+   "default_agg": "AVG",
+   "index": 158,
+   "nelem": "1",
+   "units": "g C/m2d"
+  },
+  "OUT_GRND_FLUX": {
+   "alma": null,
+   "alma_units": null,
+   "comment": "net heat flux into ground [W/m2]",
+   "default_agg": "AVG",
+   "index": 101,
+   "nelem": "1",
+   "units": "W/m2"
+  },
+  "OUT_GRND_FLUX_BAND": {
+   "alma": null,
+   "alma_units": null,
+   "comment": "net heat flux into ground [W/m2]",
+   "default_agg": "AVG",
+   "index": 140,
+   "nelem": "options.SNOW_BAND",
+   "units": "W/m2"
+  },
+  "OUT_INFLOW": {
+   "alma": [
+    "aggdata[0] /= out_dt_sec"
+   ],
+   "alma_units": "mm/s",
+   "comment": "moisture that reaches top of soil column [mm] (ALMA_OUTPUT: [mm/s])",
+   "default_agg": "SUM",
+   "index": 35,
+   "nelem": "1",
+   "units": "mm"
+  },
+  "OUT_IN_LONG": {
+   "alma": null,
+   "alma_units": null,
+   "comment": "incoming longwave at ground surface (under veg) [W/m2]",
+   "default_agg": "AVG",
+   "index": 102,
+   "nelem": "1",
+   "units": "W/m2"
+  },
+  "OUT_IN_LONG_BAND": {
+   "alma": null,
+   "alma_units": null,
+   "comment": "incoming longwave at ground surface (under veg) [W/m2]",
+   "default_agg": "AVG",
+   "index": 141,
+   "nelem": "options.SNOW_BAND",
+   "units": "W/m2"
+  },
+  "OUT_LAI": {
+   "alma": null,
+   "alma_units": null,
+   "comment": "leaf area index [m2/m2]",
+   "default_agg": "AVG",
+   "index": 123,
+   "nelem": "1",
+   "units": "m2/m2"
+  },
+  "OUT_LAKE_AREA_FRAC": {
+   "alma": null,
+   "alma_units": null,
+   "comment": "lake surface area as fraction of the grid cell area [fraction]",
+   "default_agg": "END",
+   "index": 1,
+   "nelem": "1",
+   "units": "fraction"
+  },
+  "OUT_LAKE_BF_IN": {
+   "alma": [
+    "aggdata[0] /= out_dt_sec"
+   ],
+   "alma_units": "mm/s",
+   "comment": "incoming baseflow from lake catchment [mm] (ALMA_OUTPUT: [mm/s])",
+   "default_agg": "SUM",
+   "index": 36,
+   "nelem": "1",
+   "units": "mm"
+  },
+  "OUT_LAKE_BF_IN_V": {
+   "alma": [
+    "aggdata[0] /= out_dt_sec"
+   ],
+   "alma_units": "m3/s",
+   "comment": "incoming volumetric baseflow from lake catchment [m3] (ALMA_OUTPUT: [m3/s])",
+   "default_agg": "SUM",
+   "index": 37,
+   "nelem": "1",
+   "units": "m3"
+  },
+  "OUT_LAKE_BF_OUT": {
+   "alma": [
+    "aggdata[0] /= out_dt_sec"
+   ],
+   "alma_units": "mm/s",
+   "comment": "outgoing baseflow from lake [mm] (ALMA_OUTPUT: [mm/s])",
+   "default_agg": "SUM",
+   "index": 38,
+   "nelem": "1",
+   "units": "mm"
+  },
+  "OUT_LAKE_BF_OUT_V": {
+   "alma": [
+    "aggdata[0] /= out_dt_sec"
+   ],
+   "alma_units": "m3/s",
+   "comment": "outgoing volumetric baseflow from lake [m3] (ALMA_OUTPUT: [m3/s])",
+   "default_agg": "SUM",
+   "index": 39,
+   "nelem": "1",
+   "units": "m3"
+  },
+  "OUT_LAKE_CHAN_IN": {
+   "alma": [
+    "aggdata[0] /= out_dt_sec"
+   ],
+   "alma_units": "mm/s",
+   "comment": "channel inflow into lake [mm] (ALMA_OUTPUT: [mm/s])",
+   "default_agg": "SUM",
+   "index": 40,
+   "nelem": "1",
+   "units": "mm"
+  },
+  "OUT_LAKE_CHAN_IN_V": {
+   "alma": [
+    "aggdata[0] /= out_dt_sec"
+   ],
+   "alma_units": "m3/s",
+   "comment": "volumetric channel inflow into lake [m3] (ALMA_OUTPUT: [m3/s])",
+   "default_agg": "SUM",
+   "index": 41,
+   "nelem": "1",
+   "units": "m3"
+  },
+  "OUT_LAKE_CHAN_OUT": {
+   "alma": [
+    "aggdata[0] /= out_dt_sec"
+   ],
+   "alma_units": "mm/s",
+   "comment": "channel outflow from lake [mm] (ALMA_OUTPUT: [mm/s])",
+   "default_agg": "SUM",
+   "index": 42,
+   "nelem": "1",
+   "units": "mm"
+  },
+  "OUT_LAKE_CHAN_OUT_V": {
+   "alma": [
+    "aggdata[0] /= out_dt_sec"
+   ],
+   "alma_units": "m3/s",
+   "comment": "volumetric channel outflow from lake [m3] (ALMA_OUTPUT: [m3/s])",
+   "default_agg": "SUM",
+   "index": 43,
+   "nelem": "1",
+   "units": "m3"
+  },
+  "OUT_LAKE_DEPTH": {
+   "alma": null,
+   "alma_units": null,
+   "comment": "lake depth (distance between surface and deepest point) [m]",
+   "default_agg": "END",
+   "index": 2,
+   "nelem": "1",
+   "units": "m"
+  },
+  "OUT_LAKE_DSTOR": {
+   "alma": [
+    "aggdata[0] /= out_dt_sec"
+   ],
+   "alma_units": "mm/s",
+   "comment": "change in lake moisture storage (liquid plus ice cover) [mm] (ALMA_OUTPUT: [mm/s])",
+   "default_agg": "SUM",
+   "index": 44,
+   "nelem": "1",
+   "units": "mm"
+  },
+  "OUT_LAKE_DSTOR_V": {
+   "alma": [
+    "aggdata[0] /= out_dt_sec"
+   ],
+   "alma_units": "m3/s",
+   "comment": "volumetric change in lake moisture storage (liquid plus ice cover) [m3] (ALMA_OUTPUT: [m3/s])",
+   "default_agg": "SUM",
+   "index": 45,
+   "nelem": "1",
+   "units": "m3"
+  },
+  "OUT_LAKE_DSWE": {
+   "alma": [
+    "aggdata[0] /= out_dt_sec"
+   ],
+   "alma_units": "mm/s",
+   "comment": "change in swe on top of lake ice [mm] (ALMA_OUTPUT: [mm/s])",
+   "default_agg": "SUM",
+   "index": 46,
+   "nelem": "1",
+   "units": "mm"
+  },
+  "OUT_LAKE_DSWE_V": {
+   "alma": [
+    "aggdata[0] /= out_dt_sec"
+   ],
+   "alma_units": "m3/s",
+   "comment": "volumetric change in swe on top of lake ice [m3] (ALMA_OUTPUT: [m3/s])",
+   "default_agg": "SUM",
+   "index": 47,
+   "nelem": "1",
+   "units": "m3"
+  },
+  "OUT_LAKE_EVAP": {
+   "alma": [
+    "aggdata[0] /= out_dt_sec"
+   ],
+   "alma_units": "mm/s",
+   "comment": "net evaporation from lake surface [mm] (ALMA_OUTPUT: [mm/s])",
+   "default_agg": "SUM",
+   "index": 48,
+   "nelem": "1",
+   "units": "mm"
+  },
+  "OUT_LAKE_EVAP_V": {
+   "alma": [
+    "aggdata[0] /= out_dt_sec"
+   ],
+   "alma_units": "m3/s",
+   "comment": "net volumetric evaporation from lake surface [m3] (ALMA_OUTPUT: [m3/s])",
+   "default_agg": "SUM",
+   "index": 49,
+   "nelem": "1",
+   "units": "m3"
+  },
+  "OUT_LAKE_ICE": {
+   "alma": null,
+   "alma_units": null,
+   "comment": "moisture stored as lake ice [mm over lake ice area]",
+   "default_agg": "END",
+   "index": 3,
+   "nelem": "1",
+   "units": "mm over lake ice area"
+  },
+  "OUT_LAKE_ICE_FRACT": {
+   "alma": null,
+   "alma_units": null,
+   "comment": "fractional coverage of lake ice [fraction]",
+   "default_agg": "END",
+   "index": 4,
+   "nelem": "1",
+   "units": "fraction"
+  },
+  "OUT_LAKE_ICE_HEIGHT": {
+   "alma": null,
+   "alma_units": null,
+   "comment": "thickness of lake ice [cm]",
+   "default_agg": "END",
+   "index": 5,
+   "nelem": "1",
+   "units": "cm"
+  },
+  "OUT_LAKE_ICE_TEMP": {
+   "alma": [
+    "aggdata[0] += KELVIN"
+   ],
+   "alma_units": "K",
+   "comment": "temperature of lake ice [C] (ALMA_OUTPUT: [K])",
+   "default_agg": "AVG",
+   "index": 78,
+   "nelem": "1",
+   "units": "C"
+  },
+  "OUT_LAKE_MOIST": {
+   "alma": null,
+   "alma_units": null,
+   "comment": "liquid water and ice stored in lake [mm over grid cell]",
+   "default_agg": "END",
+   "index": 6,
+   "nelem": "1",
+   "units": "mm over grid cell"
+  },
+  "OUT_LAKE_PREC_V": {
+   "alma": [
+    "aggdata[0] /= out_dt_sec"
+   ],
+   "alma_units": "m3/s",
+   "comment": "volumetric precipitation over lake surface [m3] (ALMA_OUTPUT: [m3/s])",
+   "default_agg": "SUM",
+   "index": 50,
+   "nelem": "1",
+   "units": "m3"
+  },
+  "OUT_LAKE_RCHRG": {
+   "alma": [
+    "aggdata[0] /= out_dt_sec"
+   ],
+   "alma_units": "mm/s",
+   "comment": "recharge from lake to surrounding wetland [mm] (ALMA_OUTPUT: [mm/s])",
+   "default_agg": "SUM",
+   "index": 51,
+   "nelem": "1",
+   "units": "mm"
+  },
+  "OUT_LAKE_RCHRG_V": {
+   "alma": [
+    "aggdata[0] /= out_dt_sec"
+   ],
+   "alma_units": "m3/s",
+   "comment": "volumetric recharge from lake to surrounding wetland [m3] (ALMA_OUTPUT: [m3/s])",
+   "default_agg": "SUM",
+   "index": 52,
+   "nelem": "1",
+   "units": "m3"
+  },
+  "OUT_LAKE_RO_IN": {
+   "alma": [
+    "aggdata[0] /= out_dt_sec"
+   ],
+   "alma_units": "mm/s",
+   "comment": "incoming runoff from lake catchment [mm] (ALMA_OUTPUT: [mm/s])",
+   "default_agg": "SUM",
+   "index": 53,
+   "nelem": "1",
+   "units": "mm"
+  },
+  "OUT_LAKE_RO_IN_V": {
+   "alma": [
+    "aggdata[0] /= out_dt_sec"
+   ],
+   "alma_units": "m3/s",
+   "comment": "incoming volumetric runoff from lake catchment [m3] (ALMA_OUTPUT: [m3/s])",
+   "default_agg": "SUM",
+   "index": 54,
+   "nelem": "1",
+   "units": "m3"
+  },
+  "OUT_LAKE_SURF_AREA": {
+   "alma": null,
+   "alma_units": null,
+   "comment": "lake surface area [m2]",
+   "default_agg": "END",
+   "index": 7,
+   "nelem": "1",
+   "units": "m2"
+  },
+  "OUT_LAKE_SURF_TEMP": {
+   "alma": [
+    "aggdata[0] += KELVIN"
+   ],
+   "alma_units": "K",
+   "comment": "lake surface temperature [C] (ALMA_OUTPUT: [K])",
+   "default_agg": "AVG",
+   "index": 79,
+   "nelem": "1",
+   "units": "C"
+  },
+  "OUT_LAKE_SWE": {
+   "alma": null,
+   "alma_units": null,
+   "comment": "liquid water equivalent of snow on top of lake ice [m over lake ice area]",
+   "default_agg": "END",
+   "index": 8,
+   "nelem": "1",
+   "units": "m over lake ice area"
+  },
+  "OUT_LAKE_SWE_V": {
+   "alma": null,
+   "alma_units": null,
+   "comment": "volumetric liquid water equivalent of snow on top of lake ice [m3]",
+   "default_agg": "END",
+   "index": 9,
+   "nelem": "1",
+   "units": "m3"
+  },
+  "OUT_LAKE_VAPFLX": {
+   "alma": [
+    "aggdata[0] /= out_dt_sec"
+   ],
+   "alma_units": "mm/s",
+   "comment": "outgoing sublimation from snow on top of lake ice [mm] (ALMA_OUTPUT: [mm/s])",
+   "default_agg": "SUM",
+   "index": 55,
+   "nelem": "1",
+   "units": "mm"
+  },
+  "OUT_LAKE_VAPFLX_V": {
+   "alma": [
+    "aggdata[0] /= out_dt_sec"
+   ],
+   "alma_units": "m3/s",
+   "comment": "outgoing volumetric sublimation from snow on top of lake ice [m3] (ALMA_OUTPUT: [m3/s])",
+   "default_agg": "SUM",
+   "index": 56,
+   "nelem": "1",
+   "units": "m3"
+  },
+  "OUT_LAKE_VOLUME": {
+   "alma": null,
+   "alma_units": null,
+   "comment": "lake volume [m3]",
+   "default_agg": "END",
+   "index": 10,
+   "nelem": "1",
+   "units": "m3"
+  },
+  "OUT_LATENT": {
+   "alma": null,
+   "alma_units": null,
+   "comment": "net upward latent heat flux [W/m2]",
+   "default_agg": "AVG",
+   "index": 103,
+   "nelem": "1",
+   "units": "W/m2"
+  },
+  "OUT_LATENT_BAND": {
+   "alma": null,
+   "alma_units": null,
+   "comment": "net upward latent heat flux [W/m2]",
+   "default_agg": "AVG",
+   "index": 142,
+   "nelem": "options.SNOW_BAND",
+   "units": "W/m2"
+  },
+  "OUT_LATENT_SUB": {
+   "alma": null,
+   "alma_units": null,
+   "comment": "net upward latent heat flux from sublimation [W/m2]",
+   "default_agg": "AVG",
+   "index": 104,
+   "nelem": "1",
+   "units": "W/m2"
+  },
+  "OUT_LATENT_SUB_BAND": {
+   "alma": null,
+   "alma_units": null,
+   "comment": "net upward latent heat flux due to sublimation [W/m2]",
+   "default_agg": "AVG",
+   "index": 143,
+   "nelem": "options.SNOW_BAND",
+   "units": "W/m2"
+  },
+  "OUT_LITTERFALL": {
+   "alma": null,
+   "alma_units": null,
+   "comment": "flux of carbon from living biomass into soil [g C/m2d]",
+   "default_agg": "AVG",
+   "index": 161,
+   "nelem": "1",
+   "units": "g C/m2d"
+  },
+  "OUT_LONGWAVE": {
+   "alma": null,
+   "alma_units": null,
+   "comment": "incoming longwave [W/m2]",
+   "default_agg": "AVG",
+   "index": 124,
+   "nelem": "1",
+   "units": "W/m2"
+  },
+  "OUT_MELT_ENERGY": {
+   "alma": null,
+   "alma_units": null,
+   "comment": "energy of fusion (melting) in snowpack [W/m2]",
+   "default_agg": "AVG",
+   "index": 105,
+   "nelem": "1",
+   "units": "W/m2"
+  },
+  "OUT_MELT_ENERGY_BAND": {
+   "alma": null,
+   "alma_units": null,
+   "comment": "energy of fusion (melting) in snowpack [W/m2]",
+   "default_agg": "AVG",
+   "index": 144,
+   "nelem": "options.SNOW_BAND",
+   "units": "W/m2"
+  },
+  "OUT_NEE": {
+   "alma": null,
+   "alma_units": null,
+   "comment": "net ecosystem exchange (=NPP-RHET) [g C/m2d]",
+   "default_agg": "AVG",
+   "index": 163,
+   "nelem": "1",
+   "units": "g C/m2d"
+  },
+  "OUT_NET_LONG": {
+   "alma": null,
+   "alma_units": null,
+   "comment": "net downward longwave flux [W/m2]",
+   "default_agg": "AVG",
+   "index": 106,
+   "nelem": "1",
+   "units": "W/m2"
+  },
+  "OUT_NET_LONG_BAND": {
+   "alma": null,
+   "alma_units": null,
+   "comment": "net downward longwave flux [W/m2]",
+   "default_agg": "AVG",
+   "index": 145,
+   "nelem": "options.SNOW_BAND",
+   "units": "W/m2"
+  },
+  "OUT_NET_SHORT": {
+   "alma": null,
+   "alma_units": null,
+   "comment": "net downward shortwave flux [W/m2]",
+   "default_agg": "AVG",
+   "index": 107,
+   "nelem": "1",
+   "units": "W/m2"
+  },
+  "OUT_NET_SHORT_BAND": {
+   "alma": null,
+   "alma_units": null,
+   "comment": "net downward shortwave flux [W/m2]",
+   "default_agg": "AVG",
+   "index": 146,
+   "nelem": "options.SNOW_BAND",
+   "units": "W/m2"
+  },
+  "OUT_NPP": {
+   "alma": null,
+   "alma_units": null,
+   "comment": "net primary productivity [g C/m2d]",
+   "default_agg": "AVG",
+   "index": 160,
+   "nelem": "1",
+   "units": "g C/m2d"
+  },
+  "OUT_PAR": {
+   "alma": null,
+   "alma_units": null,
+   "comment": "incoming photosynthetically active radiation [W/m2]",
+   "default_agg": "AVG",
+   "index": 125,
+   "nelem": "1",
+   "units": "W/m2"
+  },
+  "OUT_PET_H2OSURF": {
+   "alma": null,
+   "alma_units": "mm/s",
+   "comment": "potential evap from open water [mm] (ALMA_OUTPUT: [mm/s])",
+   "default_agg": "SUM",
+   "index": 58,
+   "nelem": "1",
+   "units": "mm"
+  },
+  "OUT_PET_NATVEG": {
+   "alma": null,
+   "alma_units": "mm/s",
+   "comment": "potential evap (transpiration only) from current vegetation and current canopy resistance [mm] (ALMA_OUTPUT: [mm/s])",
+   "default_agg": "SUM",
+   "index": 61,
+   "nelem": "1",
+   "units": "mm"
+  },
+  "OUT_PET_SATSOIL": {
+   "alma": null,
+   "alma_units": "mm/s",
+   "comment": "potential evap from saturated bare soil [mm] (ALMA_OUTPUT: [mm/s])",
+   "default_agg": "SUM",
+   "index": 57,
+   "nelem": "1",
+   "units": "mm"
+  },
+  "OUT_PET_SHORT": {
+   "alma": null,
+   "alma_units": "mm/s",
+   "comment": "potential evap (transpiration only) from short reference crop (grass) [mm] (ALMA_OUTPUT: [mm/s])",
+   "default_agg": "SUM",
+   "index": 59,
+   "nelem": "1",
+   "units": "mm"
+  },
+  "OUT_PET_TALL": {
+   "alma": null,
+   "alma_units": "mm/s",
+   "comment": "potential evap (transpiration only) from tall reference crop (alfalfa) [mm] (ALMA_OUTPUT: [mm/s])",
+   "default_agg": "SUM",
+   "index": 60,
+   "nelem": "1",
+   "units": "mm"
+  },
+  "OUT_PET_VEGNOCR": {
+   "alma": null,
+   "alma_units": "mm/s",
+   "comment": "potential evap (transpiration only) from current vegetation and 0 canopy resistance [mm] (ALMA_OUTPUT: [mm/s])",
+   "default_agg": "SUM",
+   "index": 62,
+   "nelem": "1",
+   "units": "mm"
+  },
+  "OUT_PREC": {
+   "alma": [
+    "aggdata[0] /= out_dt_sec"
+   ],
+   "alma_units": "mm/s",
+   "comment": "incoming precipitation [mm] (ALMA_OUTPUT: [mm/s])",
+   "default_agg": "SUM",
+   "index": 63,
+   "nelem": "1",
+   "units": "mm"
+  },
+  "OUT_PRESSURE": {
+   "alma": [
+    "aggdata[0] *= 1000"
+   ],
+   "alma_units": "Pa",
+   "comment": "near surface atmospheric pressure [kPa] (ALMA_OUTPUT: [Pa])",
+   "default_agg": "AVG",
+   "index": 126,
+   "nelem": "1",
+   "units": "kPa"
+  },
+  "OUT_QAIR": {
+   "alma": null,
+   "alma_units": null,
+   "comment": "specific humidity [kg/kg]",
+   "default_agg": "AVG",
+   "index": 127,
+   "nelem": "1",
+   "units": "kg/kg"
+  },
+  "OUT_RAD_TEMP": {
+   "alma": null,
+   "alma_units": null,
+   "comment": "average radiative surface temperature [K]",
+   "default_agg": "AVG",
+   "index": 80,
+   "nelem": "1",
+   "units": "K"
+  },
+  "OUT_RAINF": {
+   "alma": [
+    "aggdata[0] /= out_dt_sec"
+   ],
+   "alma_units": "mm/s",
+   "comment": "rainfall [mm] (ALMA_OUTPUT: [mm/s])",
+   "default_agg": "SUM",
+   "index": 64,
+   "nelem": "1",
+   "units": "mm"
+  },
+  "OUT_RAUT": {
+   "alma": null,
+   "alma_units": null,
+   "comment": "autotrophic respiration [g C/m2d]",
+   "default_agg": "AVG",
+   "index": 159,
+   "nelem": "1",
+   "units": "g C/m2d"
+  },
+  "OUT_REFREEZE": {
+   "alma": [
+    "aggdata[0] /= out_dt_sec"
+   ],
+   "alma_units": "mm/s",
+   "comment": "refreezing of water in the snow [mm] (ALMA_OUTPUT: [mm/s])",
+   "default_agg": "SUM",
+   "index": 65,
+   "nelem": "1",
+   "units": "mm"
+  },
+  "OUT_REL_HUMID": {
+   "alma": null,
+   "alma_units": null,
+   "comment": "relative humidity [%]",
+   "default_agg": "AVG",
+   "index": 128,
+   "nelem": "1",
+   "units": "%"
+  },
+  "OUT_RFRZ_ENERGY": {
+   "alma": null,
+   "alma_units": null,
+   "comment": "net energy used to refreeze liquid water in snowpack [W/m2]",
+   "default_agg": "AVG",
+   "index": 109,
+   "nelem": "1",
+   "units": "W/m2"
+  },
+  "OUT_RFRZ_ENERGY_BAND": {
+   "alma": null,
+   "alma_units": null,
+   "comment": "net energy used to refreeze liquid water in snowpack [W/m2]",
+   "default_agg": "AVG",
+   "index": 147,
+   "nelem": "options.SNOW_BAND",
+   "units": "W/m2"
+  },
+  "OUT_RHET": {
+   "alma": null,
+   "alma_units": null,
+   "comment": "soil respiration (heterotrophic respiration) [g C/m2d]",
+   "default_agg": "AVG",
+   "index": 162,
+   "nelem": "1",
+   "units": "g C/m2d"
+  },
+  "OUT_ROOTMOIST": {
+   "alma": null,
+   "alma_units": null,
+   "comment": "root zone soil moisture [mm]",
+   "default_agg": "END",
+   "index": 11,
+   "nelem": "1",
+   "units": "mm"
+  },
+  "OUT_RUNOFF": {
+   "alma": [
+    "aggdata[0] /= out_dt_sec"
+   ],
+   "alma_units": "mm/s",
+   "comment": "surface runoff [mm] (ALMA_OUTPUT: [mm/s])",
+   "default_agg": "SUM",
+   "index": 66,
+   "nelem": "1",
+   "units": "mm"
+  },
+  "OUT_R_NET": {
+   "alma": null,
+   "alma_units": null,
+   "comment": "net downward radiation flux [W/m2]",
+   "default_agg": "AVG",
+   "index": 108,
+   "nelem": "1",
+   "units": "W/m2"
+  },
+  "OUT_SALBEDO": {
+   "alma": null,
+   "alma_units": null,
+   "comment": "snow pack albedo [fraction]",
+   "default_agg": "AVG",
+   "index": 81,
+   "nelem": "1",
+   "units": "fraction"
+  },
+  "OUT_SENSIBLE": {
+   "alma": null,
+   "alma_units": null,
+   "comment": "net upward sensible heat flux [W/m2]",
+   "default_agg": "AVG",
+   "index": 110,
+   "nelem": "1",
+   "units": "W/m2"
+  },
+  "OUT_SENSIBLE_BAND": {
+   "alma": null,
+   "alma_units": null,
+   "comment": "net upward sensible heat flux [W/m2]",
+   "default_agg": "AVG",
+   "index": 148,
+   "nelem": "options.SNOW_BAND",
+   "units": "W/m2"
+  },
+  "OUT_SHORTWAVE": {
+   "alma": null,
+   "alma_units": null,
+   "comment": "incoming shortwave [W/m2]",
+   "default_agg": "AVG",
+   "index": 129,
+   "nelem": "1",
+   "units": "W/m2"
+  },
+  "OUT_SMFROZFRAC": {
+   "alma": null,
+   "alma_units": null,
+   "comment": "fraction of soil moisture (by mass) that is ice, for each soil layer",
+   "default_agg": "END",
+   "index": 12,
+   "nelem": "options.Nlayer",
+   "units": null
+  },
+  "OUT_SMLIQFRAC": {
+   "alma": null,
+   "alma_units": null,
+   "comment": "fraction of soil moisture (by mass) that is liquid, for each soil layer",
+   "default_agg": "END",
+   "index": 13,
+   "nelem": "options.Nlayer",
+   "units": null
+  },
+  "OUT_SNOWF": {
+   "alma": [
+    "aggdata[0] /= out_dt_sec"
+   ],
+   "alma_units": "mm/s",
+   "comment": "snowfall [mm] (ALMA_OUTPUT: [mm/s])",
+   "default_agg": "SUM",
+   "index": 68,
+   "nelem": "1",
+   "units": "mm"
+  },
+  "OUT_SNOWT_FBFLAG": {
+   "alma": null,
+   "alma_units": null,
+   "comment": "snow surface temperature fallback flag",
+   "default_agg": "SUM",
+   "index": 84,
+   "nelem": "1",
+   "units": null
+  },
+  "OUT_SNOW_CANOPY": {
+   "alma": null,
+   "alma_units": null,
+   "comment": "snow interception storage in canopy [mm]",
+   "default_agg": "END",
+   "index": 14,
+   "nelem": "1",
+   "units": "mm"
+  },
+  "OUT_SNOW_CANOPY_BAND": {
+   "alma": null,
+   "alma_units": null,
+   "comment": "snow interception storage in canopy [mm]",
+   "default_agg": "END",
+   "index": 149,
+   "nelem": "options.SNOW_BAND",
+   "units": "mm"
+  },
+  "OUT_SNOW_COVER": {
+   "alma": null,
+   "alma_units": null,
+   "comment": "fractional area of snow cover [fraction]",
+   "default_agg": "END",
+   "index": 15,
+   "nelem": "1",
+   "units": "fraction"
+  },
+  "OUT_SNOW_COVER_BAND": {
+   "alma": null,
+   "alma_units": null,
+   "comment": "fractional area of snow cover [fraction]",
+   "default_agg": "END",
+   "index": 150,
+   "nelem": "options.SNOW_BAND",
+   "units": "fraction"
+  },
+  "OUT_SNOW_DEPTH": {
+   "alma": null,
+   "alma_units": null,
+   "comment": "depth of snow pack [cm]",
+   "default_agg": "END",
+   "index": 16,
+   "nelem": "1",
+   "units": "cm"
+  },
+  "OUT_SNOW_DEPTH_BAND": {
+   "alma": null,
+   "alma_units": null,
+   "comment": "depth of snow pack [cm]",
+   "default_agg": "END",
+   "index": 151,
+   "nelem": "options.SNOW_BAND",
+   "units": "cm"
+  },
+  "OUT_SNOW_FLUX": {
+   "alma": null,
+   "alma_units": null,
+   "comment": "energy flux through snow pack [W/m2]",
+   "default_agg": "AVG",
+   "index": 111,
+   "nelem": "1",
+   "units": "W/m2"
+  },
+  "OUT_SNOW_FLUX_BAND": {
+   "alma": null,
+   "alma_units": null,
+   "comment": "energy flux through snow pack [W/m2]",
+   "default_agg": "AVG",
+   "index": 152,
+   "nelem": "options.SNOW_BAND",
+   "units": "W/m2"
+  },
+  "OUT_SNOW_MELT": {
+   "alma": [
+    "aggdata[0] /= out_dt_sec"
+   ],
+   "alma_units": "mm/s",
+   "comment": "snow melt [mm] (ALMA_OUTPUT: [mm/s])",
+   "default_agg": "SUM",
+   "index": 67,
+   "nelem": "1",
+   "units": "mm"
+  },
+  "OUT_SNOW_MELT_BAND": {
+   "alma": null,
+   "alma_units": "mm/s",
+   "comment": "snow melt [mm] (ALMA_OUTPUT: [mm/s])",
+   "default_agg": "AVG",
+   "index": 153,
+   "nelem": "options.SNOW_BAND",
+   "units": "mm"
+  },
+  "OUT_SNOW_PACKT_BAND": {
+   "alma": null,
+   "alma_units": "K",
+   "comment": "snow pack temperature [C] (ALMA_OUTPUT: [K])",
+   "default_agg": "AVG",
+   "index": 154,
+   "nelem": "options.SNOW_BAND",
+   "units": "C"
+  },
+  "OUT_SNOW_PACK_TEMP": {
+   "alma": [
+    "aggdata[0] += KELVIN"
+   ],
+   "alma_units": "K",
+   "comment": "snow pack temperature [C] (ALMA_OUTPUT: [K])",
+   "default_agg": "AVG",
+   "index": 82,
+   "nelem": "1",
+   "units": "C"
+  },
+  "OUT_SNOW_SURFT_BAND": {
+   "alma": null,
+   "alma_units": "K",
+   "comment": "snow surface temperature [C] (ALMA_OUTPUT: [K])",
+   "default_agg": "AVG",
+   "index": 155,
+   "nelem": "options.SNOW_BAND",
+   "units": "C"
+  },
+  "OUT_SNOW_SURF_TEMP": {
+   "alma": [
+    "aggdata[0] += KELVIN"
+   ],
+   "alma_units": "K",
+   "comment": "snow surface temperature [C] (ALMA_OUTPUT: [K])",
+   "default_agg": "AVG",
+   "index": 83,
+   "nelem": "1",
+   "units": "C"
+  },
+  "OUT_SOILT_FBFLAG": {
+   "alma": null,
+   "alma_units": null,
+   "comment": "soil temperature flag for each soil thermal node",
+   "default_agg": "SUM",
+   "index": 88,
+   "nelem": "options.Nnode",
+   "units": null
+  },
+  "OUT_SOIL_ICE": {
+   "alma": null,
+   "alma_units": null,
+   "comment": "soil ice content [mm] for each soil layer",
+   "default_agg": "END",
+   "index": 17,
+   "nelem": "options.Nlayer",
+   "units": "mm"
+  },
+  "OUT_SOIL_LIQ": {
+   "alma": null,
+   "alma_units": null,
+   "comment": "soil liquid content [mm] for each soil layer",
+   "default_agg": "END",
+   "index": 18,
+   "nelem": "options.Nlayer",
+   "units": "mm"
+  },
+  "OUT_SOIL_MOIST": {
+   "alma": null,
+   "alma_units": null,
+   "comment": "soil total moisture content [mm] for each soil layer",
+   "default_agg": "END",
+   "index": 19,
+   "nelem": "options.Nlayer",
+   "units": "mm"
+  },
+  "OUT_SOIL_TEMP": {
+   "alma": [
+    "every element += KELVIN"
+   ],
+   "alma_units": "K",
+   "comment": "soil temperature [C] (ALMA_OUTPUT: [K]) for each soil layer",
+   "default_agg": "AVG",
+   "index": 85,
+   "nelem": "options.Nlayer",
+   "units": "C"
+  },
+  "OUT_SOIL_TNODE": {
+   "alma": [
+    "every element += KELVIN"
+   ],
+   "alma_units": "K",
+   "comment": "soil temperature [C] (ALMA_OUTPUT: [K]) for each soil thermal node",
+   "default_agg": "AVG",
+   "index": 86,
+   "nelem": "options.Nnode",
+   "units": "C"
+  },
+  "OUT_SOIL_TNODE_WL": {
+   "alma": [
+    "every element += KELVIN"
+   ],
+   "alma_units": "K",
+   "comment": "soil temperature [C] (ALMA_OUTPUT: [K]) for each soil thermal node in the wetland",
+   "default_agg": "AVG",
+   "index": 87,
+   "nelem": "options.Nnode",
+   "units": "C"
+  },
+  "OUT_SOIL_WET": {
+   "alma": null,
+   "alma_units": null,
+   "comment": "vertical average of (soil moisture - wilting point)/(maximum soil moisture - wilting point) [mm/mm]",
+   "default_agg": "END",
+   "index": 20,
+   "nelem": "1",
+   "units": "mm/mm"
+  },
+  "OUT_SUB_BLOWING": {
+   "alma": [
+    "aggdata[0] /= out_dt_sec"
+   ],
+   "alma_units": "mm/s",
+   "comment": "net sublimation of blowing snow [mm] (ALMA_OUTPUT: [mm/s])",
+   "default_agg": "SUM",
+   "index": 69,
+   "nelem": "1",
+   "units": "mm"
+  },
+  "OUT_SUB_CANOP": {
+   "alma": [
+    "aggdata[0] /= out_dt_sec"
+   ],
+   "alma_units": "mm/s",
+   "comment": "net sublimation from snow stored in canopy [mm] (ALMA_OUTPUT: [mm/s])",
+   "default_agg": "SUM",
+   "index": 70,
+   "nelem": "1",
+   "units": "mm"
+  },
+  "OUT_SUB_SNOW": {
+   "alma": [
+    "aggdata[0] /= out_dt_sec",
+    "aggdata[0] += OUT_SUB_CANOP"
+   ],
+   "alma_units": "mm/s",
+   "comment": "total net sublimation from snow pack (surface and blowing) [mm] (ALMA_OUTPUT: [mm/s])",
+   "default_agg": "SUM",
+   "index": 71,
+   "nelem": "1",
+   "units": "mm"
+  },
+  "OUT_SUB_SURFACE": {
+   "alma": [
+    "aggdata[0] /= out_dt_sec"
+   ],
+   "alma_units": "mm/s",
+   "comment": "net sublimation from snow pack surface [mm] (ALMA_OUTPUT: [mm/s])",
+   "default_agg": "SUM",
+   "index": 72,
+   "nelem": "1",
+   "units": "mm"
+  },
+  "OUT_SURFSTOR": {
+   "alma": null,
+   "alma_units": null,
+   "comment": "storage of liquid water and ice (not snow) on surface (ponding) [mm]",
+   "default_agg": "END",
+   "index": 21,
+   "nelem": "1",
+   "units": "mm"
+  },
+  "OUT_SURFT_FBFLAG": {
+   "alma": null,
+   "alma_units": null,
+   "comment": "surface temperature flag",
+   "default_agg": "SUM",
+   "index": 90,
+   "nelem": "1",
+   "units": null
+  },
+  "OUT_SURF_COND": {
+   "alma": null,
+   "alma_units": null,
+   "comment": "surface conductance [m/s]",
+   "default_agg": "AVG",
+   "index": 130,
+   "nelem": "1",
+   "units": "m/s"
+  },
+  "OUT_SURF_FROST_FRAC": {
+   "alma": null,
+   "alma_units": null,
+   "comment": "fraction of soil surface that is frozen [fraction]",
+   "default_agg": "END",
+   "index": 22,
+   "nelem": "1",
+   "units": "fraction"
+  },
+  "OUT_SURF_TEMP": {
+   "alma": [
+    "aggdata[0] += KELVIN"
+   ],
+   "alma_units": "K",
+   "comment": "average surface temperature [C] (ALMA_OUTPUT: [K])",
+   "default_agg": "AVG",
+   "index": 89,
+   "nelem": "1",
+   "units": "C"
+  },
+  "OUT_SWE": {
+   "alma": null,
+   "alma_units": null,
+   "comment": "snow water equivalent in snow pack (including vegetation-intercepted snow) [mm]",
+   "default_agg": "END",
+   "index": 23,
+   "nelem": "1",
+   "units": "mm"
+  },
+  "OUT_SWE_BAND": {
+   "alma": null,
+   "alma_units": null,
+   "comment": "snow water equivalent in snow pack [mm]",
+   "default_agg": "END",
+   "index": 156,
+   "nelem": "options.SNOW_BAND",
+   "units": "mm"
+  },
+  "OUT_TCAN_FBFLAG": {
+   "alma": null,
+   "alma_units": null,
+   "comment": "Tcanopy flag",
+   "default_agg": "SUM",
+   "index": 91,
+   "nelem": "1",
+   "units": null
+  },
+  "OUT_TDEPTH": {
+   "alma": [
+    "aggdata[0] /= 100"
+   ],
+   "alma_units": "m",
+   "comment": "depth of thawing fronts [cm] (ALMA_OUTPUT: [m]) for each thawing front",
+   "default_agg": "AVG",
+   "index": 92,
+   "nelem": "MAX_FRONTS if options.FROZEN_SOIL else 1",
+   "units": "cm"
+  },
+  "OUT_TFOL_FBFLAG": {
+   "alma": null,
+   "alma_units": null,
+   "comment": "Tfoliage flag",
+   "default_agg": "SUM",
+   "index": 93,
+   "nelem": "1",
+   "units": null
+  },
+  "OUT_TRANSP_VEG": {
+   "alma": [
+    "aggdata[0] /= out_dt_sec"
+   ],
+   "alma_units": "mm/s",
+   "comment": "net transpiration from vegetation [mm] (ALMA_OUTPUT: [mm/s])",
+   "default_agg": "SUM",
+   "index": 73,
+   "nelem": "1",
+   "units": "mm"
+  },
+  "OUT_TSKC": {
+   "alma": null,
+   "alma_units": null,
+   "comment": "cloud cover fraction [fraction]",
+   "default_agg": "AVG",
+   "index": 131,
+   "nelem": "1",
+   "units": "fraction"
+  },
+  "OUT_VEGCOVER": {
+   "alma": null,
+   "alma_units": null,
+   "comment": "fractional area of plants [fraction]",
+   "default_agg": "AVG",
+   "index": 132,
+   "nelem": "1",
+   "units": "fraction"
+  },
+  "OUT_VEGT": {
+   "alma": [
+    "aggdata[0] += KELVIN"
+   ],
+   "alma_units": "K",
+   "comment": "average vegetation canopy temperature [C] (ALMA_OUTPUT: [K])",
+   "default_agg": "AVG",
+   "index": 94,
+   "nelem": "1",
+   "units": "C"
+  },
+  "OUT_VP": {
+   "alma": [
+    "aggdata[0] *= 1000"
+   ],
+   "alma_units": "Pa",
+   "comment": "near surface vapor pressure [kPa] (ALMA_OUTPUT: [Pa])",
+   "default_agg": "AVG",
+   "index": 133,
+   "nelem": "1",
+   "units": "kPa"
+  },
+  "OUT_VPD": {
+   "alma": [
+    "aggdata[0] *= 1000"
+   ],
+   "alma_units": "Pa",
+   "comment": "near surface vapor pressure deficit [kPa] (ALMA_OUTPUT: [Pa])",
+   "default_agg": "AVG",
+   "index": 134,
+   "nelem": "1",
+   "units": "kPa"
+  },
+  "OUT_WATER_ERROR": {
+   "alma": null,
+   "alma_units": null,
+   "comment": "water budget error [mm]",
+   "default_agg": "AVG",
+   "index": 74,
+   "nelem": "1",
+   "units": "mm"
+  },
+  "OUT_WDEW": {
+   "alma": null,
+   "alma_units": null,
+   "comment": "total moisture interception storage in canopy [mm]",
+   "default_agg": "END",
+   "index": 24,
+   "nelem": "1",
+   "units": "mm"
+  },
+  "OUT_WIND": {
+   "alma": null,
+   "alma_units": null,
+   "comment": "near surface wind speed [m/s]",
+   "default_agg": "AVG",
+   "index": 135,
+   "nelem": "1",
+   "units": "m/s"
+  },
+  "OUT_ZWT": {
+   "alma": null,
+   "alma_units": null,
+   "comment": "water table position [cm] (zwt within lowest unsaturated layer)",
+   "default_agg": "END",
+   "index": 25,
+   "nelem": "1",
+   "units": "cm"
+  },
+  "OUT_ZWT_LUMPED": {
+   "alma": null,
+   "alma_units": null,
+   "comment": "lumped water table position [cm] (zwt of total moisture across all layers, lumped together)",
+   "default_agg": "END",
+   "index": 26,
+   "nelem": "1",
+   "units": "cm"
+  }
+ },
+ "vic_source": "reference/VIC-VIC.4.2.d/src",
+ "vs_vic5": {
+  "default_agg_differs": {},
+  "only_in_vic42d": [
+   "OUT_COSZEN",
+   "OUT_LONGWAVE",
+   "OUT_NET_LONG",
+   "OUT_NET_LONG_BAND",
+   "OUT_NET_SHORT",
+   "OUT_NET_SHORT_BAND",
+   "OUT_PET_H2OSURF",
+   "OUT_PET_NATVEG",
+   "OUT_PET_SATSOIL",
+   "OUT_PET_SHORT",
+   "OUT_PET_TALL",
+   "OUT_PET_VEGNOCR",
+   "OUT_SHORTWAVE",
+   "OUT_TSKC",
+   "OUT_VEGCOVER"
+  ],
+  "only_in_vic5": [
+   "OUT_DISCHARGE",
+   "OUT_FCANOPY",
+   "OUT_LWDOWN",
+   "OUT_LWNET",
+   "OUT_LWNET_BAND",
+   "OUT_PET",
+   "OUT_SOIL_ICE_FRAC",
+   "OUT_SOIL_LIQ_FRAC",
+   "OUT_SWDOWN",
+   "OUT_SWNET",
+   "OUT_SWNET_BAND",
+   "OUT_TIME_VICRUN_CPU",
+   "OUT_TIME_VICRUN_WALL"
+  ],
+  "vic5_source": "reference/VIC-5.1.0/vic"
+ }
+}

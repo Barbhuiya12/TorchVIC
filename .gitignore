@@ -1,0 +1,25 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.pytest_cache/
+
+# test data, filled by tools/get_test_data.sh
+/reference
+/data
+site/
+
+# local clutter: worktrees, docs build, run outputs, editor and tool state
+worktrees/
+/site/
+benchmarks/results*/
+verification/results/
+verification/work
+*.out
+*.hw
+*.time
+*.log
+slurm-*
+.vscode/
+.idea/
