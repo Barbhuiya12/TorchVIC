@@ -25,7 +25,7 @@ TorchVIC departs from VIC on purpose, and the entry says so.
 |---|------------|--------|---------|----------|----------|
 | 1 | `photosynth.c` | gas constant per kmol in expressions per mol | `CARBON TRUE` | issue [#965](https://github.com/UW-Hydro/VIC/issues/965), pull request [#966](https://github.com/UW-Hydro/VIC/pull/966) | reproduced; corrected by an option |
 | 2 | `compute_soil_resp.c` | turnover times in hours divided by a step in seconds | `CARBON TRUE` | issue [#967](https://github.com/UW-Hydro/VIC/issues/967), pull request [#968](https://github.com/UW-Hydro/VIC/pull/968) | reproduced; corrected by an option |
-| 3 | `generate_default_lake_state.c` | lake temperature profile left at 0 °C | `LAKES TRUE`, no initial state file | not yet reported | reproduced (default core 5.1.0) |
+| 3 | `generate_default_lake_state.c` | lake temperature profile left at 0 °C | `LAKES TRUE`, no initial state file | [#976](https://github.com/UW-Hydro/VIC/issues/976), PR [#977](https://github.com/UW-Hydro/VIC/pull/977) | reproduced (default core 5.1.0) |
 | 4 | `lake_utils.c` | `get_volume` returns twice the capacity | latent | pull request [#973](https://github.com/UW-Hydro/VIC/pull/973) | value reproduced |
 | 5 | image driver, `vic_force.c` | `CHANNEL_IN` read with a stale time index | `LAKES TRUE` with `CHANNEL_IN` | issue [#969](https://github.com/UW-Hydro/VIC/issues/969), pull request [#970](https://github.com/UW-Hydro/VIC/pull/970) | `CHANNEL_IN` not used |
 | 6 | RVIC extension, `rout_convolution.c` | water lost with a source time offset | RVIC routing | issue [#971](https://github.com/UW-Hydro/VIC/issues/971), pull request [#972](https://github.com/UW-Hydro/VIC/pull/972) | own router conserves water |
@@ -125,9 +125,14 @@ test case with `CHANNEL_IN` data was available.
   of the classic driver.
 * **Effect.** On its Findley Lake sample, VIC 5.1.0 reports after the first
   hour a lake depth of 23.3993 m, close to the file's initial depth, and a
-  surface temperature of −0.0065 °C, with ice forming. Found in the source and
-  confirmed by TorchVIC's comparison with VIC 5.1.0 on this sample.
-* **Upstream.** Not yet reported. The related issue
+  surface temperature of −0.0065 °C, with ice forming. With the fix the lake
+  starts at 3.78 °C without ice; over 1970–1979 the surface temperature differs
+  by up to 12.2 °C in the first summer and the 1970 lake evaporation by 10 %,
+  and the two runs agree from 1975 (a spin-up error). Runs started from a state
+  file are not affected.
+* **Upstream.** Issue [#976](https://github.com/UW-Hydro/VIC/issues/976) and
+  pull request [#977](https://github.com/UW-Hydro/VIC/pull/977), which derives
+  the lake dimensions before the temperatures are set. The related issue
   [#406](https://github.com/UW-Hydro/VIC/issues/406) (closed) asked for a
   sensible default lake temperature.
 * **TorchVIC.** With the default core (5.1.0) it reproduces VIC 5.1.0.
