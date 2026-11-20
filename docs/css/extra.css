@@ -1,0 +1,18 @@
+/* Entry cards on the landing page and the connector index. */
+.card-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin: 16px 0 24px 0;
+}
+.card-grid .card {
+  flex: 1 1 220px;
+  border: 1px solid #c9ced3;
+  border-top: 4px solid #2980b9;
+  border-radius: 3px;
+  padding: 4px 16px 8px 16px;
+  background: #fcfcfc;
+}
+.card-grid .card p { margin: 8px 0; }
+.card-grid .card .card-title { font-size: 120%; font-weight: bold; margin-top: 12px; }
+.wy-table-responsive table td, .wy-table-responsive table th { white-space: normal; }

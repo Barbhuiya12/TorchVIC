@@ -236,3 +236,7 @@ the physics of a run that writes six variables.
 VIC global files for the water and energy balance. See `benchmarks/README.md`
 for the environment variables. The input parameters and forcing of the domain
 are built by the scripts in `tools/` ([Your own domain](tutorials/own-domain.md)).
+
+## Next step
+
+The accuracy side of the comparison: [Verification](verification.md).

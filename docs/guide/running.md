@@ -1,6 +1,6 @@
-# Running the model
+# Run the model
 
-```
+```bash
 torchvic run INPUT [options]
 ```
 
@@ -154,3 +154,7 @@ Multi-GPU runs were not timed for 0.4.7. Each process repeats the fixed costs of
 start-up and input reading, so several GPUs pay off for much larger domains, or
 for independent runs, one per GPU, rather than for a domain the size of the
 Indian subcontinent (112,825 cells; [Performance](../performance.md)).
+
+## Next step
+
+Read the results: [Outputs and state files](outputs.md). For discharge at gauges, see [Route runoff to gauges](routing.md); to run VIC with other models, see [Coupled runs](../coupled/overview.md).

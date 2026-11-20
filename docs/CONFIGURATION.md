@@ -1,23 +1,67 @@
-# Coupled-run configuration
+# Coupled-run configuration file
+
+## What it does
 
 One YAML (or JSON) file describes a coupled run: the modules, the connections
 between them, the ledger, checkpoints and outputs. The coupled system is
-introduced in the [overview](coupled/overview.md). Check it without running:
+introduced in the [overview](coupled/overview.md).
 
-    torchvic validate --config configs/vic_only.yaml          # schema, registry, graph, units
-    torchvic validate --config configs/vic_only.yaml --deep   # also reads the data: grids, mappings, span
+## When to use it
 
-Run it:
+* Use it for every coupled run (`torchvic run --config`).
+* For VIC alone, with no other connector, use a global file and
+  `torchvic run global_param.txt` ([Run the model](guide/running.md)).
+* Check a file before a long run with `torchvic validate --config`.
 
-    torchvic run --config configs/vic_only.yaml [--device cuda] [--out DIR]
+## Inputs
+
+| input | content | unit |
+|---|---|---|
+| the configuration file | YAML or JSON with the sections `run`, `modules`, `connections`, `mappings`, `ledger`, `checkpoint`, `output` | see the option comments in [Sections](#sections) |
+| `${VAR}` in any string | replaced from the environment; an unset variable is an error | - |
+| relative `global_param`, `dir`, `path`, `restart_from` and `file` | taken from the configuration file's directory | - |
+| the data the modules name | VIC global file, network, dam table, aquifer values and so on | listed on each [connector page](connectors/index.md) |
+
+## Config block
+
+A minimal file runs VIC alone through the runtime:
+
+```yaml
+version: 1
+run: {device: auto, dtype: float64}
+modules:
+  vic: {connector: vic, global_param: path/to/global_param.txt, core: 5.1.0}
+connections: []
+ledger: {enabled: true, on_violation: reject}
+output: {dir: results, history: true, ledger: true}
+```
+
+Check and run it:
+
+```bash
+torchvic validate --config coupled.yaml            # schema, registry, graph, units
+torchvic validate --config coupled.yaml --deep     # also reads the data: grids, mappings, span
+torchvic run --config coupled.yaml [--device cuda] [--out DIR]
+```
 
 or from Python:
 
-    from torchvic import TorchVIC
-    m = TorchVIC.from_config('configs/vic_only.yaml')
-    m.initialize(); m.run(); m.finalize()
+```python
+from torchvic import TorchVIC
+m = TorchVIC.from_config('coupled.yaml')
+m.initialize(); m.run(); m.finalize()
+```
 
-## Sections
+## Outputs
+
+A run writes to `output.dir`: VIC's history streams, `ledger.csv` and
+`run_report.json`. `output.history` and `output.ledger` switch the first two
+on or off. A checkpoint is written every `checkpoint.every` steps to
+`checkpoint.path`.
+
+## Technical details
+
+### Sections
 
 ```yaml
 version: 1
@@ -95,7 +139,7 @@ output:
 Relative `global_param`, `dir`, `path`, `restart_from` and `file` are taken
 from the configuration file's directory.
 
-## What is checked, and when
+### What is checked, and when
 
 * **load** (`schema.load`): unknown keys, types, ranges, modules named by
   connections, mappings named by connections, files that must exist,
@@ -110,7 +154,7 @@ from the configuration file's directory.
   areas, connectors agreeing on the run's length, a fast producer feeding a
   slower consumer at lag 0, unavailable backends.
 
-## Example configurations
+### Example configurations
 
 | file | what it does |
 |---|---|
@@ -126,3 +170,21 @@ from the configuration file's directory.
 | `configs/vic_groundwater.yaml` | VIC + groundwater (`vic.baseflow` into `groundwater.recharge`); routing connections shown as comments; tested in `tests/test_coupling_groundwater.py` |
 
 Other module combinations are not provided as examples.
+
+## Limitations
+
+* Other module combinations than those under Example configurations are not
+  provided as examples.
+* A registry entry that is marked `planned` is refused with its reason.
+* Limits that apply to every module: [Limits of the coupled system](coupled/overview.md#limits).
+
+## Verification status
+
+`configs/vic_only.yaml` is tested: its history equals `torchvic run`'s
+(`tests/test_coupling_vic.py`). The table of example configurations above says
+which of the other shipped files are tested and which only validate.
+
+
+## Next step
+
+[Connectors](connectors/index.md), then the page of each connector you use.

@@ -285,3 +285,7 @@ pytest -m gpu tests                              # needs a CUDA device
 
 Tests find their inputs through environment variables; see
 [Testing](development/testing.md).
+
+## Next step
+
+Run times: [Performance](performance.md). What differs from VIC on purpose: [Differences from VIC](differences.md).

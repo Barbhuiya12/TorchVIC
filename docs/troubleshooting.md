@@ -125,3 +125,7 @@ the global file and the log ([Contact](about/contact.md)).
 `pytest tests` skips every test whose data is absent and says which;
 `tools/get_test_data.sh` downloads the sample data and the VIC releases and
 builds their image drivers (needs `nc-config` and `mpicc`).
+
+## Next step
+
+If the message is not listed here, open an issue as described in [Contact](about/contact.md).

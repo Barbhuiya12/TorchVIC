@@ -1,4 +1,4 @@
-# The global parameter file
+# The global file
 
 The global parameter file is VIC 5's run description, and TorchVIC reads
 it as VIC 5's image driver does: one option per line, `KEY value`,
@@ -11,7 +11,7 @@ global-file key, and are given from Python, are described in
 
 ## Time
 
-```
+```text
 MODEL_STEPS_PER_DAY   8        # the model step: 8 = three-hourly, 24 = hourly, 1 = daily
 SNOW_STEPS_PER_DAY    8        # snow sub-steps per day (>= MODEL_STEPS_PER_DAY)
 RUNOFF_STEPS_PER_DAY  24       # runoff sub-steps per day (>= MODEL_STEPS_PER_DAY)
@@ -32,7 +32,7 @@ before it starts. `CALENDAR` must agree with the forcing's calendar.
 
 ## Physics
 
-```
+```text
 FULL_ENERGY TRUE               # surface energy balance (FALSE: water balance only)
 QUICK_FLUX  TRUE               # the two-node ground-heat-flux scheme (FALSE: the full soil thermal profile)
 FROZEN_SOIL FALSE              # soil ice (TRUE runs with QUICK_FLUX TRUE after it, or IMPLICIT/EXP_TRANS)
@@ -59,7 +59,7 @@ and slower.
 
 ## The domain
 
-```
+```text
 DOMAIN         ${VIC_SAMPLE_DATA}/image/WalnutGulch/parameters/domain.WalnutGulch.0.0625_deg.nc
 DOMAIN_TYPE    LAT     lat
 DOMAIN_TYPE    LON     lon
@@ -74,7 +74,7 @@ DOMAIN_TYPE    XDIM    lon
 
 ## The forcing
 
-```
+```text
 FORCING1      ${VIC_SAMPLE_DATA}/image/WalnutGulch/forcings/livneh_NAmerExt_15Oct2014.WalnutGulch.
 FORCE_TYPE    AIR_TEMP     temp
 FORCE_TYPE    PREC         prec
@@ -101,7 +101,7 @@ would use the parameter file's per-class heights there
 
 ## The parameters
 
-```
+```text
 PARAMETERS      ${VIC_SAMPLE_DATA}/image/WalnutGulch/parameters/params.WalnutGulch.L2015.0.0625_deg.nc
 LAI_SRC         FROM_VEGPARAM     # LAI from the parameter file's per-cell values (FROM_VEGLIB: the class values)
 FCAN_SRC        FROM_DEFAULT      # canopy fraction 1 (FROM_VEGPARAM/FROM_VEGLIB need `fcanopy` in the file)
@@ -112,7 +112,7 @@ SNOW_BAND       TRUE              # read the file's bands; every band with area 
 
 ## Initial and saved state
 
-```
+```text
 INIT_STATE   state/state.20031231_00000.nc    # start from a VIC state file (absent: VIC's cold start)
 STATENAME    state/state                      # write state.YYYYMMDD_SSSSS.nc ...
 STATEYEAR    2006
@@ -129,7 +129,7 @@ directory, environment variables expanded. [Outputs and state files](outputs.md)
 
 ## Output
 
-```
+```text
 RESULT_DIR  ${VIC_SAMPLE_RESULTS}/sample_image     # --out overrides it
 OUTFILE     fluxes.WalnutGulch.L2015              # a stream: this file prefix ...
 COMPRESS    FALSE
@@ -164,3 +164,7 @@ runs, and are announced in the log. A key that is not an image-driver
 option is announced and ignored, as VIC warns and ignores it. A value
 TorchVIC does not run as VIC does stops the run with a message naming the
 key, the value and the reason; the list is [Options](../OPTIONS.md).
+
+## Next step
+
+[Run the model](running.md). The value-by-value list of options is [Options](../OPTIONS.md).

@@ -130,7 +130,7 @@ one computes.
 The variable names are yours. The global file's `FORCE_TYPE` lines say
 which variable is which:
 
-```
+```text
 FORCE_TYPE    AIR_TEMP     temp
 FORCE_TYPE    PREC         prec
 FORCE_TYPE    PRESSURE     air_pressure
@@ -169,7 +169,7 @@ from MetSim 2.0.1 and compared with it
 ([Verification](../verification.md#daily-forcing-mtclim-against-metsim)). The
 file holds one record per day with
 
-```
+```text
 FORCE_TYPE    TMAX    tasmax      # daily maximum temperature, degC
 FORCE_TYPE    TMIN    tasmin      # daily minimum temperature, degC
 FORCE_TYPE    PREC    prcp        # daily total, mm
@@ -214,7 +214,7 @@ One text file that names the three files above and describes the run. It
 is VIC 5's own format, and every line is explained in
 [The global parameter file](global-file.md). The shortest useful file:
 
-```
+```text
 MODEL_STEPS_PER_DAY   8
 SNOW_STEPS_PER_DAY    8
 RUNOFF_STEPS_PER_DAY  8
@@ -279,3 +279,7 @@ expanded.
   options you set.
 * `tools/compare_outputs.py A B` compares two result directories variable
   by variable, for before-and-after checks.
+
+## Next step
+
+Describe the run in [The global file](global-file.md), then [run the model](running.md).

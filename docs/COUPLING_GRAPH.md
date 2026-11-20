@@ -26,7 +26,7 @@ engines used from Python, not registry connectors (see
 
 ## Edges that exist
 
-```
+```text
                  vic.total_runoff / total_runoff_daily
    VIC  ---------------------------------------------->  routing  ----> discharge (gauges)
     ^  \                                                  ^  |   ^

@@ -13,7 +13,7 @@ parameters, daily or sub-daily forcing), `run` executes the time loop
 driver writes them. The command line does the same: `torchvic run`.
 """
 
-__version__ = "0.4.8"
+__version__ = "0.4.9"
 
 __all__ = ['__version__', 'default_device', 'load_case', 'load_study', 'run',
            'write_history', 'set_core', 'TorchVIC']

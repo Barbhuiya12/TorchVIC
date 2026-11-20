@@ -164,3 +164,7 @@ The probes behind this classification are listed in the
   bit; a `[cell]` tensor holding the scalar gives the scalar run bit for bit,
   and a mixed tensor gives each cell the run with its own scalar
   (`tests/test_snow_thresholds_cell.py`).
+
+## Next step
+
+[Verification](verification.md) gives the size of the differences; [Known limitations](about/limitations.md) lists what is not covered.

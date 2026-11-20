@@ -8,7 +8,7 @@ larger than a small fix. Bug reports and feature requests also go to the
 
 ## Repository layout
 
-```
+```text
 torchvic/core/      the physics (snow, canopy, vegetation, soil, energy, ...)
 torchvic/model/     the time loop (basin.simulate), state carry, routing
 torchvic/io/        global parameter file, domain, params, forcing, history, state

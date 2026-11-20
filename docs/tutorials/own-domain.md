@@ -123,3 +123,7 @@ and CSV.
 Observed discharge as a CSV, a study file with the metrics you want
 ([Study files](../guide/study.md)), and `case.ensemble(n)` to evaluate
 many parameter sets in one GPU run ([Python API](../guide/python-api.md)).
+
+## Next step
+
+Run VIC with other models in one time loop: [Coupled runs](../coupled/overview.md).

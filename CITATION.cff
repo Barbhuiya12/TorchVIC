@@ -1,7 +1,7 @@
 cff-version: 1.2.0
 message: "If you use this software, please cite it as below."
 title: "TorchVIC: the VIC 5 land surface model in PyTorch"
-version: 0.4.8
+version: 0.4.9
 license: GPL-3.0-or-later
 url: "https://barbhuiya12.github.io/TorchVIC/"
 repository-code: "https://github.com/Barbhuiya12/TorchVIC"

@@ -3,8 +3,9 @@
 ## Code
 
 The source is at <https://github.com/Barbhuiya12/TorchVIC>. The current release
-is 0.4.8; earlier versions are tagged. TorchVIC is not on PyPI; install it
-from the repository ([Install](../install.md)). The changes of each version are
+is 0.4.9; earlier versions are tagged. The package is on PyPI as `torchvic`
+(`pip install torchvic`, from 0.4.9); as the developer route, install it from
+the repository ([Install](../install.md)). The changes of each version are
 in the [Release notes](../development/release-notes.md).
 
 To cite TorchVIC, see [How to cite](../about/citing.md).

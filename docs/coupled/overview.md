@@ -1,6 +1,9 @@
-# Coupled system
+# Coupled runs: overview
 
-The coupled system runs VIC and other water models in one time loop on the GPU.
+**What you will learn:** what a coupled run is, which connectors exist and which
+page to read for each.
+
+A coupled run runs VIC and other water models in one time loop on the GPU.
 A YAML file names the modules (connectors) and the connections between them; a
 runtime orders them, exchanges water between them and a ledger checks that every
 transfer closes. VIC alone is run with `torchvic run global_param.txt --core 5.1.0`; the
@@ -27,7 +30,18 @@ configurations are in `configs/`. The file is described in
 [Water accounting](../WATER_ACCOUNTING.md). The design is in
 [Architecture](../ARCHITECTURE.md).
 
-## Modules
+## Your first coupled run
+
+1. Install TorchVIC and run the [Quick start](../quickstart.md) first.
+2. Write a configuration file with the VIC module only; the minimal file is in
+   [Configuration file](../CONFIGURATION.md#config-block).
+3. Check it: `torchvic validate --config coupled.yaml`.
+4. Run it and compare the history with a plain `torchvic run`: the two are
+   equal.
+5. Add one connector at a time: take its `modules:` entry and `connections:`
+   from its page under [Connectors](../connectors/index.md).
+
+## Connectors
 
 | connector | does | page |
 |---|---|---|
@@ -43,7 +57,7 @@ configurations are in `configs/`. The file is described in
 | `vicwur_routing`, `vicwur_dams`, `vicwur_wateruse_local`, `vicwur_wateruse_remote`, `vicwur_nonrenew`, `vicwur_efr`, `vicwur_irrigation`, `vicwur_co2`, `vicwur_landuse`, `vicwur_crop`, `vicwur_cropsyst` | VIC-WUR package: cascade router, dams, water use, non-renewable abstraction, environmental flow, irrigation, CO2, land use, crops | [VIC-WUR](../connectors/vicwur.md) |
 | ensembles and EnKF/ETKF/LETKF | Python engines, not registry connectors | [Ensembles and DA](../connectors/ensemble_da.md) |
 
-## Inputs
+## Inputs of each connector
 
 | input | format |
 |---|---|
@@ -89,3 +103,7 @@ build (`LISFLOOD_BIN`). Device memory grows with the domain and the connectors
 
 A lakes connector, carbon and land-cover coupling, coupling to Earth-system
 models, and ensembles inside the runtime.
+
+## Next step
+
+[Configuration file](../CONFIGURATION.md), then [Connectors](../connectors/index.md).

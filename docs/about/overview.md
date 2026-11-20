@@ -75,7 +75,7 @@ Beyond VIC 5, TorchVIC adds:
   ([Study files](../guide/study.md));
 * a coupled system in which routing, reservoirs, water quality, groundwater,
   flood hydraulics, irrigation and crop growth run in the same GPU time loop
-  ([Coupled system](../coupled/overview.md)).
+  ([Coupled runs](../coupled/overview.md)).
 
 ## Fidelity
 

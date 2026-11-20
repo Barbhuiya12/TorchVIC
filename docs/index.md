@@ -3,25 +3,90 @@
 [![License: GPL-3.0-or-later](https://img.shields.io/badge/license-GPL--3.0--or--later-blue.svg)](https://github.com/Barbhuiya12/TorchVIC/blob/main/LICENSE)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)](install.md)
 
-!!! note
-    You are viewing the documentation for TorchVIC 0.4.8. It computes the
-    physics of VIC 5.1.0 (the default, and the release that the results below
+TorchVIC is the Variable Infiltration Capacity (VIC) macroscale hydrologic
+model, release 5 ([Liang et al., 1994](about/references.md#vic);
+[Hamman et al., 2018](about/references.md#vic)), re-implemented in PyTorch. It
+reads the files of VIC 5's image driver (the global file, `domain.nc`,
+`params.nc` and the forcing), solves every grid cell of the domain at once on a
+GPU or a CPU, and writes VIC 5 NetCDF history and state files. The physics is
+VIC's; what changes is how VIC is executed. A coupled run adds river routing,
+reservoirs, water quality, groundwater, flood hydraulics, irrigation and crops
+to the same time loop through connectors.
+
+!!! note "Version"
+    This is the documentation for TorchVIC 0.4.8. It computes the physics of
+    VIC 5.1.0 (core 5.1.0, the default, and the release that the results below
     are for) and of VIC 5.0.1 (`--core 5.0.1`), on a GPU or a CPU. The results
     quoted on this site were measured with TorchVIC 0.4.7 against compiled VIC
     ([Verification](verification.md), [Performance](performance.md)).
 
-TorchVIC is the Variable Infiltration Capacity (VIC) macroscale hydrologic
-model, release 5 ([Liang et al., 1994](about/references.md#vic);
-[Hamman et al., 2018](about/references.md#vic)), re-implemented in PyTorch. It
-reads the files of VIC 5's image driver (the global parameter file,
-`domain.nc`, `params.nc` and the forcing), solves every grid cell of the
-domain at once on a GPU or a CPU, and writes VIC 5 NetCDF history and state
-files. The physics is VIC's; what changes is how VIC is executed.
+## Start here
+
+<div class="card-grid" markdown>
+
+<div class="card" markdown>
+<p class="card-title">1. Install</p>
+
+`pip install torchvic` or install from source.
+Choose the CPU or the CUDA build of PyTorch first.
+
+[Install TorchVIC](install.md)
+</div>
+
+<div class="card" markdown>
+<p class="card-title">2. Quick start</p>
+
+Run the 15-cell Walnut Gulch sample on a CPU in a few minutes and read the
+output file.
+
+[Quick start](quickstart.md)
+</div>
+
+<div class="card" markdown>
+<p class="card-title">3. Connectors</p>
+
+Couple VIC with routing, reservoirs, groundwater, flood, irrigation and crops
+in one coupled run.
+
+[Connectors](connectors/index.md)
+</div>
+
+</div>
+
+The path through the documentation is: [Install](install.md), then
+[Quick start](quickstart.md), then [Running VIC](guide/index.md) (inputs,
+global file, outputs), then [Coupled runs](coupled/overview.md) and their
+[connectors](connectors/index.md), then the [Python API](guide/python-api.md),
+then [Verification](verification.md) and [Performance](performance.md). The
+[About](about/overview.md) section holds the model overview, limitations and
+how to cite.
 
 VIC is a research model developed by the Computational Hydrology Group at the
 University of Washington. TorchVIC is written and maintained by Siddik
 Barbhuiya. If you use TorchVIC, please acknowledge VIC and TorchVIC as
 described in [How to cite](about/citing.md).
+
+## Features
+
+* **VIC's own inputs and outputs.** A VIC 5 image-driver setup runs as it is; a
+  VIC classic setup is converted with one command (`torchvic convert-classic`).
+  The history files are VIC 5's streams, aggregated as VIC aggregates them;
+  VIC's state files restart TorchVIC, and TorchVIC writes the same state-file
+  layout.
+* **Every option accounted for.** VIC 5.1.0's image driver reads 82 global-file
+  keywords. 77 have at least one value that TorchVIC runs as VIC does, and 6
+  are read to no effect and announced. A value TorchVIC does not run as VIC does
+  is refused by name before the run starts ([Options](OPTIONS.md)).
+* **Daily forcing.** Daily maximum and minimum temperature and precipitation
+  are disaggregated on the device by the MTCLIM algorithms, so a reanalysis or
+  a station-based daily product drives the model directly.
+* **Hardware.** One GPU, several GPUs (`--gpus N`) or a CPU, from one code.
+* **Tools around VIC.** Zarr forcing, GPU river routing to many nested gauges,
+  batched parameter ensembles and goodness-of-fit metrics.
+* **Coupled runs.** VIC, routing, reservoirs, water quality, groundwater,
+  flood hydraulics, irrigation and crops run in one GPU time loop through a
+  connector API, with a water ledger that must close
+  ([Coupled runs](coupled/overview.md)).
 
 ## Key results
 
@@ -69,79 +134,21 @@ double-precision values, is in [Known limitations](about/limitations.md).
 **Precision.** Float64 is the default and the verified mode. Float32 is not
 recommended ([Known limitations](about/limitations.md)).
 
-## Features
-
-* **VIC's own inputs and outputs.** A VIC 5 image-driver setup runs as it is; a
-  VIC classic setup is converted with one command (`torchvic convert-classic`).
-  The history files are VIC 5's streams, aggregated as VIC aggregates them;
-  VIC's state files restart TorchVIC, and TorchVIC writes the same state-file
-  layout.
-* **Every option accounted for.** VIC 5.1.0's image driver reads 82 global-file
-  keywords. 77 have at least one value that TorchVIC runs as VIC does, and 6
-  are read to no effect and announced. A value TorchVIC does not run as VIC does
-  is refused by name before the run starts ([Options](OPTIONS.md)).
-* **Daily forcing.** Daily maximum and minimum temperature and precipitation
-  are disaggregated on the device by the MTCLIM algorithms, so a reanalysis or
-  a station-based daily product drives the model directly.
-* **Hardware.** One GPU, several GPUs (`--gpus N`) or a CPU, from one code.
-* **Tools around VIC.** Zarr forcing, GPU river routing to many nested gauges,
-  batched parameter ensembles and goodness-of-fit metrics.
-* **Coupled system.** VIC, routing, reservoirs, water quality, groundwater,
-  flood hydraulics, irrigation and crops run in one GPU time loop through a
-  connector API, with a water ledger that must close
-  ([Coupled system](coupled/overview.md)).
-
-## Install and first run
-
-TorchVIC is installed from source (Python 3.10 or later; torch 2.6 or 2.7,
-2.6.0 tested):
-
-```bash
-git clone https://github.com/Barbhuiya12/TorchVIC.git
-cd TorchVIC
-python -m venv .venv && source .venv/bin/activate
-pip install "torch==2.6.0" --index-url https://download.pytorch.org/whl/cpu   # or the CUDA wheel for a GPU
-pip install -e .
-torchvic --version
-```
-
-Then run UW-Hydro's Walnut Gulch sample (15 cells, ten days):
-
-```bash
-git clone --depth 1 https://github.com/UW-Hydro/VIC_sample_data.git
-export TORCHVIC_SAMPLE_DATA=$PWD/VIC_sample_data
-torchvic run $TORCHVIC_SAMPLE_DATA/image/WalnutGulch/parameters/global_param.WalnutGulch.L2015.txt \
-    --core 5.1.0 --device cpu --out wg_results
-```
-
-The output is a VIC 5 history file in `wg_results/`. VIC 5.1.0 is the default
-core and the release verified on the [Verification](verification.md) page;
-`--core 5.1.0` only makes it explicit. Pass `--core 5.0.1` for VIC 5.0.1.
-From Python:
-
-```python
-import torchvic
-case = torchvic.load_case('global_param.txt', device='cuda', core='5.1.0')
-out = torchvic.run(case)
-torchvic.write_history(out, case, result_dir='results')
-```
-
-See [Install](install.md) and the [Quick start](quickstart.md).
-
 ## Where to start
 
 | you want to | read |
 |---|---|
 | install TorchVIC | [Install](install.md) |
 | run the example and see an output file | [Quick start](quickstart.md), [Walnut Gulch, end to end](tutorials/walnut-gulch.md) |
-| run your existing VIC 5 image-driver setup | [Running the model](guide/running.md), [Options](OPTIONS.md) |
+| run your existing VIC 5 image-driver setup | [Run the model](guide/running.md), [Options](OPTIONS.md) |
 | run a VIC classic setup | [Prepare your inputs](guide/inputs.md), section *The parameter file* |
 | build a domain from scratch (reanalysis forcing, new parameters, routing) | [Your own domain, from scratch](tutorials/own-domain.md) |
-| understand every line of the global file | [The global parameter file](guide/global-file.md) |
+| understand every line of the global file | [The global file](guide/global-file.md) |
 | read the history and state files, restart a run | [Outputs and state files](guide/outputs.md) |
-| get discharge at gauges | [Routing to gauges](guide/routing.md) |
-| compare a run with observations, run ensembles | [Study files, observations, ensembles](guide/study.md), [Python API](guide/python-api.md) |
+| get discharge at gauges | [Route runoff to gauges](guide/routing.md) |
+| compare a run with observations, run ensembles | [Observations and ensembles](guide/study.md), [Python API](guide/python-api.md) |
 | use more than one GPU | [Several GPUs](guide/running.md#several-gpus) |
+| run VIC with routing, reservoirs, groundwater, flood, irrigation or crops | [Coupled runs](coupled/overview.md), [Connectors](connectors/index.md) |
 | know how far TorchVIC is from VIC, and why | [Differences from VIC](differences.md), [Verification](verification.md) |
 | know what does not work yet | [Known limitations](about/limitations.md) |
 | something refused or wrong | [Troubleshooting](troubleshooting.md) |

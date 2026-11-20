@@ -1,34 +1,43 @@
 # Install
 
-TorchVIC is a Python package that you install from source. It needs
+This page installs TorchVIC and checks the installation. It takes about ten
+minutes. Next step: the [Quick start](quickstart.md).
+
+## Requirements
 
 * Python 3.10 or later (the package lists 3.10, 3.11 and 3.12; the tested stack
-  is Python 3.11);
+  is Python 3.11).
 * PyTorch 2.6 or 2.7. `pyproject.toml` requires `torch>=2.6,<2.8`. The test
   suites ran on 2.6.0 (2.6.0+cu124 with CUDA 12.4 and Triton 3.2.0 on the GPUs).
   2.7.1, which pip picks within that range, passed the quick start on a CPU and
   a GPU, the GPU fusion and CUDA-graph tests and a five-day comparison of history
-  files with 2.6.0;
+  files with 2.6.0.
 * Linux. All tests and timings were made on Ubuntu 24.04; other platforms have
   not been tested.
 
 NumPy, xarray, netCDF4, cftime, pandas and PyYAML are installed with TorchVIC.
 A GPU is optional ([Performance](performance.md) says when it pays off).
 
-## 1. Get the code
+## Choose a route
+
+| route | use it when | available |
+|---|---|---|
+| [pip](#route-a-pip-from-pypi) | you want to use TorchVIC | from 0.4.9 |
+| [source](#route-b-from-source-developer-route) | you want to read, change or test the code, or you need a version that is not yet on PyPI | now |
+
+Both routes need PyTorch for your hardware first
+([step 1](#step-1-install-pytorch-for-your-hardware)).
+
+## Step 1: Install PyTorch for your hardware
+
+Create an environment, then install PyTorch before TorchVIC. The right wheel
+depends on whether you have a GPU and which CUDA driver it runs.
 
 ```bash
-git clone https://github.com/Barbhuiya12/TorchVIC.git
-cd TorchVIC
 python -m venv .venv
 source .venv/bin/activate
 python -m pip install --upgrade pip
 ```
-
-## 2. Install PyTorch for your hardware
-
-PyTorch is installed first, because the right wheel depends on whether you
-have a GPU and which CUDA driver it runs.
 
 **CPU only** (laptops, small cases, verification runs):
 
@@ -64,16 +73,44 @@ A GPU with good float64 throughput is preferable, because the model runs in
 double precision. The H200 and the RTX 6000 Ada were tested. The device memory
 needed grows linearly with the number of cells (309 kB per cell with the water
 balance and 379 kB with the energy balance); the 112,825-cell domain needs 34.9
-and 42.8 GB. The [coupled system](coupled/overview.md) needs more.
+and 42.8 GB. A [coupled run](coupled/overview.md) needs more.
 
-## 3. Install TorchVIC
+!!! note "Torch version"
+    The installed torch must be 2.6 or 2.7. The fusion of the GPU kernels uses
+    private interfaces of PyTorch's inductor compiler. On a torch that lacks
+    them TorchVIC switches the fusion off with a warning and runs the unfused
+    path: the same results, slower on a GPU.
 
-The installed torch must be 2.6 or 2.7. The fusion of the GPU kernels uses
-private interfaces of PyTorch's inductor compiler. On a torch that lacks them
-TorchVIC switches the fusion off with a warning and runs the unfused path: the
-same results, slower on a GPU.
+## Route A: pip, from PyPI
+
+!!! note "Install torch first"
+    Install the torch wheel for your hardware first (step 2). Otherwise pip
+    installs torch from PyPI, which on Linux is the CUDA build, a download of
+    more than 1 GB.
 
 ```bash
+pip install torchvic
+torchvic --version
+```
+
+Optional extras are installed in square brackets:
+
+```bash
+pip install "torchvic[flood,progress,zarr]"
+```
+
+| extra | adds | for |
+|---|---|---|
+| `progress` | tqdm | a progress bar over the time loop (`--progress`) |
+| `zarr` | zarr>=3, numcodecs | Zarr forcing stores |
+| `flood` | scipy | DEM conditioning for the [flood connector](connectors/flood.md) |
+| `test` | pytest, scipy | running the test suite |
+
+## Route B: from source (developer route)
+
+```bash
+git clone https://github.com/Barbhuiya12/TorchVIC.git
+cd TorchVIC
 pip install -e .              # torch, numpy, xarray, netCDF4, cftime, pandas, pyyaml
 pip install -e .[progress]    # optional: a progress bar over the time loop (tqdm)
 pip install -e .[zarr]        # optional: Zarr forcing stores (zarr>=3, numcodecs)
@@ -82,10 +119,9 @@ pip install -e .[test]        # optional: pytest and scipy, to run the tests
 torchvic --version
 ```
 
-`-e` installs in place so that `git pull` updates the installation. TorchVIC is
-not on PyPI; install it from the repository as above. The DEM conditioning of the
-flood connector needs SciPy, which is not installed with TorchVIC
-(`pip install -e .[flood]` installs it).
+`-e` installs in place so that `git pull` updates the installation. The DEM
+conditioning of the flood connector needs SciPy, which is not installed with
+TorchVIC (the `flood` extra installs it).
 
 ### Building VIC and fetching the test data (optional)
 
@@ -96,12 +132,12 @@ MPI C compiler) on the `PATH`, besides `curl` and `git`; the script checks for
 them and says which one is missing. On a cluster load the netCDF and MPI modules
 first.
 
-## 4. Check the installation
+## Check the installation
 
 The unit tests that need no external data run on a CPU:
 
 ```bash
-pip install -e .[test]
+pip install "torchvic[test]"          # or: pip install -e .[test]
 CUDA_VISIBLE_DEVICES= python -m pytest -q -m "not reference and not slow and not gpu" tests
 ```
 

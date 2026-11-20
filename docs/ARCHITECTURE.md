@@ -9,7 +9,7 @@ uses, one exchange interval at a time, with the loop state carried through
 
 ## Layers
 
-```
+```text
 torchvic run --config x.yaml        torchvic validate --config x.yaml
         |                                     |
 TorchVIC (runtime.py)  from_config / initialize / run / save_checkpoint / finalize

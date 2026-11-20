@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.4.9 (2026-11-20)
+
+A packaging and documentation release. The model code is unchanged from 0.4.8 (only the version string differs), so every result of 0.4.8 holds.
+
+**Install**
+- TorchVIC is on PyPI as `torchvic`: `pip install torchvic`, with the extras `flood`, `progress`, `zarr` and `test`. Install the torch wheel for your hardware first; otherwise pip installs the CUDA build of torch from PyPI. A workflow builds and publishes each tagged release to PyPI with trusted publishing.
+- Package metadata for PyPI: description, authors, classifiers and project links.
+
+**Documentation**
+- The site is reorganised: a landing page, two install routes (pip and source), the quick start, an overview of all connectors, and one layout for every connector page (what it does, when to use it, inputs with units, configuration, outputs, limitations, verification status).
+- Known issues in VIC 5: the default lake state of VIC 5.1.0 is reported upstream (UW-Hydro/VIC issue #976, pull request #977), with its effect on VIC's Findley Lake sample.
+- The links of the README are absolute, so they work on the PyPI page.
+
 ## 0.4.8 (2026-11-17)
 
 The default VIC core is now 5.1.0 (it was 5.0.1); pass `--core 5.0.1` for the previous physics. With `--core 5.1.0`, results are bit-identical to 0.4.7. Checked on the ISC test dataset in float64 (WB1 and EB1; every variable of the history files compared byte for byte; 0.4.8 run without `--core`, 0.4.7 run with `--core 5.1.0`): the whole period 2004-2005 on one RTX 6000 Ada, and the first 80 steps (ten days) on the CPU. The rest of this release is installation and usability fixes.

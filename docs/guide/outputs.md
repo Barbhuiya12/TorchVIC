@@ -66,7 +66,7 @@ VIC agrees with VIC's own restart ([Verification](../verification.md)).
 
 **Writing one**:
 
-```
+```text
 STATENAME    states/state
 STATEYEAR    2006
 STATEMONTH   1
@@ -82,11 +82,11 @@ file's directory).
 
 **Starting from one**:
 
-```
+```text
 INIT_STATE   states/state.20060101_00000.nc
 ```
 
-A state dated at the run's start continues the run seamlessly; VIC does
+A state dated at the run's start continues the run without a gap; VIC does
 not compare the two dates and neither refuses TorchVIC, which announces a
 mismatch and starts from the file all the same. The state's cells,
 layers, classes and bands must match the parameter file. Without
@@ -105,3 +105,7 @@ cell]` on the active cells). `case.aggregate(out, 'NDAYS 1')` applies
 VIC's aggregation and returns tensors plus the period start times;
 `case.write_history(out, result_dir=...)` writes the files. The
 [Python API](python-api.md) page lists the calls.
+
+## Next step
+
+[Route runoff to gauges](routing.md), compare with observations in [Observations and ensembles](study.md), or [couple VIC with other models](../coupled/overview.md).

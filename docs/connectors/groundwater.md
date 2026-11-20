@@ -1,19 +1,99 @@
 # Groundwater connector
 
-The groundwater engine (`torchvic/groundwater/`) is a PyTorch implementation, for CPU and CUDA, of the
-MODFLOW 6 groundwater flow (GWF) equations; MODFLOW 6 is the validation reference and is not a dependency.
-The connector (`torchvic/coupling/connectors/groundwater.py`, registry name `groundwater`) wraps the engine
-for the coupling runtime: VIC's baseflow is the recharge, and the aquifer returns discharge to the rivers and
-serves pumping requests. A second profile, `vicwur3`, is the MODFLOW coupling of VIC-WUR 3.0
-([VIC-WUR](vicwur.md)); this page describes the default profile unless it says otherwise. See also
-[Limits of the coupled system](../coupled/overview.md#limits).
+The groundwater connector adds a MODFLOW 6-style aquifer to a coupled run: VIC's baseflow is the recharge, and the aquifer returns discharge to the rivers and serves pumping requests.
 
-## Equations
+## What it does
+
+The groundwater engine (`torchvic/groundwater/`) is a PyTorch implementation, for CPU and CUDA, of the MODFLOW 6 groundwater flow (GWF) equations; MODFLOW 6 is the validation reference and is not a dependency. The connector (`torchvic/coupling/connectors/groundwater.py`, registry name `groundwater`) wraps the engine for the coupling runtime. One VIC cell is one aquifer cell. A second profile, `vicwur3`, is the MODFLOW coupling of VIC-WUR 3.0 ([VIC-WUR](vicwur.md)); this page describes the default profile unless it says otherwise. See also [Limits of the coupled system](../coupled/overview.md#limits).
+
+## When to use it
+
+* Use it when VIC's baseflow should pass through an aquifer with its own storage before it reaches the rivers.
+* Use it when irrigation pumping should draw on a groundwater store ([Irrigation](irrigation.md)).
+* Use it when river-aquifer exchange is needed (RIV and DRN packages).
+* Do not use it when the aquifer must feed back to VIC (capillary rise, water table in the soil column); mode G2 is not built.
+* Do not use it for an aquifer grid finer than the VIC grid, or for several aquifer layers through the connector; it sets one unconfined layer.
+* For the MODFLOW coupling of VIC-WUR 3.0, use the `vicwur3` profile and read [VIC-WUR](vicwur.md).
+
+## Inputs
+
+Connection inputs (see [Exchanges](#exchanges)):
+
+| input | file or variable | unit | meaning |
+|---|---|---|---|
+| `recharge` | `vic.baseflow` (flux) | mm over the interval | VIC bottom-layer baseflow; applied as RCH at the rate mm / 1000 / dt (dt in days) |
+| `pumping_request` | irrigation connector (state) | m3 | volume wanted per cell over the interval |
+| `river_stage` | channel stage (state, optional) | m | channel level for RIV, lagged by one interval; without a connection the configured `river.stage` holds |
+
+Configuration inputs:
+
+| input | file or variable | unit | meaning |
+|---|---|---|---|
+| cell geometry | `global_param` (the global file of the VIC grid) | - | the VIC cells are the aquifer cells; the area is the VIC land area (`area x frac`) |
+| `aquifer.k` | scalar, per-cell list or `{file, var, scale}` | m/d | hydraulic conductivity |
+| `aquifer.sy` | same | none | specific yield |
+| `aquifer.ss` | same | 1/m | specific storage |
+| `aquifer.thickness` | same | m | aquifer thickness |
+| `aquifer.top` | same | m | land surface elevation |
+| `aquifer.depth_to_water` or `aquifer.head0` | same | m | initial water table depth or initial head |
+| `interval_days` | scalar | days | aquifer step (default 1) |
+| `river.cond` | same | m2/d | riverbed conductance; RIV cells where `cond` > 0 |
+| `river.stage` | same | m | configured river stage (used when no `river_stage` is connected) |
+| `river.bottom` | same | m | riverbed bottom |
+| `drain.depth` | same | m | drain level below the surface (default 2 m) |
+| `drain.cond` | same | m2/d per cell | drain conductance (default K sqrt(area)) |
+| `evt.rate`, `evt.depth` (optional `evt.surface`) | same | m/d, m | groundwater ET rate and extinction depth |
+| `pump_cap`, `afr` | scalar | none | capping factor (default 1) and well-reduction fraction (default 0.1) of [Pumping](#pumping) |
+| `max_discrepancy_pct` | scalar | % | bound on the engine budget discrepancy checked by `validate` (default 1e-4 %) |
+
+## Config block
+
+```yaml
+modules:
+  vic:
+    connector: vic
+    global_param: path/to/global_param.txt
+    core: 5.1.0
+    window_days: 1            # daily exchange: daily recharge
+  groundwater:
+    connector: groundwater
+    global_param: path/to/global_param.txt   # the VIC cells are the aquifer cells
+    interval_days: 1
+    aquifer:                  # scalar, per-cell list, or {file, var, scale}
+      k: {file: path/to/aquifer.nc, var: k}
+      sy: {file: path/to/aquifer.nc, var: sy}
+      thickness: {file: path/to/aquifer.nc, var: thickness}
+      depth_to_water: 5.0
+    drain:
+      depth: 2.0
+    pumping: true
+    afr: 0.1
+connections:
+  - {from: vic.baseflow, to: groundwater.recharge}
+```
+
+With a routing module, add `vic.runoff -> routing.inflow` and `groundwater.discharge -> routing.inflow`; see [Counting the baseflow once](#counting-the-baseflow-once). The example configuration is `configs/vic_groundwater.yaml`.
+
+## Outputs
+
+| output | unit | meaning |
+|---|---|---|
+| `discharge` | m3 | flux: aquifer to river, DRN outflow + RIV gains - RIV losses (negative where the river loses water) |
+| `pumping` | m3 | flux: what the wells delivered |
+| `pumping_unmet` | m3 | state: request - delivered, returned to the requester |
+| `head` | m | state: aquifer head at the interval end |
+| `water_table_depth` | m | state: depth to the water table at the interval end |
+
+The engine's `step` also returns the budget rates in and out per package and the percent discrepancy. Per-interval ledger rows carry the `detail_*` terms listed under [Ledger](#ledger).
+
+## Technical details
+
+### Equations
 
 The engine solves the control-volume finite-difference form of the MODFLOW 6 GWF equations. For cell n of
 area A_n and saturated thickness b_n = min(h_n, top_n) - bot_n:
 
-```
+```text
 S_n A_n dh_n/dt = sum_m C_nm (h_m - h_n) + Q_rch,n + Q_wel,n + Q_riv,n + Q_drn,n
 ```
 
@@ -37,7 +117,7 @@ VIC cell (the area VIC uses for runoff volumes), the stencil has five points, ce
 inactive and the domain edges are no-flow. The engine supports several layers with vertical (Kv) leakage;
 the connector sets one layer.
 
-## Responsibility for each flux
+### Responsibility for each flux
 
 Each flux has one responsible module, so no water is counted twice.
 
@@ -61,12 +141,9 @@ select G0 or G1; there is no separate option:
 * Mode G2 (head feedback to VIC: capillary rise, water table in the soil column): not built, because it
   would change VIC's physics.
 
-## The engine
+### Engine formulation
 
-Code: `torchvic/groundwater/` (`grid.py`, `solver.py`, `model.py`). Tests: `tests/test_groundwater.py` and
-`tests/test_groundwater_mf6.py` (described below).
-
-### Formulation
+Code: `torchvic/groundwater/` (`grid.py`, `solver.py`, `model.py`).
 
 The engine reproduces one MODFLOW 6 option set, matched term by term to the MODFLOW 6.7.0 source:
 
@@ -83,14 +160,14 @@ MODFLOW 6 rewets cells in node order within one pass, so a cell rewetted earlier
 neighbours, which a parallel solver would not reproduce exactly. PERCHED, the Newton formulation and
 upstream weighting are not supported either.
 
-### Grid
+### Engine grid
 
 A structured `nlay x nrow x ncol` grid with per-cell area and per-face distances and widths (CL1, CL2,
 width), so the same solver runs MODFLOW 6 DIS grids (`Grid.dis`) and a regular lat/lon grid with one VIC
 cell per model cell (`Grid.latlon`: spherical distances, the VIC domain area as the cell area). MODFLOW 6
 needs DISU for the lat/lon geometry; `Grid.disu_arrays` exports it.
 
-### Solver
+### Engine solver
 
 The 7-point stencil is stored as diagonals (no sparse matrix, no atomics) in float64. The linear solver is
 PCG with a Jacobi (default) or a red-black symmetric Gauss-Seidel preconditioner.
@@ -108,7 +185,7 @@ iterations per outer iteration for steady steps. A step that does not converge i
 inner solves, which are kept for later steps; this covers stiff confined systems. List boundaries scatter
 without atomics, so runs are deterministic, and graph and eager results are bitwise equal.
 
-### API
+### Engine API
 
 `GroundwaterModel(grid, k11, k33, icelltype, ss, sy, iconvert, strt, ...)` with the setters
 `set_recharge(rate)`, `set_wells(cells, q, auto_flow_reduce)`, `set_rivers(cells, stage, cond, rbot)`,
@@ -121,37 +198,6 @@ with values only (cells omitted) updates them in place, without re-capturing the
 converge raises `GroundwaterNotConverged` and the state is not committed. The restart state (`state_dict`,
 `save`, `load`) is the heads, the wet/dry flags and the clock; a restarted run reproduces the continuous run
 bit for bit.
-
-### Validation against MODFLOW 6
-
-`tests/test_groundwater_mf6.py` compares the engine with MODFLOW 6 6.7.0 on four cases: the MODFLOW 6
-examples `ex-gwf-twri01` (steady state, five layers) and `ex-gwf-fhb` (transient, confined), a two-layer case
-with every supported package and option (`mixed`), and a lat/lon case with one VIC cell per model cell
-(`latlon`, MODFLOW 6 DISU). Both solvers use the same IMS closure settings (`tests/groundwater_cases.py`);
-the test asserts a maximum head difference of 1e-7 (in the model's length unit) and a difference of 1e-9 of
-the step's inflow for each package budget term. It is skipped when the MODFLOW 6 reference results are not
-available.
-
-### How the engine was checked
-
-Besides the MODFLOW 6 comparison, `tests/test_groundwater.py` checks:
-
-* analytic solutions (a confined line between two fixed heads, linear without and parabolic with recharge;
-  the Dupuit solution for unconfined flow);
-* conservation in a closed domain with recharge, wells and a river, and the storage rates against the head
-  change;
-* dry cells and AUTO_FLOW_REDUCE: a cell that goes dry stays dry, and a well is reduced rather than cut off;
-* restart (bit-identical to the continuous run) and a failed step (the state is unchanged);
-* agreement between the two preconditioners, between CPU and GPU, and between CUDA-graph and eager
-  execution;
-* the lat/lon geometry and the DISU export.
-
-## The connector
-
-Code: `torchvic/coupling/connectors/groundwater.py` (registry name `groundwater`). Tests:
-`tests/test_coupling_groundwater.py` (ledger conservation, the baseflow rule, pumping limits, river
-exchange and ET, restart, failed steps, and VIC with groundwater on VIC's Stehekin sample). Example
-configuration: `configs/vic_groundwater.yaml`.
 
 ### Recharge from VIC
 
@@ -173,7 +219,7 @@ candidate, and no VIC code is changed.
 VIC alone sends runoff plus baseflow to routing (`total_runoff`). With groundwater the baseflow goes to the
 aquifer and returns as discharge:
 
-```
+```text
 vic.baseflow          -> groundwater.recharge
 vic.runoff            -> routing.inflow           (not vic.total_runoff)
 groundwater.discharge -> routing.inflow
@@ -282,7 +328,7 @@ Not bundled; read each licence before use.
 * Pumping: the Minor Irrigation Census and CGWB dynamic resources, through the irrigation connector.
 * Data for evaluating results: CGWB water levels and GRACE storage.
 
-## River-aquifer exchange in the routing sweep
+### River-aquifer exchange in the routing sweep
 
 In the `vicwur3` profile, in mode `fixed` with a daily period and a router in the VIC-WUR group, the
 exchange of the river cells is solved inside the routing sweep (slot `river_exchange`; connector option
@@ -300,7 +346,7 @@ mode `exact` the behaviour of VIC-WUR 3.0 is kept: the forced inflow of a losing
 river holds, so the discharge can become negative. The slot is tested in `tests/test_river_exchange.py`; the
 modes are described in [VIC-WUR](vicwur.md).
 
-## Limits
+## Limitations
 
 Unless stated otherwise, these are the limits of the default profile.
 
@@ -319,3 +365,23 @@ Unless stated otherwise, these are the limits of the default profile.
   losing river) is not withdrawn from the channel or limited by the water in it. The `vicwur3` profile
   does this in the [routing sweep](#river-aquifer-exchange-in-the-routing-sweep).
 * The water balance is checked for the whole aquifer in each interval, not cell by cell.
+
+## Verification status
+
+The engine is checked against MODFLOW 6 6.7.0 and against analytic solutions in the test suite; the connector is checked in its own tests. This is not part of the VIC verification on the Verification page.
+
+* `tests/test_groundwater_mf6.py` compares the engine with MODFLOW 6 6.7.0 on four cases: the MODFLOW 6 examples `ex-gwf-twri01` (steady state, five layers) and `ex-gwf-fhb` (transient, confined), a two-layer case with every supported package and option (`mixed`), and a lat/lon case with one VIC cell per model cell (`latlon`, MODFLOW 6 DISU). Both solvers use the same IMS closure settings (`tests/groundwater_cases.py`); the test asserts a maximum head difference of 1e-7 (in the model's length unit) and a difference of 1e-9 of the step's inflow for each package budget term. It is skipped when the MODFLOW 6 reference results are not available.
+* `tests/test_groundwater.py` checks:
+    * analytic solutions (a confined line between two fixed heads, linear without and parabolic with recharge; the Dupuit solution for unconfined flow);
+    * conservation in a closed domain with recharge, wells and a river, and the storage rates against the head change;
+    * dry cells and AUTO_FLOW_REDUCE: a cell that goes dry stays dry, and a well is reduced rather than cut off;
+    * restart (bit-identical to the continuous run) and a failed step (the state is unchanged);
+    * agreement between the two preconditioners, between CPU and GPU, and between CUDA-graph and eager execution;
+    * the lat/lon geometry and the DISU export.
+* `tests/test_coupling_groundwater.py` checks ledger conservation, the baseflow rule, pumping limits, river exchange and ET, restart, failed steps, and VIC with groundwater on VIC's Stehekin sample.
+* The `river_exchange` slot of the `vicwur3` profile is tested in `tests/test_river_exchange.py`.
+
+
+## Next step
+
+[VIC-WUR connector](vicwur.md) for the `vicwur3` profile and its river-exchange modes, or [Irrigation](irrigation.md) for the pumping requests.

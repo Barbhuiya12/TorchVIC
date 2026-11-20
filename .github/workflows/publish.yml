@@ -1,0 +1,61 @@
+name: publish
+
+# Builds the sdist and wheel and uploads them to PyPI when a version tag (v*)
+# is pushed. Authentication is PyPI Trusted Publishing (OpenID Connect): no
+# token or secret is stored in the repository or in GitHub. One-time setup on
+# pypi.org: add a (pending) trusted publisher for owner Barbhuiya12,
+# repository TorchVIC, workflow publish.yml, environment pypi.
+#
+# To try a release on TestPyPI first, register the same publisher on
+# test.pypi.org with environment testpypi, and add a second job like
+# `publish-pypi` that uses environment testpypi and the input
+# `repository-url: https://test.pypi.org/legacy/`.
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Tag must match the package version
+        run: |
+          python - <<'PY'
+          import os, re
+          tag = os.environ["GITHUB_REF_NAME"].lstrip("v")
+          src = open("torchvic/__init__.py").read()
+          ver = re.search(r'__version__\s*=\s*"([^"]+)"', src).group(1)
+          assert tag == ver, f"tag {tag} != torchvic.__version__ {ver}"
+          PY
+      - run: python -m pip install --upgrade build twine
+      - run: python -m build
+      - run: twine check dist/*
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
+
+  publish-pypi:
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment:
+      name: pypi
+      url: https://pypi.org/p/torchvic
+    permissions:
+      id-token: write   # required for Trusted Publishing
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist/
+      - uses: pypa/gh-action-pypi-publish@release/v1

@@ -1,4 +1,4 @@
-# User guide
+# Running VIC: user guide
 
 A TorchVIC run is a VIC 5 image-driver run. If you already run VIC's image
 driver you have every input and can go straight to

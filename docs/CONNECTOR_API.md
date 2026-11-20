@@ -1,13 +1,78 @@
-# Connector API
+# VIC connector and connector API
 
-Per-connector pages:
-[routing, reservoirs and water quality](connectors/river.md),
-[irrigation](connectors/irrigation.md), [reservoirs](connectors/reservoir.md),
-[crops](connectors/crop.md), [groundwater](connectors/groundwater.md),
-[flood](connectors/flood.md), [ensembles and assimilation](connectors/ensemble_da.md),
-[water quality](connectors/water_quality.md). Overview of the edges between
-them: [Coupling graph](COUPLING_GRAPH.md). Limits of the coupled system:
-[Coupled system overview](coupled/overview.md#limits).
+Every module of a coupled run is a connector. This page documents the VIC
+connector, which is in every coupled run, and the interface that all connectors
+implement. Per-connector pages for the other connectors are listed under
+[Connectors](connectors/index.md). The overview of the edges between them is
+the [Coupling graph](COUPLING_GRAPH.md); the limits of the coupled system are in
+the [overview](coupled/overview.md#limits).
+
+## What it does
+
+`VicConnector` wraps the existing VIC run path and adds no physics. It runs VIC
+in intervals (windows of days, one day or one model step), hands the fluxes and
+states that other connectors need to the runtime, and takes water from them
+through defined injection points. The registry name is `vic`.
+
+## When to use it
+
+* Use it as the first connector of every coupled run: all other connectors take
+  their water from VIC or add water to it.
+* For VIC alone, with no other connector, use `torchvic run global_param.txt`
+  ([Run the model](guide/running.md)). The result is the same bit for bit.
+* To write your own connector, read
+  [The connector interface](#the-connector-interface) and
+  [Adding a connector, step by step](#adding-a-connector-step-by-step).
+
+## Inputs
+
+| input | file or variable | unit | meaning |
+|---|---|---|---|
+| VIC case | global file, image-driver `domain.nc`, `params.nc` and forcing NetCDF (or Zarr forcing) | as in the global file | the run VIC computes |
+| `precip_add` | connection input, [cell] or [step, cell] | mm | precipitation added to the forcing |
+| `soil_add` | connection input, [cell], [cell, layer] or [cell, tile, layer] | mm | water added to (or, if negative, taken from) soil moisture |
+| `soil_add_<src>` | connection input | mm | one more producer of `soil_add` |
+| `lai` | connection state input, [cell, tile] or [cell, tile, step] | none (leaf area index, m2 m-2) | replaces the vegetation history's LAI for the interval |
+
+The injection inputs and their rules are under [Injection points](#injection-points).
+
+## Config block
+
+```yaml
+modules:
+  vic:
+    connector: vic
+    global_param: path/to/global_param.txt   # VIC 5 image-driver global file
+    core: 5.1.0                              # 5.1.0 | 5.0.1
+    window_days: 31                          # 0: the whole run in one call
+connections: []                              # the other connectors add their own
+```
+
+All options of the `vic` module are listed in the
+[configuration file](CONFIGURATION.md#sections).
+
+## Outputs
+
+Fluxes are summed over the interval, in mm. States are values at the interval
+end.
+
+| output | kind | unit | meaning |
+|---|---|---|---|
+| `runoff`, `baseflow`, `total_runoff` | flux | mm | `baseflow` is the drainage out of the bottom layer; `total_runoff` = runoff + baseflow, what routing takes |
+| `et`, `transp`, `evap_canop`, `evap_bare`, `sub_snow`, `sub_canop` | flux | mm | evapotranspiration and its parts, snow and canopy sublimation |
+| `rainf`, `snowf`, `snow_melt`, `pet` | flux | mm | rain, snow, snow melt, potential evapotranspiration |
+| `soil_add_unmet` | flux | mm | the part of `soil_add` that was not added (`soil_add_mode: cap`) |
+| `swe`, `wdew`, `snow_canopy` | state | mm | snow water equivalent, canopy water, canopy snow |
+| `soil_moisture` | state | mm | [cell, layer] |
+| `total_runoff_daily` | flux | mm | [day, cell], VIC's own daily series of runoff + baseflow |
+
+The full per-step output (every `OUT_*` TorchVIC has) goes to the output manager
+and the history writer. Details are under
+[The VIC connector in detail](#the-vic-connector-in-detail).
+
+## Technical details
+
+### The connector interface
 
 Every module of a coupled run is a `torchvic.coupling.Connector`. The
 runtime calls, in this order:
@@ -22,7 +87,7 @@ runtime calls, in this order:
 | `save_state() / load_state(blob)` | checkpoint / restart | everything a restart needs; tensors on the CPU in the blob |
 | `finalize(context)` | once | flush, close |
 
-## Declarations
+### Declarations
 
 | attribute | meaning |
 |---|---|
@@ -46,14 +111,15 @@ same or a declared conservative mapping joins them (`grid mismatch`
 otherwise), and a flux output feeds at most one connection (the same water
 cannot be delivered twice).
 
-## Proposal and Balance
+
+### Proposal and Balance
 
 `Proposal(connector, t0, t1, state, exports, balance, series, backend, info)`.
 `exports` holds the declared outputs the run's connections consume (device
 tensors on the output's grid, in its units). `series` is the per-step output
 for the output manager. `balance` is a `Balance`:
 
-```
+```text
 R = P + I_ext - ET - Q_out - E_other - dS - closure        (m3, whole domain)
 ```
 
@@ -63,9 +129,8 @@ counts it in `I_ext`; one that sends water through a flux output counts it
 in `Q_out`. Terms may be device tensors; the ledger reads them once at its
 check. See [Water accounting](WATER_ACCOUNTING.md).
 
-## The VIC connector
 
-`VicConnector` wraps the existing run path; it adds no physics.
+### The VIC connector in detail
 
 * **intervals** (`window_days` / `exchange`): `window_days: 31` (default), `0` or `exchange: whole` (one `Case.run`),
   `exchange: day`, `exchange: step`. Each interval is `Case.run` (or, for
@@ -105,6 +170,7 @@ check. See [Water accounting](WATER_ACCOUNTING.md).
   inside `basin.simulate` and are not outputs; exposing them would need a change to
   the step code (not done).
 
+
 ### Injection points
 
 Available now, without changing VIC's equations:
@@ -135,24 +201,8 @@ and are restored from a snapshot if the step is rejected.
 Vegetation (`lai`) still changes at window boundaries (a whole window's
 per-step series may be given ahead).
 
-Not available, because each would need a change to VIC's step code (a
-`basin.simulate` hook, a device tensor read inside the step loop, not a new
-equation):
 
-* water added *inside* an interval at the model step (per-step soil or
-  surface addition within a 31-day captured window);
-* throughfall-like addition below the canopy (bypassing interception);
-* a ponded surface store or a surface-water body fed by modules;
-* groundwater as VIC's lower boundary (two-way: a water table that changes
-  baseflow or capillary rise) -- this replaces ARNO baseflow physics and is
-  a physics change, not available;
-* withdrawals from runoff before routing within the step (today: take from
-  the `total_runoff` export, i.e. after VIC, which is what VIC-WUR does);
-* crop-driven rooting depth or fraction (LAI is available, see `lai`);
-  LAI that changes inside an interval from a model running at the same
-  step (the `lai` input takes a whole interval's per-step series ahead).
-
-## A stepping connector (routing, reservoirs)
+### A stepping connector (routing, reservoirs)
 
 The API supports a connector that steps at the model step with per-step
 state: `interval_s` = the model step, state on the device (e.g. the
@@ -167,7 +217,8 @@ the slower producer). A reservoir release that must change runoff routing in
 the same step is a lag-0 connection routing -> reservoir -> routing, i.e. an
 iterated cycle, or two halves of the routing step as two connectors.
 
-## The river connectors (routing, reservoirs, water quality)
+
+### The river connectors (routing, reservoirs, water quality)
 
 `torchvic/coupling/connectors/{routing,reservoir,quality}.py`, configurations
 `configs/vic_routing.yaml`, `vic_reservoir_routing.yaml`,
@@ -223,7 +274,8 @@ iterated cycle, or two halves of the routing step as two connectors.
   rings; the store identity `store = removed - released - supplied -
   decayed` and the per-node ledgers close.
 
-## Adding a connector, step by step
+
+### Adding a connector, step by step
 
 1. **Write the class** in `torchvic/coupling/connectors/<name>.py`,
    subclassing `Connector`. Set `name`, `version`, `backends`
@@ -261,7 +313,8 @@ iterated cycle, or two halves of the routing step as two connectors.
    Credit any upstream model in `THIRD_PARTY_NOTICES.md`; GPL-2.0-only code
    is only used as an external process.
 
-## Input formats
+
+### Input formats
 
 | input | format |
 |---|---|
@@ -273,3 +326,37 @@ iterated cycle, or two halves of the routing step as two connectors.
 | crop | WOFOST parameter JSON (`configs/crop_params_sbarley.json`), optional `height_table` |
 | groundwater | per-cell top, bottom, K, Sy, initial head |
 | flood | basin `.npz` plus `*_vic_pairs.csv` (`tools/flood/make_basin.py`) |
+
+## Limitations
+
+The limits of the injection points are in their table above. The following would need a change to VIC's step code (a `basin.simulate` hook, a device tensor read inside the step loop, not a new equation) and are not available:
+
+* water added *inside* an interval at the model step (per-step soil or
+  surface addition within a 31-day captured window);
+* throughfall-like addition below the canopy (bypassing interception);
+* a ponded surface store or a surface-water body fed by modules;
+* groundwater as VIC's lower boundary (two-way: a water table that changes
+  baseflow or capillary rise) -- this replaces ARNO baseflow physics and is
+  a physics change, not available;
+* withdrawals from runoff before routing within the step (today: take from
+  the `total_runoff` export, i.e. after VIC, which is what VIC-WUR does);
+* crop-driven rooting depth or fraction (LAI is available, see `lai`);
+  LAI that changes inside an interval from a model running at the same
+  step (the `lai` input takes a whole interval's per-step series ahead).
+
+## Verification status
+
+VIC through the runtime equals the direct run bit for bit
+(`tests/test_coupling_vic.py`; on the CPU every interval length equals the
+single run). Daily coupling inside VIC's windows equals, bit for bit, the run
+with one-day VIC windows exchanging at every boundary
+(`tests/test_coupling_daily.py`). Routing through VIC's 31-day windows equals
+the standalone router fed VIC's daily series, bit for bit
+(`tests/test_coupling_routing.py`). The coupled system is not part of the
+evaluation of VIC on the [Verification](verification.md) and
+[Performance](performance.md) pages.
+
+
+## Next step
+
+[Configuration file](CONFIGURATION.md), then the page of each connector you use under [Connectors](connectors/index.md).

@@ -269,7 +269,7 @@ def test_readme_options_summary_is_the_codes():
     if O.README_BEGIN not in text:
         # the short README links to docs/OPTIONS.md, which the test above
         # checks against the code
-        assert 'docs/OPTIONS.md' in text
+        assert 'docs/OPTIONS.md' in text or '/TorchVIC/OPTIONS/' in text
         pytest.skip('README.md carries no options block')
     assert text == O.readme_block(text), (
         'README.md options block is stale: python -m torchvic.io.options '

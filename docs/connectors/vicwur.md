@@ -1,14 +1,101 @@
-# VIC-WUR
+# VIC-WUR water use and management
 
 The VIC-WUR connectors reproduce the water-use and water-management package
 of VIC-WUR 3.0 (Droppers et al., 2020; see [References](../about/references.md))
-inside the coupled system. VIC-WUR couples VIC with river routing, dams, sector
-water use, irrigation, environmental flow requirements (EFR), land-use change,
-the WOFOST-NPK crop model and a MODFLOW aquifer. TorchVIC implements each part
-as its own module and connector, so a configuration can use any subset. The
-reference version is VIC-WUR 3.0.0.
+inside the coupled system.
 
-## Connectors
+## What it does
+
+VIC-WUR couples VIC with river routing, dams, sector water use, irrigation,
+environmental flow requirements (EFR), land-use change, the WOFOST-NPK crop
+model and a MODFLOW aquifer. TorchVIC implements each part as its own module
+and connector (registry names `vicwur_routing`, `vicwur_dams`, `vicwur_efr` and
+so on, in `torchvic/coupling/connectors/vicwur_*.py`), so a configuration can
+use any subset. The reference version is VIC-WUR 3.0.0. The connectors of a run
+join one phase group and run on the `vicwur3` VIC core.
+
+## When to use it
+
+* Use it to reproduce VIC-WUR 3.0: dams, sector water use, non-renewable
+  abstraction, EFR, irrigation, crops, land use and the MODFLOW coupling, with
+  inputs from a VIC-WUR global file.
+* Use `exact` mode ([Modes](#modes)) to compare with the compiled VIC-WUR and
+  `fixed` mode (default) for the corrected model.
+* Do not use it when the lumped irrigation connector is enough: see
+  [Irrigation](irrigation.md), which remains available alongside
+  `vicwur_irrigation`.
+* Do not use it for the CropSyst crop engine alone ([CropSyst](cropsyst.md)) or
+  for the aquifer alone ([Groundwater](groundwater.md)).
+
+## Inputs
+
+The inputs are those of VIC-WUR 3.0 and are named in a VIC-WUR global file.
+`torchvic.coupling.connectors.vicwur_setup.modules` reads them.
+
+| input | file or variable | unit | meaning |
+|---|---|---|---|
+| sector water demand | plugin forcing files of the sector demands | mm per model step, per sector (MUN, ENE, MAN, LIV, IRR) | demand of each sector, held between records |
+| groundwater fraction | plugin forcing files | - (fraction) | share of the demand taken from groundwater, held between records |
+| consumption fraction | plugin forcing files | - (fraction) | share of the withdrawal consumed, held between records |
+| EFR discharge | plugin forcing file `EFR_DISCHARGE` | m3 s-1 | discharge for the environmental flow requirement |
+| EFR baseflow | plugin forcing file `EFR_BASEFLOW` | mm per model step | baseflow for the environmental flow requirement |
+| routing network | parameter file of the routing network | - | flow network and routing levels of the cascade router |
+| dams | parameter file of the dams | capacity in hm3 | register of global and local dams |
+| remote water use | parameter file of remote water use | - | source and receiver cells |
+| irrigation | parameter file of irrigation | - | irrigated tiles, efficiency, groundwater fraction, offset |
+| crops | parameter file of the crops | - | WOFOST-NPK crop parameters |
+| land cover | land-cover (`Cv`) records | - (area fraction) | land-cover fraction per vegetation class, for `vicwur_landuse` |
+| CO2 | plugin forcing file `CO2` | ppm | atmospheric CO2 for `vicwur_co2` |
+| MODFLOW static values | `groundwater` argument of `modules` (needed with `GWM TRUE`) | as on the [Groundwater](groundwater.md) page | static values per cell for the `vicwur3` profile |
+
+The sample configuration has no `connections:` entries (`connections: []`): the
+connectors of the phase group exchange data in the order of the VIC-WUR driver
+([Order of the step](#order-of-the-step)) and act inside the VIC step through
+the hooks of the `vicwur3` core ([VIC core and hooks](#vic-core-and-hooks)).
+
+## Config block
+
+No example YAML file for the VIC-WUR connectors ships in `configs/`; the blocks
+are the `modules` of a configuration ([Configuration](../CONFIGURATION.md)).
+`vicwur_setup.modules` builds them from the global file and fills the other
+options (parameter tables and forcing streams). A block has this form:
+
+```yaml
+modules:
+  vic:
+    connector: vic
+    global_param: path/to/global_vicwur.txt
+    core: vicwur3
+    phase_group: vicwur
+    day_coupled: [vicwur_routing, vicwur_dams]
+  vicwur_routing:
+    connector: vicwur_routing
+    group: vicwur
+  vicwur_dams:
+    connector: vicwur_dams
+    group: vicwur
+    exact: false          # true: reproduce the C code of VIC-WUR 3.0
+connections: []
+```
+
+## Outputs
+
+| output | unit | meaning |
+|---|---|---|
+| `vicwur_routing`: `discharge` (`OUT_DISCHARGE`) | m3 s-1 | routed discharge per cell |
+| `vicwur_routing`: `stream_moist` (`OUT_STREAM_MOIST`) | mm | in-stream water per cell |
+| `vicwur_dams`: `storage` | m3 | storage per dam |
+| `vicwur_wateruse_local`: `withdrawn` | mm | withdrawal per cell |
+| `vicwur_efr`: `efr_discharge` (`OUT_EFR_*`) | m3 s-1 | EFR discharge per cell |
+| `vicwur_irrigation`: `OUT_REQUIREMENT`, `OUT_SHORTAGE`, `OUT_RECEIVED`, `OUT_APPLIED`, `OUT_LEFTOVER` | mm | irrigation requirement, shortage, received, applied and leftover water per cell |
+| `vicwur_landuse`: `cv` (`OUT_CV`) | - | land-cover fraction per cell and class |
+| `vicwur_co2`: `catm` (`OUT_CATM`) | ppm | atmospheric CO2 per cell |
+
+The outputs also include the plugin water balance.
+
+## Technical details
+
+### Connectors
 
 | connector (registry name) | what it does |
 |---|---|
@@ -29,7 +116,7 @@ Each connector is registered under its own name. The connectors of a run join
 one phase group, which runs them in the order of the VIC-WUR driver
 ([Order of the step](#order-of-the-step)).
 
-## VIC core and hooks
+### VIC core and hooks
 
 To reproduce VIC-WUR 3.0 the connectors run on the `vicwur3` VIC core, the
 `vic_run` of VIC-WUR 3.0 (`core: vicwur3` in the `vic` block, or
@@ -42,7 +129,7 @@ stored water stress, the CO2 effect on canopy resistance and the soil of the
 groundwater coupling (`GWM`) with its recharge. With every hook off, VIC runs
 as it would without the connectors.
 
-## Modes
+### Modes
 
 The components that reproduce a defect of the C code of VIC-WUR 3.0 have two
 modes. There is no single configuration key: the mode is set by the `mode`
@@ -73,7 +160,7 @@ Opt-in (a choice of model behaviour, not a correction): `vicwur_nonrenew` with
 of the same cell. The default, `return_to='river'`, returns it to the river as
 VIC-WUR 3.0 does.
 
-## Order of the step
+### Order of the step
 
 In each model step the connectors run in the order of the VIC-WUR driver:
 forcing, update of the step variables, the VIC step, a first pass over the
@@ -87,19 +174,12 @@ the plugin water balance. The level sweep is equivalent to the serial order of
 the C code. The runtime that runs the group is described in
 [Architecture](../ARCHITECTURE.md) and [Coupling graph](../COUPLING_GRAPH.md).
 
-## Setting up
+### Setting up
 
-The inputs are those of VIC-WUR 3.0 and are named in a VIC-WUR global file: the
-plugin forcing files of the sector water demands, the groundwater fraction and
-the consumption fraction (held between records) and of the EFR discharge and
-baseflow; the parameter files of the routing network, dams, remote water use,
-irrigation and crops; and, for land use, land-cover (`Cv`) records.
-`torchvic.coupling.connectors.vicwur_setup.modules` reads them and builds the
-module blocks of the switched-on components, plus the `vic` block. With
-`GWM TRUE` it also needs the `groundwater` argument (the MODFLOW static values
-per cell) and adds the `groundwater` member with the `vicwur3` profile. No
-example YAML file for the VIC-WUR connectors ships in `configs/`; the blocks
-are the `modules` of a configuration ([Configuration](../CONFIGURATION.md)).
+The inputs are those listed under [Inputs](#inputs). `modules` builds the module
+blocks of the switched-on components, plus the `vic` block. With `GWM TRUE` it
+also needs the `groundwater` argument (the MODFLOW static values per cell) and
+adds the `groundwater` member with the `vicwur3` profile.
 
 ```python
 from torchvic.coupling import TorchVIC
@@ -112,7 +192,39 @@ app = TorchVIC.from_dict(dict(run=dict(device='cpu'), modules=mods,
 app.initialize().run()
 ```
 
-## Agreement with VIC-WUR 3.0
+### Large domains
+
+Two options trade device memory for host memory. `run.keep_outputs_on`
+(`device`, `host` or `none`) sets where the kept output series live: with `host`
+they are copied off the GPU at each commit, with `none` they are not kept.
+`vic: forcing_on: host` keeps the VIC forcing in pinned host memory and copies
+each window to the device when it runs, so the device holds one window of
+forcing whatever the length of the run. See
+[Configuration](../CONFIGURATION.md).
+
+States and outputs of repeated runs are bit-identical on the CPU and on the
+GPU: the sums over bands and cells use a fixed order instead of GPU atomics.
+
+## Limitations
+
+* The inputs (irrigation efficiency, sector water demand, groundwater and
+  consumption fractions, and the other files listed under
+  [Inputs](#inputs)) are those of VIC-WUR and must be supplied by the
+  user. Results are not calibrated.
+* The land-use connector does not redistribute carbon pools (`CARBON` is not
+  wired with the VIC hooks).
+* Licensing of the VIC-WUR-derived components: see
+  [License and credits](../downloads/code.md#license-and-credits) and
+  `THIRD_PARTY_NOTICES.md`.
+* Limits that apply to every coupled run:
+  [Limits of the coupled system](../coupled/overview.md#limits).
+
+## Verification status
+
+Checked against reference runs of VIC-WUR 3.0 in the test suite, in `exact`
+mode. The tests are skipped when the reference runs are absent.
+
+### Agreement with VIC-WUR 3.0
 
 The reference runs of VIC-WUR 3.0 were replayed in `exact` mode, component by
 component (through the connectors and at kernel level) and end to end, with VIC
@@ -145,29 +257,8 @@ are bit-identical.
 The lumped irrigation connector ([Irrigation](irrigation.md)) remains available
 alongside `vicwur_irrigation`.
 
-## Large domains
 
-Two options trade device memory for host memory. `run.keep_outputs_on`
-(`device`, `host` or `none`) sets where the kept output series live: with `host`
-they are copied off the GPU at each commit, with `none` they are not kept.
-`vic: forcing_on: host` keeps the VIC forcing in pinned host memory and copies
-each window to the device when it runs, so the device holds one window of
-forcing whatever the length of the run. See
-[Configuration](../CONFIGURATION.md).
+## Next step
 
-States and outputs of repeated runs are bit-identical on the CPU and on the
-GPU: the sums over bands and cells use a fixed order instead of GPU atomics.
-
-## Limits
-
-* The inputs (irrigation efficiency, sector water demand, groundwater and
-  consumption fractions, and the other files listed under
-  [Setting up](#setting-up)) are those of VIC-WUR and must be supplied by the
-  user. Results are not calibrated.
-* The land-use connector does not redistribute carbon pools (`CARBON` is not
-  wired with the VIC hooks).
-* Licensing of the VIC-WUR-derived components: see
-  [License and credits](../downloads/code.md#license-and-credits) and
-  `THIRD_PARTY_NOTICES.md`.
-* Limits that apply to every coupled run:
-  [Limits of the coupled system](../coupled/overview.md#limits).
+[Irrigation](irrigation.md) for the lumped irrigation connector, or
+[Groundwater](groundwater.md) for the MODFLOW coupling.

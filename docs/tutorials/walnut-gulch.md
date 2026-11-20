@@ -14,7 +14,7 @@ export TORCHVIC_SAMPLE_DATA=$PWD/VIC_sample_data
 cd $TORCHVIC_SAMPLE_DATA/image/WalnutGulch && ls parameters forcings
 ```
 
-```
+```text
 parameters/domain.WalnutGulch.0.0625_deg.nc          the grid and mask
 parameters/params.WalnutGulch.L2015.0.0625_deg.nc    soil, vegetation, snow bands
 parameters/global_param.WalnutGulch.L2015.txt        the run
@@ -47,7 +47,7 @@ error in the sample's metadata). Both matter below.
 
 `parameters/global_param.WalnutGulch.L2015.txt`, without comments:
 
-```
+```text
 MODEL_STEPS_PER_DAY 8        SNOW_STEPS_PER_DAY 8        RUNOFF_STEPS_PER_DAY 24
 STARTYEAR 2008 STARTMONTH 01 STARTDAY 01    ENDYEAR 2008 ENDMONTH 01 ENDDAY 10
 CALENDAR PROLEPTIC_GREGORIAN
@@ -84,7 +84,7 @@ makes the choice explicit. `--core 5.0.1` runs the physics of VIC 5.0.1.
 Read the log from the top; every line is a decision you may want to know
 about:
 
-```
+```text
 VIC core 5.1.0
 global file: MODEL_STEPS_PER_DAY 8, RUNOFF_STEPS_PER_DAY 24
 options: FROZEN_SOIL FALSE, BLOWING FALSE, SPATIAL_SNOW FALSE, CARBON FALSE, SHARE_LAYER_MOIST TRUE,
@@ -189,3 +189,7 @@ torchvic run study.yaml --out wg_year
 ```
 
 prints the metrics after the run. [Study files](../guide/study.md).
+
+## Next step
+
+Run your own data: [Your own domain, from scratch](own-domain.md).

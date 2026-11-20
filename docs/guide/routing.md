@@ -1,4 +1,4 @@
-# Routing to gauges
+# Route runoff to gauges
 
 VIC produces runoff and baseflow per cell; discharge at a gauge is those
 fluxes routed down the river network. TorchVIC routes on the device,
@@ -80,3 +80,7 @@ runoff and to the hydrographs.
 `basin.simulate` also carries a lumped per-case outlet
 (`out['discharge_mm']`), used by the study report and by ensembles, where
 each member routes to its own outlet.
+
+## Next step
+
+[Observations and ensembles](study.md) scores the discharge against gauge data. Routing inside a coupled run: [River routing connector](../connectors/river.md).

@@ -13,8 +13,12 @@ theme:
   collapse_navigation: true
   sticky_navigation: true
   titles_only: false
+extra_css:
+  - css/extra.css
 markdown_extensions:
   - admonition
+  - attr_list
+  - md_in_html
   - toc:
       permalink: true
   - tables
@@ -22,54 +26,56 @@ markdown_extensions:
   - def_list
 nav:
   - Home: index.md
-  - About:
-      - Model overview: about/overview.md
-      - Differences from VIC: differences.md
-      - Verification: verification.md
-      - Performance: performance.md
-      - Known limitations: about/limitations.md
-      - Known issues in VIC 5: about/vic5-issues.md
-      - How to cite: about/citing.md
-      - References: about/references.md
-      - FAQ: about/faq.md
-      - Contact: about/contact.md
   - Documentation:
       - Install: install.md
       - Quick start: quickstart.md
-      - User guide:
-          - Overview: guide/index.md
-          - Prepare your inputs: guide/inputs.md
-          - The global parameter file: guide/global-file.md
-          - Running the model: guide/running.md
-          - Outputs and state files: guide/outputs.md
-          - Routing to gauges: guide/routing.md
-          - Study files, observations, ensembles: guide/study.md
-          - Troubleshooting: troubleshooting.md
       - Tutorials:
           - Walnut Gulch, end to end: tutorials/walnut-gulch.md
           - Your own domain, from scratch: tutorials/own-domain.md
-      - Reference:
-          - Options, value by value: OPTIONS.md
-          - Output variables: OUTPUT_VARIABLES.md
-          - Python API: guide/python-api.md
-          - Process-to-C mapping: mapping.md
-      - Coupled system:
+      - Running VIC:
+          - Guide overview: guide/index.md
+          - Prepare your inputs: guide/inputs.md
+          - The global file: guide/global-file.md
+          - Run the model: guide/running.md
+          - Outputs and state files: guide/outputs.md
+          - Route runoff to gauges: guide/routing.md
+          - Observations and ensembles: guide/study.md
+          - Troubleshooting: troubleshooting.md
+      - Coupled runs:
           - Overview: coupled/overview.md
           - Configuration file: CONFIGURATION.md
-          - Connector API: CONNECTOR_API.md
-          - Coupling graph: COUPLING_GRAPH.md
-          - Water accounting: WATER_ACCOUNTING.md
           - Connectors:
+              - All connectors: connectors/index.md
+              - VIC (connector API): CONNECTOR_API.md
               - River routing: connectors/river.md
               - Reservoirs: connectors/reservoir.md
+              - Water quality: connectors/water_quality.md
               - Groundwater: connectors/groundwater.md
               - Flood: connectors/flood.md
               - Irrigation: connectors/irrigation.md
-              - Crops: connectors/crop.md
+              - Crops (WOFOST): connectors/crop.md
               - CropSyst: connectors/cropsyst.md
               - VIC-WUR: connectors/vicwur.md
-              - Ensembles and DA: connectors/ensemble_da.md
-              - Water quality: connectors/water_quality.md
+              - Ensembles and assimilation: connectors/ensemble_da.md
+          - Coupling graph: COUPLING_GRAPH.md
+          - Water accounting: WATER_ACCOUNTING.md
+      - Reference:
+          - Python API: guide/python-api.md
+          - Options, value by value: OPTIONS.md
+          - Output variables: OUTPUT_VARIABLES.md
+          - Process-to-C mapping: mapping.md
+      - Verification and performance:
+          - Verification: verification.md
+          - Performance: performance.md
+          - Differences from VIC: differences.md
+  - About:
+      - Model overview: about/overview.md
+      - Known limitations: about/limitations.md
+      - Known issues in VIC 5: about/vic5-issues.md
+      - FAQ: about/faq.md
+      - How to cite: about/citing.md
+      - References: about/references.md
+      - Contact: about/contact.md
   - Development:
       - Release notes: development/release-notes.md
       - Contributing: development/contributing.md

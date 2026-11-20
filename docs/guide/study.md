@@ -1,4 +1,4 @@
-# Study files, observations, ensembles
+# Observations, study files and ensembles
 
 ## Study files
 
@@ -41,7 +41,7 @@ torchvic run study.yaml --device cuda --out results/
 
 With observations the run ends with a table:
 
-```
+```text
 against the observations:
   runoff         kge      0.7312
   runoff         nse      0.6880
@@ -109,3 +109,7 @@ original case. Anything not named keeps the parameter file's value. Gradients fl
 to whatever tensor was passed in when the run is made outside
 `inference_mode` (`case.run(p=p)` directly), which is the basis for
 gradient-based methods.
+
+## Next step
+
+The calls behind a study file are in the [Python API](python-api.md). To judge how far TorchVIC is from VIC, see [Verification](../verification.md).

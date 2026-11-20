@@ -120,3 +120,7 @@ soil, energy balance, frozen soil, lakes, carbon, blowing snow, MTCLIM),
 each documented with the VIC C file and lines it implements;
 [Process-to-C mapping](../mapping.md) is the generated index.
 `torchvic.model.basin.simulate` is the time loop that calls them.
+
+## Next step
+
+[Verification](../verification.md) shows how the results were checked against VIC; [Performance](../performance.md) shows the run times.

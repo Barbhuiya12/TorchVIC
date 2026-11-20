@@ -3,14 +3,23 @@
 This page runs TorchVIC on a public VIC 5 example and shows what comes
 out. It takes a few minutes, needs no GPU and no VIC installation.
 
+**What you will learn:** how to run a VIC 5 image-driver case from the command
+line, what the run log says, and how to open the output file in Python.
+
 ## 1. Install
 
-See [Install](install.md). In short:
+See [Install](install.md) for the details and for a GPU. In short, on a CPU:
+
+```bash
+python -m venv .venv && source .venv/bin/activate
+pip install "torch==2.6.0" --index-url https://download.pytorch.org/whl/cpu
+pip install torchvic
+```
+
+From source (the developer route):
 
 ```bash
 git clone https://github.com/Barbhuiya12/TorchVIC.git && cd TorchVIC
-python -m venv .venv && source .venv/bin/activate
-pip install "torch==2.6.0" --index-url https://download.pytorch.org/whl/cpu
 pip install -e .
 ```
 
@@ -46,7 +55,7 @@ makes the choice explicit. `--core 5.0.1` selects the physics of VIC 5.0.1.
 The log says what was read and every decision taken from the global file.
 The end of it:
 
-```
+```text
 <Case 15 cells, 80 steps at 8/day, cpu, energy on, core 5.1.0>
 ran 80 steps over 15 cells in 2.5 s
 
@@ -87,7 +96,7 @@ torchvic run ... --core 5.0.1                  # VIC 5.0.1's physics (the defaul
 torchvic run ... --dtype float32               # single precision; not recommended
 torchvic run ... --no-energy                   # water balance only, even with FULL_ENERGY TRUE
 torchvic run ... --steps 16                    # the first two days only
-torchvic run ... --progress                    # a progress bar (pip install -e .[progress])
+torchvic run ... --progress                    # a progress bar (pip install "torchvic[progress]")
 ```
 
 From Python the same run is
@@ -99,9 +108,11 @@ out = torchvic.run(case)                              # {name: tensor [time, cel
 paths = torchvic.write_history(out, case, result_dir='wg_results')
 ```
 
-## Next
+## Next step
 
 * Your own VIC 5 setup: [Running the model](guide/running.md).
 * Your own data: [Prepare your inputs](guide/inputs.md), then
   [The global parameter file](guide/global-file.md).
 * The example in depth: [Walnut Gulch, end to end](tutorials/walnut-gulch.md).
+* Several models in one time loop: [Coupled runs](coupled/overview.md) and the
+  [connectors](connectors/index.md).
